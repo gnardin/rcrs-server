@@ -43,6 +43,11 @@ public final class StandardPropertyFactory extends AbstractPropertyFactory<Stand
       case BUILDING_AREA_GROUND:
       case BUILDING_AREA_TOTAL:
       case DIRECTION:
+      case HEIGHT:
+      case DETECTION_RANGE:
+      case SENSOR_RANGE:
+      case BATTERY:
+      case SPEED:
       case STAMINA:
       case HP:
       case DAMAGE:

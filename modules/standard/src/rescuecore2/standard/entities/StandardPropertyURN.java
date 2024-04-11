@@ -80,7 +80,17 @@ public enum StandardPropertyURN implements URN {
   /** Refill Capacity property */
   REFILL_CAPACITY(PROPERTY_URN_PREFIX | 34, PROPERTY_URN_PREFIX_STR + "refillcapacity"),
   /** Waiting List Size property */
-  WAITING_LIST_SIZE(PROPERTY_URN_PREFIX | 35, PROPERTY_URN_PREFIX_STR + "waitinglistlize");
+  WAITING_LIST_SIZE(PROPERTY_URN_PREFIX | 35, PROPERTY_URN_PREFIX_STR + "waitinglistlize"),
+  /** Battery life property */
+  BATTERY(PROPERTY_URN_PREFIX | 36, PROPERTY_URN_PREFIX_STR + "battery"),
+  /** Sensor range property */
+  SENSOR_RANGE(PROPERTY_URN_PREFIX | 37, PROPERTY_URN_PREFIX_STR + "sensorrange"),
+  /** Height property */
+  HEIGHT(PROPERTY_URN_PREFIX | 38, PROPERTY_URN_PREFIX_STR + "height"),
+  /** Detection range */
+  DETECTION_RANGE(PROPERTY_URN_PREFIX | 39, PROPERTY_URN_PREFIX_STR + "detectionrange"),
+  /** Speed property */
+  SPEED(PROPERTY_URN_PREFIX | 40, PROPERTY_URN_PREFIX_STR + "speed");
 
   private int urnId;
   private String urnStr;

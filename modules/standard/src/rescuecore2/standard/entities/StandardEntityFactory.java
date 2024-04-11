@@ -51,6 +51,10 @@ public final class StandardEntityFactory extends AbstractEntityFactory<StandardE
         return new AmbulanceTeam(id);
       case POLICE_FORCE:
         return new PoliceForce(id);
+      case DRONE:
+        return new Drone(id);
+      case RESCUE_ROBOT:
+        return new RescueRobot(id);
       default:
         throw new IllegalArgumentException("Unrecognised entity urn: " + urn);
     }

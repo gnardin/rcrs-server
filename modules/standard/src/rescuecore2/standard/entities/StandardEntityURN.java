@@ -38,7 +38,11 @@ public enum StandardEntityURN implements URN {
   /** Ambulance Team entity */
   AMBULANCE_TEAM(ENTITY_URN_PREFIX | 13, ENTITY_URN_PREFIX_STR + "ambulanceteam"),
   /** Police Force entity */
-  POLICE_FORCE(ENTITY_URN_PREFIX | 14, ENTITY_URN_PREFIX_STR + "policeforce");
+  POLICE_FORCE(ENTITY_URN_PREFIX | 14, ENTITY_URN_PREFIX_STR + "policeforce"),
+  /** Drone entity */
+  DRONE(ENTITY_URN_PREFIX | 15, ENTITY_URN_PREFIX_STR + "drone"),
+  /** Rescue robot entity */
+  RESCUE_ROBOT(ENTITY_URN_PREFIX | 16, ENTITY_URN_PREFIX_STR + "rescuerobot");
 
   private int urnId;
   private String urnStr;
