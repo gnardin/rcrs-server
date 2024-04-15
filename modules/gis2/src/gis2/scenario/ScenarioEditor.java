@@ -64,6 +64,8 @@ public class ScenarioEditor extends JPanel {
   private static final Color REFUGE_COLOUR = new Color(0, 128, 0);
   private static final Color HYDRANT_COLOUR = new Color(128, 128, 0);
   private static final Color GAS_STATION_COLOUR = new Color(255, 128, 0);
+  private static final Color RESCUE_ROBOT_COLOUR = new Color(102, 0 , 153);
+  private static final Color DRONE_COLOUR = new Color(159, 243, 243);
 
   private GMLMap map;
   private GMLMapViewer viewer;
@@ -678,6 +680,16 @@ public class ScenarioEditor extends JPanel {
     addTool(new PlaceAmbulanceCentreTool(this), menu, toolbar, menuGroup,
         toolbarGroup);
     addTool(new RemoveAmbulanceCentreTool(this), menu, toolbar, menuGroup,
+        toolbarGroup);
+    menu.addSeparator();
+    toolbar.addSeparator();
+    addTool(new PlaceRescueRobotTool(this), menu, toolbar, menuGroup,
+        toolbarGroup);
+    addTool(new RemoveRescueRobotTool(this), menu, toolbar, menuGroup, 
+        toolbarGroup);
+    addTool(new PlaceDroneTool(this), menu, toolbar, menuGroup, 
+        toolbarGroup);
+    addTool(new RemoveDroneTool(this), menu, toolbar, menuGroup, 
         toolbarGroup);
   }
 
