@@ -51,6 +51,7 @@ public class ControlledAgentGUI extends JPanel {
     private List<ControlledAmbulanceTeam> ats;
     private ListListModel atListModel;
     private JList atList;
+    
 
     /**
        Construct a ControlledAgentGUI.

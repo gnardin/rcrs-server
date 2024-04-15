@@ -598,7 +598,7 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    * @return The list of rescue robot locations.
    */
   public Collection<Integer> getRescueRobots() {
-    return Collections.unmodifiableCollection(acLocations);
+    return Collections.unmodifiableCollection(rrLocations);
   }
 
   /**
@@ -607,7 +607,7 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    * @return The list of drone locations.
    */
   public Collection<Integer> getDrones() {
-    return Collections.unmodifiableCollection(acLocations);
+    return Collections.unmodifiableCollection(drLocations);
   }
 
   /**
