@@ -65,8 +65,8 @@ public class ScenarioEditor extends JPanel {
   private static final Color HYDRANT_COLOUR = new Color(128, 128, 0);
   private static final Color GAS_STATION_COLOUR = new Color(255, 128, 0);
   //  	(255,0,255)
-  private static final Color RESCUE_ROBOT_COLOUR = new Color(255, 0, 255);
-  private static final Color DRONE_COLOUR = new Color(0, 255, 255);
+  // private static final Color RESCUE_ROBOT_COLOUR = new Color(255, 0, 255);
+  // private static final Color DRONE_COLOUR = new Color(0, 255, 255);
 
   private GMLMap map;
   private GMLMapViewer viewer;

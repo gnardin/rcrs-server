@@ -29,7 +29,7 @@ public class PlaceRescueRobotTool extends ShapeTool{
 
     @Override
     protected void processClick(GMLShape shape) {
-        editor.getScenario().addRescueRobot(0);
+        editor.getScenario().addRescueRobot(shape.getID());
         editor.setChanged();
         editor.updateOverlays();
         editor.addEdit(new addRescueRobotEdit(shape.getID()));
