@@ -22,6 +22,8 @@ public class AgentOverlay implements Overlay {
   private static final Color FIRE_BRIGADE_COLOUR = Color.RED;
   private static final Color POLICE_FORCE_COLOUR = Color.BLUE;
   private static final Color AMBULANCE_TEAM_COLOUR = Color.WHITE;
+  private static final Color RESCUE_ROBOT_COLOUR = Color.MAGENTA;
+  private static final Color DRONE_COLOUR = Color.CYAN;
   private static final int OFFSET = 7;
   private ScenarioEditor editor;
 
@@ -62,6 +64,18 @@ public class AgentOverlay implements Overlay {
         return 0;
       }
     };
+    Map<Integer, Integer> rrs = new LazyMap<Integer,Integer>() {
+      @Override
+      public Integer createValue() {
+        return 0;
+      }
+    };
+    Map<Integer,Integer> drs = new LazyMap<Integer,Integer>() {
+      @Override
+      public Integer createValue() {
+        return 0;
+      }
+    };
     for (int next : editor.getScenario().getCivilians()) {
       civs.put(next, civs.get(next) + 1);
     }
@@ -73,6 +87,12 @@ public class AgentOverlay implements Overlay {
     }
     for (int next : editor.getScenario().getAmbulanceTeams()) {
       ats.put(next, ats.get(next) + 1);
+    }
+    for (int next : editor.getScenario().getRescueRobots()) {
+      rrs.put(next, rrs.get(next) + 1);
+    }
+    for (int next : editor.getScenario().getDrones()) {
+      drs.put(next, drs.get(next) + 1);
     }
     // Now draw them
     for (Map.Entry<Integer, Integer> next : civs.entrySet()) {
@@ -120,6 +140,22 @@ public class AgentOverlay implements Overlay {
       paint(g, x, y, AMBULANCE_TEAM_COLOUR);
       g.drawString(count + "", x, y);
 
+    }
+    for (Map.Entry<Integer, Integer> next : rrs.entrySet()) {
+      GMLShape shape = editor.getMap().getShape(next.getKey());
+      int count = next.getValue();
+      int x = transform.xToScreen(shape.getCentreX()) - OFFSET;
+      int y = transform.yToScreen(shape.getCentreY());
+      paint(g, x, y, RESCUE_ROBOT_COLOUR);
+      g.drawString(count + "", x, y);
+    }
+    for (Map.Entry<Integer, Integer> next : drs.entrySet()) {
+      GMLShape shape = editor.getMap().getShape(next.getKey());
+      int count = next.getValue();
+      int x = transform.xToScreen(shape.getCentreX()) - OFFSET;
+      int y = transform.yToScreen(shape.getCentreY());
+      paint(g, x, y, DRONE_COLOUR);
+      g.drawString(count + "", x, y);
     }
   }
 

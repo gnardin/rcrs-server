@@ -24,6 +24,8 @@ public class PlaceAgentsFunction extends AbstractFunction {
   private static final int TYPE_POLICE = 1;
   private static final int TYPE_AMBULANCE = 2;
   private static final int TYPE_CIVILIAN = 3;
+  private static final int TYPE_DRONE = 4;
+  private static final int TYPE_ROBOT = 5;
 
   private Random random;
 
@@ -46,7 +48,7 @@ public class PlaceAgentsFunction extends AbstractFunction {
   public void execute() {
     JPanel panel = new JPanel(new GridLayout(3, 2));
     JTextField numberField = new JTextField("1");
-    JComboBox<String> typeCombo = new JComboBox<String>(new String[] { "Fire", "Police", "Ambulance", "Civilian" });
+    JComboBox<String> typeCombo = new JComboBox<String>(new String[] { "Fire", "Police", "Ambulance", "Civilian", "Drone", "Robot" });
 
     JCheckBox buildingBox = new JCheckBox("In buildings?", false);
     JCheckBox roadBox = new JCheckBox("In Roads?", true);
@@ -103,6 +105,16 @@ public class PlaceAgentsFunction extends AbstractFunction {
       case TYPE_CIVILIAN:
         for (int id : ids) {
           s.addCivilian(id);
+        }
+        break;
+      case TYPE_DRONE:
+        for (int id : ids) {
+          s.addRescueRobot(id);
+        }
+        break;
+      case TYPE_ROBOT:
+        for (int id : ids) {
+          s.addRescueRobot(id);
         }
         break;
       default:

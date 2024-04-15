@@ -64,8 +64,9 @@ public class ScenarioEditor extends JPanel {
   private static final Color REFUGE_COLOUR = new Color(0, 128, 0);
   private static final Color HYDRANT_COLOUR = new Color(128, 128, 0);
   private static final Color GAS_STATION_COLOUR = new Color(255, 128, 0);
-  private static final Color RESCUE_ROBOT_COLOUR = new Color(102, 0 , 153);
-  private static final Color DRONE_COLOUR = new Color(159, 243, 243);
+  //  	(255,0,255)
+  private static final Color RESCUE_ROBOT_COLOUR = new Color(255, 0, 255);
+  private static final Color DRONE_COLOUR = new Color(0, 255, 255);
 
   private GMLMap map;
   private GMLMapViewer viewer;
@@ -796,6 +797,16 @@ public class ScenarioEditor extends JPanel {
         valid = false;
       }
     }
+    for (int id : newScenario.getRescueRobots()) {
+      if (newMap.getShape(id) == null) {
+        valid = false;
+      }
+    }
+    for (int id : newScenario.getDrones()) {
+      if (newMap.getShape(id) == null) {
+        valid = false;
+      }
+    }
     return valid;
   }
 
@@ -813,6 +824,8 @@ public class ScenarioEditor extends JPanel {
             + scenario.getFireBrigades().size() + " fb, "
             + scenario.getFireStations().size() + " fs, "
             + scenario.getPoliceForces().size() + " pf, "
+            + scenario.getRescueRobots().size() + " rr, "
+            + scenario.getDrones().size() + "dr, "
             + scenario.getPoliceOffices().size() + " po, "
             + scenario.getAmbulanceTeams().size() + " at, "
             + scenario.getAmbulanceCentres().size() + " ac");
