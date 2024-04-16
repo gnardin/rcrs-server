@@ -109,7 +109,7 @@ public class PlaceAgentsFunction extends AbstractFunction {
         break;
       case TYPE_DRONE:
         for (int id : ids) {
-          s.addRescueRobot(id);
+          s.addDrone(id);
         }
         break;
       case TYPE_ROBOT:

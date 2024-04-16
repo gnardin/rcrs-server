@@ -966,7 +966,7 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    * @param location The new drone location
    */
   public void addDrone(int location) {
-    acLocations.add(location);
+    drLocations.add(location);
   }
 
   /** 
@@ -975,7 +975,7 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    * @param location The drone location to remove.
    */
   public void removeDrone(int location) {
-    acLocations.remove(location);
+    drLocations.remove(location);
   }
 
   /** 
@@ -984,7 +984,7 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    * @param location The new rescue robot location.
    */
   public void addRescueRobot(int location) {
-    acLocations.add(location);
+    rrLocations.add(location);
   }
 
   /** 
@@ -993,7 +993,7 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    * @param location The rescue robot location to remove
    */
   public void removeRescueRobot(int location) {
-    acLocations.remove(location);
+    rrLocations.remove(location);
   }
 
   private void setupAgent(Human h, EntityID position, StandardWorldModel model, Config config)

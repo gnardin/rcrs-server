@@ -13,6 +13,12 @@ public final class StandardConstants {
     /** Config key for the number of police forces in the scenario. */
     public static final String POLICE_FORCE_COUNT_KEY = "scenario.agents.pf";
 
+    /** Config key for the number of rescue robots in the scenario */
+    public static final String RESCUE_ROBOT_KEY = "scenario.agents.rr";
+
+    /** Config key for the number of drones in the scenario */
+    public static final String DRONE_KEY = "scenario.agents.dr";
+
     /** Config key for the number of fire stations in the scenario. */
     public static final String FIRE_STATION_COUNT_KEY = "scenario.agents.fs";
 
@@ -21,6 +27,8 @@ public final class StandardConstants {
 
     /** Config key for the number of police offices in the scenario. */
     public static final String POLICE_OFFICE_COUNT_KEY = "scenario.agents.po";
+
+    
 
     private StandardConstants() {}
 }
