@@ -55,6 +55,8 @@ public class HumanLayer extends StandardEntityViewLayer<Human> {
     private static final Color FIRE_BRIGADE_COLOUR = Color.RED;
     private static final Color POLICE_FORCE_COLOUR = Color.BLUE;
     private static final Color AMBULANCE_TEAM_COLOUR = Color.WHITE;
+    private static final Color RESCUE_ROBOT_COLOUR = Color.MAGENTA;
+    private static final Color DRONE_COLOUR = Color.CYAN;
     private static final Color DEAD_COLOUR = Color.BLACK;
 
     private int iconSize;
@@ -78,6 +80,8 @@ public class HumanLayer extends StandardEntityViewLayer<Human> {
         icons.put(StandardEntityURN.FIRE_BRIGADE.toString(), generateIconMap("FireBrigade"));
         icons.put(StandardEntityURN.AMBULANCE_TEAM.toString(), generateIconMap("AmbulanceTeam"));
         icons.put(StandardEntityURN.POLICE_FORCE.toString(), generateIconMap("PoliceForce"));
+        icons.put(StandardEntityURN.RESCUE_ROBOT.toString(), generateIconMap("RescueRobot"));
+        icons.put(StandardEntityURN.DRONE.toString(), generateIconMap("DroneTeam"));
         icons.put(StandardEntityURN.CIVILIAN.toString() + "-Male", generateIconMap("Civilian-Male"));
         icons.put(StandardEntityURN.CIVILIAN.toString() + "-Female", generateIconMap("Civilian-Female"));
         useIconsAction = new UseIconsAction();
@@ -169,6 +173,10 @@ public class HumanLayer extends StandardEntityViewLayer<Human> {
             return AMBULANCE_TEAM_COLOUR;
         case POLICE_FORCE:
             return POLICE_FORCE_COLOUR;
+        case DRONE:
+            return DRONE_COLOUR;
+        case RESCUE_ROBOT:
+            return RESCUE_ROBOT_COLOUR;
         default:
             throw new IllegalArgumentException("Don't know how to draw humans of type " + h.getStandardURN());
         }

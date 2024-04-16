@@ -11,7 +11,6 @@ import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.standard.entities.Area;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.Road;
-import rescuecore2.standard.entities.PoliceForce;
 import rescuecore2.standard.entities.RescueRobot;
 import rescuecore2.standard.components.StandardAgent;
 

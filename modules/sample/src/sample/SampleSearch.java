@@ -161,6 +161,10 @@ public final class SampleSearch {
     } while ( current != start );
     return path;
   }
+  
+  public List<EntityID> aStarSearch( EntityID start, Collection<EntityID> goals ) {
+    return null;
+  }
 
 
   public List<EntityID> breadthFirstSearchForCivilian( EntityID start,

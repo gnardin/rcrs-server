@@ -11,7 +11,7 @@ import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.standard.entities.Refuge;
 import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.AmbulanceTeam;
+import rescuecore2.standard.entities.Drone;
 import rescuecore2.standard.components.StandardAgent;
 
 import sample.SampleSearch;

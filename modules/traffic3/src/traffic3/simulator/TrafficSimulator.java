@@ -29,6 +29,8 @@ import rescuecore2.standard.entities.Blockade;
 import rescuecore2.standard.entities.Civilian;
 import rescuecore2.standard.entities.Edge;
 import rescuecore2.standard.entities.FireBrigade;
+import rescuecore2.standard.entities.Drone;
+import rescuecore2.standard.entities.RescueRobot;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.PoliceForce;
 import rescuecore2.standard.entities.Refuge;
@@ -283,6 +285,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         case REFUGE:
         case AMBULANCE_TEAM:
         case POLICE_FORCE:
+        case DRONE:
+        case RESCUE_ROBOT:
         case CIVILIAN:
         case FIRE_BRIGADE:
         case WORLD:
@@ -315,7 +319,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       NumberGenerator<Double> civilianVelocityGenerator) {
     double radius = 0;
     double velocityLimit = 0;
-    if (h instanceof FireBrigade || h instanceof PoliceForce || h instanceof AmbulanceTeam) {
+    if (h instanceof FireBrigade || h instanceof PoliceForce || h instanceof AmbulanceTeam || h instanceof RescueRobot || h instanceof Drone) {
       radius = RESCUE_AGENT_RADIUS;
       velocityLimit = agentVelocityGenerator.nextValue();
     } else if (h instanceof Civilian) {
