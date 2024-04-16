@@ -35,12 +35,45 @@ public class ControlledDrone extends StandardAgent<Drone>{
 
     @Override
     public void think(int time, ChangeSet changed, Collection<Command> heard) {
-        if(target != null) {
-            Logger.info("Nothing to do.");
-            return;
-        }
-        else {
-            
-        }
+        
     }
+
+    @Override
+    protected EnumSet<StandardEntityURN> getRequestedEntityURNsEnum() {
+        return EnumSet.of(StandardEntityURN.DRONE);
+    }
+        
+    /**
+    * Get the location of the entity controlled by this agent
+    @return The location of the entity 
+    */
+    protected StandardEntity location() {
+        AmbulanceTeam me = me();
+        return me.getPosition(model);
+    }
+
+    @Override
+    protected void postConnect() {
+        super.connect();
+        search = new SampleSearch(model);
+    }
+
+    @Override
+    public String toString() {
+        if (me() == null) {
+            return "Human controlled drone";
+        }
+        StringBuilder result = new StringBuilder();
+        result.append("Human controlled drone");
+        result.append(getID());
+        result.append(" ");
+        if (target == null) {
+            result.append("no target");
+        } else {
+            result.append("target: human");
+            result.append(target.getID());
+        }
+        return result.toString();
+    }
+
 }
