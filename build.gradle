@@ -98,8 +98,8 @@ publishing {
     maven(MavenPublication) {
       groupId = 'com.github.roborescue'
       artifactId = 'rcrs-server'
-      version = 'master'
-      //version = 'master-SNAPSHOT'
+      //version = 'master'
+      version = 'master-SNAPSHOT'
 
       from components.java
     }
