@@ -11,6 +11,7 @@ import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.standard.entities.Refuge;
 import rescuecore2.standard.entities.Human;
+import rescuecore2.standard.entities.Civilian;
 import rescuecore2.standard.entities.Drone;
 import rescuecore2.standard.components.StandardAgent;
 
@@ -24,6 +25,7 @@ import java.util.EnumSet;
 public class ControlledDrone extends StandardAgent<Drone>{
     private SampleSearch search;
     private Human target;
+    private static final int DETECTION_RANGE = 15000;
 
     /** 
      * Set the target of this drone
@@ -35,7 +37,48 @@ public class ControlledDrone extends StandardAgent<Drone>{
 
     @Override
     public void think(int time, ChangeSet changed, Collection<Command> heard) {
-        
+        if(target = null) {
+            Logger.info("Nothing to do");
+            return;
+        }
+        if (target instanceof Civilian) {
+            //Go there
+            List<EntityID> path = search.breadthFirstSearch(me(), target);
+            if (path != null) {
+                sendMove(time, path);
+                return;
+            } else {
+                Logger.info("Could not go towards the civilian");
+            }
+        }
+
+        //is it close enough to detect a civilian
+        int distance = model.getDistance(me(), target);
+        if (distance < DETECTION_RANGE) {
+            sendCoordinates(1, target);
+            return;
+        } //or plan a path
+        if(!target.equals(location())) {
+            List<EntityID> path = pathToCivilian();
+        }
+    }
+
+    //plan path to the civilian
+    private List<EntityID> pathToCivilian() {
+        Collection<StandardEntity> targets = model.getObjectsInRange(target, DETECTION_RANGE);
+        if (targets.isEmpty()) {
+            return null;
+        }
+        return search.breadthFirstSearch(me().getPosition(), objectsToIDs(targets));
+    }
+
+    //send coordinates to police 
+    private void sendCoordinates(int time, int target) {
+        Collection<StandardEntity> entities = model.getEntitiesOfType(StandardEntityURN.POLICE_OFFICE);
+        for (StandardEntity entity : entities) {
+            int policeID = entity.getID().getValue();
+            sendSpeak(time, policeID, ("Civilians detected at " + target).getBytes());
+        }
     }
 
     @Override

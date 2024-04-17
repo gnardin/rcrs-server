@@ -23,6 +23,10 @@ public final class SampleSearch {
 
   private Map<EntityID, Set<EntityID>> graph;
   private Set<EntityID>                buildingSet;
+  private Map<EntityID, Double>        gScore;
+  private Map<EntityID, Double>        fScore;
+  private Map<EntityID, EntityID>      cameFrom;
+  
 
 
   /**
@@ -162,7 +166,12 @@ public final class SampleSearch {
     return path;
   }
   
-  public List<EntityID> aStarSearch( EntityID start, Collection<EntityID> goals ) {
+  public List<EntityID> aStarSearch( EntityID start, Collection<EntityID> goals, Map<EntityID, Double> heuristics) {
+    gScore = new HashMap<>();
+    fScore = new HashMap<>();
+    cameFrom = new HashMap<>();
+
+    
     return null;
   }
 

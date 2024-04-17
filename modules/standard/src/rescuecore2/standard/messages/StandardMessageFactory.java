@@ -52,6 +52,8 @@ public final class StandardMessageFactory
 			return new AKSubscribe(data);
 		case AK_SPEAK:
 			return new AKSpeak(data);
+		case AK_DETECT:
+			return new AKDetect(data);
 		default:
 			Logger.warn("Unrecognised message urn: " + urn);
 			return null;
@@ -85,6 +87,8 @@ public final class StandardMessageFactory
 			return new AKSubscribe(proto);
 		case AK_SPEAK:
 			return new AKSpeak(proto);
+		case AK_DETECT:
+			return new AKDetect(proto);
 		default:
 			Logger.warn("Unrecognised message urn: " + urn);
 			return null;
