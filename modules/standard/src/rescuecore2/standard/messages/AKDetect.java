@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import rescuecore2.messages.AbstractCommand;
+import rescuecore2.messages.components.EntityIDComponent;
 import rescuecore2.messages.components.EntityIDListComponent;
 import rescuecore2.messages.components.IntComponent;
 import rescuecore2.messages.protobuf.RCRSProto.MessageProto;
@@ -18,9 +19,10 @@ import rescuecore2.worldmodel.EntityID;
  */
 public class AKDetect extends AbstractCommand {
 
-    private EntityIDListComponent path;
-    private IntComponent x;
-    private IntComponent y;
+//    private EntityIDListComponent path;
+//    private IntComponent x;
+//    private IntComponent y;
+    private EntityIDComponent target;
 
     /**
      * An AKDetect message that populates its data from a stream
@@ -51,7 +53,7 @@ public class AKDetect extends AbstractCommand {
     }
 
     public AKDetect(MessageProto proto) {
-        //this();
+        this();
         fromMessageProto(proto);
     }
 
