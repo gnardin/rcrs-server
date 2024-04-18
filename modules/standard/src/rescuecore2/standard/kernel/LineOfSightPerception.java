@@ -67,7 +67,7 @@ import rescuecore2.standard.view.HumanLayer;
  * May 2020 During Covid-19 :-)))
  * */
 public class LineOfSightPerception implements Perception, GUIComponent {
-    private static final int DEFAULT_VIEW_DISTANCE = 30000;
+    private static final int DEFAULT_VIEW_DISTANCE = 70000;
     private static final int DEFAULT_HP_PRECISION = 1000;
     private static final int DEFAULT_DAMAGE_PRECISION = 100;
     private static final int DEFAULT_RAY_COUNT = 720;
@@ -168,7 +168,7 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                     break;
                 case CIVILIAN:
                 case FIRE_BRIGADE:
-                case AMBULANCE_TEAM:
+                    case AMBULANCE_TEAM:
                 case POLICE_FORCE:
                     // Always send all properties of the agent-controlled object
                     if (next == agentEntity) {
@@ -181,6 +181,14 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                 case BLOCKADE:
                     addBlockadeProperties((Blockade)next, result);
                     break;
+                    case DRONE:
+                    case RESCUE_ROBOT:
+                        if(next == agentEntity) {
+                            addSelfProperties((Human) next, result);
+                        } else {
+                            addHumanProperties((Human) next, result);
+                        }
+                        break;
                 default:
                     // Ignore other types
                     break;
