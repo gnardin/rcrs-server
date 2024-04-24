@@ -29,6 +29,7 @@ public abstract class Robot extends StandardEntity {
     private DoubleProperty    height; 
     private DoubleProperty    detectionRange;
     private DoubleProperty    speed;
+    private IntProperty       damage;
 
      /**
    * Construct a Robot object with entirely undefined property values.
@@ -50,8 +51,9 @@ public abstract class Robot extends StandardEntity {
         detectionRange = new DoubleProperty( StandardPropertyURN.DETECTION_RANGE );
         height = new DoubleProperty( StandardPropertyURN.HEIGHT );
         speed = new DoubleProperty( StandardPropertyURN.SPEED );
+        damage = new IntProperty( StandardPropertyURN.DAMAGE );
         registerProperties( x, y, position, positionHistory, travelDistance,
-            direction, battery, sensorRange, detectionRange, height, speed );
+            direction, battery, sensorRange, detectionRange, height, speed, damage );
     }
 
 
@@ -74,8 +76,9 @@ public abstract class Robot extends StandardEntity {
         detectionRange = new DoubleProperty( other.detectionRange );
         height = new DoubleProperty( other.height );
         speed = new DoubleProperty( other.speed );
+        damage = new IntProperty( other.damage );
         registerProperties( x, y, position, positionHistory, travelDistance,
-            direction, battery, sensorRange, detectionRange, height, speed );
+            direction, battery, sensorRange, detectionRange, height, speed, damage );
     }
 
     @Override
@@ -109,6 +112,8 @@ public abstract class Robot extends StandardEntity {
           return sensorRange;
         case DETECTION_RANGE:
           return detectionRange;
+        case DAMAGE:
+          return damage;
         default:
           return super.getProperty( urn );
       }
@@ -588,23 +593,48 @@ public abstract class Robot extends StandardEntity {
     public void undefineDetectionRange() {
         detectionRange.undefine();
     }
-        
+
     /**
-    * Get the sensor range property
-    * 
-    * @return The sensor range of the robot. 
-    */
-    public IntProperty getSensorRangeProperty() {
-        return sensorRange;
+     * Get the damage property
+     *
+     * @return The damage to the robot.
+     */
+    public IntProperty getDamageProperty() {
+        return damage;
     }
 
     /**
-     * Get the sensor range of the robot. 
-     * 
-     * @return The sensor range of the robot.  
+     * Get the damage of the robot.
+     *
+     * @return The damage done to the robot
      */
-    public int getSensorRange() {
-        return sensorRange.getValue();
+    public int getDamage() {
+        return damage.getValue();
+    }
+
+    /**
+     * Set the damage done to the robot
+     *
+     * @param d  The damage
+     */
+    public void setDamage( int d ) {
+        this.damage.setValue( d );
+    }
+
+    /**
+     * Find out if the damage has been defined
+     *
+     * @return True if the damage has been defined, false otherwse
+     */
+    public boolean isDamageDefined() {
+        return damage.isDefined();
+    }
+
+    /**
+     * Undefine the damage
+     */
+    public void undefineDamage() {
+        damage.undefine();
     }
 
     /**
