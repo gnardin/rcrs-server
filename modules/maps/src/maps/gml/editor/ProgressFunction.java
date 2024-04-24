@@ -13,7 +13,7 @@ import rescuecore2.log.Logger;
    Abstract base class for Function implementations that require a progress dialog.
 */
 public abstract class ProgressFunction extends AbstractFunction {
-    private JProgressBar progress;
+    private final JProgressBar progress;
 
     /**
        Construct a ProgressFunction.

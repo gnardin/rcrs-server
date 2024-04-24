@@ -25,16 +25,16 @@ public class TemporaryMap {
 
     private double threshold;
 
-    private Set<Node> nodes;
-    private Set<Edge> edges;
-    private Map<Node, Set<Edge>> edgesAtNode;
-    private Map<Edge, Set<TemporaryObject>> objectsAtEdge;
-    private Set<TemporaryRoad> tempRoads;
-    private Set<TemporaryIntersection> tempIntersections;
-    private Set<TemporaryBuilding> tempBuildings;
-    private Set<TemporaryObject> allObjects;
+    private final Set<Node> nodes;
+    private final Set<Edge> edges;
+    private final Map<Node, Set<Edge>> edgesAtNode;
+    private final Map<Edge, Set<TemporaryObject>> objectsAtEdge;
+    private final Set<TemporaryRoad> tempRoads;
+    private final Set<TemporaryIntersection> tempIntersections;
+    private final Set<TemporaryBuilding> tempBuildings;
+    private final Set<TemporaryObject> allObjects;
 
-    private OSMMap osmMap;
+    private final OSMMap osmMap;
     private Collection<OSMIntersectionInfo> osmIntersections;
     private Collection<OSMRoadInfo> osmRoads;
     private Collection<OSMBuildingInfo> osmBuildings;

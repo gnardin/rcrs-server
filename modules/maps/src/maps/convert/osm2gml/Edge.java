@@ -6,9 +6,9 @@ import rescuecore2.misc.geometry.Line2D;
    An edge. An edge is a line between two nodes.
  */
 public class Edge extends ManagedObject {
-    private Node start;
-    private Node end;
-    private Line2D line;
+    private final Node start;
+    private final Node end;
+    private final Line2D line;
 
     /**
        Construct a new Edge.
@@ -49,13 +49,12 @@ public class Edge extends ManagedObject {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append("Edge ");
-        result.append(getID());
-        result.append(" from ");
-        result.append(start);
-        result.append(" to ");
-        result.append(end);
-        return result.toString();
+        String result = "Edge " +
+                getID() +
+                " from " +
+                start +
+                " to " +
+                end;
+        return result;
     }
 }

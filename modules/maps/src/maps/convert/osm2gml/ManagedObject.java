@@ -4,7 +4,7 @@ package maps.convert.osm2gml;
    A managed map object.
 */
 public abstract class ManagedObject {
-    private long id;
+    private final long id;
 
     /**
        Construct a managed object.

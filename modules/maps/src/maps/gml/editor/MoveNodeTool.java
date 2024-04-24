@@ -21,8 +21,8 @@ public class MoveNodeTool extends AbstractTool {
     private static final Color HIGHLIGHT_COLOUR = Color.BLACK;
     private static final int HIGHLIGHT_SIZE = 6;
 
-    private Listener listener;
-    private NodeDecorator highlight;
+    private final Listener listener;
+    private final NodeDecorator highlight;
     private GMLNode selected;
     private GMLCoordinates pressCoords;
     private GMLCoordinates originalCoords;
@@ -135,9 +135,9 @@ public class MoveNodeTool extends AbstractTool {
     }
 
     private class MoveNodeEdit extends AbstractUndoableEdit {
-        private GMLNode node;
-        private GMLCoordinates oldPosition;
-        private GMLCoordinates newPosition;
+        private final GMLNode node;
+        private final GMLCoordinates oldPosition;
+        private final GMLCoordinates newPosition;
 
         public MoveNodeEdit(GMLNode node, GMLCoordinates oldPosition, GMLCoordinates newPosition) {
             this.node = node;

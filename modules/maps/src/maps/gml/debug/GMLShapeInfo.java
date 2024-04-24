@@ -19,9 +19,9 @@ import maps.gml.GMLCoordinates;
    A ShapeInfo that knows how to draw GMLShapes.
 */
 public class GMLShapeInfo extends ShapeDebugFrame.ShapeInfo {
-    private GMLShape shape;
-    private Color outlineColour;
-    private Color fillColour;
+    private final GMLShape shape;
+    private final Color outlineColour;
+    private final Color fillColour;
     private Rectangle2D bounds;
 
     /**

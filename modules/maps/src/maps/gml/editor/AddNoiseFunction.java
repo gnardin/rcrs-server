@@ -15,7 +15,7 @@ public class AddNoiseFunction extends ProgressFunction {
     private static final int RANGE = 5;
     private static final double FACTOR = 0.001;
 
-    private Random random;
+    private final Random random;
 
     /**
        Construct an AddNoiseFunction.

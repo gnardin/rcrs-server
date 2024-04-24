@@ -54,7 +54,7 @@ public class PlaceRefugeTool extends ShapeTool {
   }
 
   private class AddRefugeEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public AddRefugeEdit(int id) {
       this.id = id;

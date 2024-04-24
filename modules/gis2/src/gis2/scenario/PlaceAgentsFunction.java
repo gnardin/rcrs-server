@@ -27,7 +27,7 @@ public class PlaceAgentsFunction extends AbstractFunction {
   private static final int TYPE_DRONE = 4;
   private static final int TYPE_ROBOT = 5;
 
-  private Random random;
+  private final Random random;
 
   /**
    * Construct a place agents function.

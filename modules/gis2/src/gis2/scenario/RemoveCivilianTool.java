@@ -36,7 +36,7 @@ public class RemoveCivilianTool extends ShapeTool {
   }
 
   private class RemoveCivilianEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public RemoveCivilianEdit(int id) {
       this.id = id;

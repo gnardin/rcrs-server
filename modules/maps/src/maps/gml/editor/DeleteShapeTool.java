@@ -22,8 +22,8 @@ import maps.gml.GMLCoordinates;
 public class DeleteShapeTool extends AbstractTool {
     private static final Color HIGHLIGHT_COLOUR = Color.BLUE;
 
-    private Listener listener;
-    private FilledShapeDecorator highlight;
+    private final Listener listener;
+    private final FilledShapeDecorator highlight;
 
     private GMLShape shape;
 
@@ -130,7 +130,7 @@ public class DeleteShapeTool extends AbstractTool {
     }
 
     private class DeleteShapeEdit extends AbstractUndoableEdit {
-        private GMLShape shape;
+        private final GMLShape shape;
 
         public DeleteShapeEdit(GMLShape shape) {
             this.shape = shape;

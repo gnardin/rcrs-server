@@ -22,7 +22,7 @@ import rescuecore2.misc.geometry.Line2D;
    This step cleans the OpenStreetMap data by removing duplicate nodes and way, fixing degenerate ways, and fixing building edge orderings.
 */
 public class CleanOSMStep extends ConvertStep {
-    private TemporaryMap map;
+    private final TemporaryMap map;
 
     /**
        Construct a CleanOSMStep.

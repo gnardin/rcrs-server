@@ -14,7 +14,7 @@ import rescuecore2.log.Logger;
    This step removes shapes that are duplicates or contained entirely inside another shape.
 */
 public class RemoveShapesStep extends ConvertStep {
-    private TemporaryMap map;
+    private final TemporaryMap map;
 
     /**
        Construct a RemoveFacesStep.

@@ -20,10 +20,10 @@ import maps.osm.OSMNode;
    A ShapeInfo that knows how to draw OSMWays.
 */
 public class OSMWayShapeInfo extends ShapeDebugFrame.ShapeInfo {
-    private OSMWay way;
-    private OSMMap map;
-    private Color colour;
-    private boolean drawEdgeDirections;
+    private final OSMWay way;
+    private final OSMMap map;
+    private final Color colour;
+    private final boolean drawEdgeDirections;
     private Rectangle2D bounds;
 
     /**

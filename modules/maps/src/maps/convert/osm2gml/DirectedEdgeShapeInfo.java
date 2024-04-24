@@ -14,7 +14,7 @@ import rescuecore2.misc.geometry.Line2D;
    A ShapeInfo that knows how to draw DirectedEdges.
 */
 public class DirectedEdgeShapeInfo extends ShapeDebugFrame.Line2DShapeInfo {
-    private Collection<DirectedEdge> edges;
+    private final Collection<DirectedEdge> edges;
 
     /**
        Create a new DirectedEdgeShapeInfo.

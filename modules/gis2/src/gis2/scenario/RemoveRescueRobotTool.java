@@ -36,7 +36,7 @@ public class RemoveRescueRobotTool extends ShapeTool{
     }
 
     private class RemoveRescueRobotEdit extends AbstractUndoableEdit {
-        private int id;
+        private final int id;
 
         public RemoveRescueRobotEdit(int id) {
             this.id = id;

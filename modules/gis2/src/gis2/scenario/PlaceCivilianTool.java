@@ -36,7 +36,7 @@ public class PlaceCivilianTool extends ShapeTool {
   }
 
   private class AddCivilianEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public AddCivilianEdit(int id) {
       this.id = id;

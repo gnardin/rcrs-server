@@ -20,7 +20,7 @@ import maps.gml.GMLShape;
  * Function for placing agents.
  */
 public class RandomHydrantPlacementFunction extends AbstractFunction {
-  private Random random;
+  private final Random random;
 
   /**
    * Construct a place agents function.

@@ -14,7 +14,7 @@ import maps.gml.GMLNode;
    A ShapeInfo that knows how to draw GMLEdges.
 */
 public class GMLEdgeShapeInfo extends ShapeDebugFrame.Line2DShapeInfo {
-    private GMLEdge edge;
+    private final GMLEdge edge;
 
     /**
        Create a new GMLEdgeShapeInfo.

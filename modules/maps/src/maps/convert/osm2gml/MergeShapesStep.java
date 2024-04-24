@@ -17,7 +17,7 @@ import maps.convert.ConvertStep;
    This class merges adjacent shapes of the same type.
 */
 public class MergeShapesStep extends ConvertStep {
-    private TemporaryMap map;
+    private final TemporaryMap map;
 
     /**
        Construct a MergeShapesStep.

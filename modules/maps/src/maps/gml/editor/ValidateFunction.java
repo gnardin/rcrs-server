@@ -31,11 +31,11 @@ public class ValidateFunction extends AbstractFunction {
     private static final Color HIGHLIGHT_COLOUR = Color.RED;
     private static final int NODE_SIZE = 5;
 
-    private DecoratorOverlay overlay = new DecoratorOverlay();
+    private final DecoratorOverlay overlay = new DecoratorOverlay();
 
-    private NodeDecorator nodeHighlight;
-    private EdgeDecorator edgeHighlight;
-    private FilledShapeDecorator shapeHighlight;
+    private final NodeDecorator nodeHighlight;
+    private final EdgeDecorator edgeHighlight;
+    private final FilledShapeDecorator shapeHighlight;
 
     /**
      * Create a new ValidateFunction.

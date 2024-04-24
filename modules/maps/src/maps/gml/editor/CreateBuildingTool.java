@@ -32,7 +32,7 @@ public class CreateBuildingTool extends CreateShapeTool {
     }
 
     private class CreateBuildingEdit extends AbstractUndoableEdit {
-        private GMLBuilding building;
+        private final GMLBuilding building;
 
         public CreateBuildingEdit(GMLBuilding building) {
             this.building = building;

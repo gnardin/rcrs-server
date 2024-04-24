@@ -25,9 +25,9 @@ public class CreateEdgeTool extends AbstractTool {
     private static final Color HIGHLIGHT_COLOUR = Color.BLUE;
     private static final int HIGHLIGHT_SIZE = 6;
 
-    private Listener listener;
-    private NodeDecorator nodeHighlight;
-    private LineOverlay overlay;
+    private final Listener listener;
+    private final NodeDecorator nodeHighlight;
+    private final LineOverlay overlay;
 
     private GMLNode hover;
     private GMLNode start;
@@ -179,7 +179,7 @@ public class CreateEdgeTool extends AbstractTool {
     }
 
     private class CreateEdgeEdit extends AbstractUndoableEdit {
-        private GMLEdge edge;
+        private final GMLEdge edge;
 
         public CreateEdgeEdit(GMLEdge edge) {
             this.edge = edge;

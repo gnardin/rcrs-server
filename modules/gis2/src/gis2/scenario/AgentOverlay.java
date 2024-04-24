@@ -25,7 +25,7 @@ public class AgentOverlay implements Overlay {
   private static final Color RESCUE_ROBOT_COLOUR = Color.MAGENTA;
   private static final Color DRONE_COLOUR = Color.CYAN;
   private static final int OFFSET = 7;
-  private ScenarioEditor editor;
+  private final ScenarioEditor editor;
 
   /**
    * Construct an AgentOverlay.

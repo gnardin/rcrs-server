@@ -127,6 +127,7 @@ public class OSMMap {
             for (Long nextID : next.getNodeIDs()) {
                 if (!nodes.containsKey(nextID)) {
                     allFound = false;
+                    break;
                 }
             }
             if (allFound) {

@@ -28,14 +28,14 @@ public abstract class CreateShapeTool extends AbstractTool {
     private static final Color SELECTED_COLOUR = Color.GREEN;
     private static final Color POSSIBLE_COLOUR = Color.WHITE;
 
-    private Listener listener;
-    private EdgeDecorator hoverHighlight;
-    private EdgeDecorator selectedHighlight;
-    private EdgeDecorator possibleHighlight;
+    private final Listener listener;
+    private final EdgeDecorator hoverHighlight;
+    private final EdgeDecorator selectedHighlight;
+    private final EdgeDecorator possibleHighlight;
 
-    private List<GMLEdge> edges;
-    private List<GMLNode> nodes;
-    private Set<GMLEdge> possible;
+    private final List<GMLEdge> edges;
+    private final List<GMLNode> nodes;
+    private final Set<GMLEdge> possible;
     private GMLNode startNode;
     private GMLNode currentNode;
     private GMLEdge hover;

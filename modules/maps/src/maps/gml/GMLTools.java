@@ -28,9 +28,9 @@ public final class GMLTools {
         StringBuilder result = new StringBuilder();
         for (Iterator<GMLCoordinates> it = coords.iterator(); it.hasNext();) {
             GMLCoordinates next = it.next();
-            result.append(String.valueOf(next.getX()));
+            result.append(next.getX());
             result.append(",");
-            result.append(String.valueOf(next.getY()));
+            result.append(next.getY());
             if (it.hasNext()) {
                 result.append(" ");
             }

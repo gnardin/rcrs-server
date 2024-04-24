@@ -20,11 +20,11 @@ import java.util.Map.Entry;
  */
 public class DecoratorOverlay implements Overlay {
 
-  private transient Map<GMLNode, NodeDecorator>         nodeDecorators;
-  private transient Map<GMLEdge, EdgeDecorator>         edgeDecorators;
-  private transient Map<GMLBuilding, BuildingDecorator> buildingDecorators;
-  private transient Map<GMLRoad, RoadDecorator>         roadDecorators;
-  private transient Map<GMLSpace, SpaceDecorator>       spaceDecorators;
+  private final transient Map<GMLNode, NodeDecorator>         nodeDecorators;
+  private final transient Map<GMLEdge, EdgeDecorator>         edgeDecorators;
+  private final transient Map<GMLBuilding, BuildingDecorator> buildingDecorators;
+  private final transient Map<GMLRoad, RoadDecorator>         roadDecorators;
+  private final transient Map<GMLSpace, SpaceDecorator>       spaceDecorators;
 
 
   /**
@@ -446,8 +446,7 @@ public class DecoratorOverlay implements Overlay {
         g.setFont( new Font( g.getFont().getName(), Font.BOLD,
             g.getFont().getSize() ) );
         g.drawString(
-            String
-                .valueOf( "C=" + ( (GMLRefuge) e.getKey() ).getBedCapacity() ),
+                "C=" + ((GMLRefuge) e.getKey()).getBedCapacity(),
             x - 20, y );
         // g.drawString(String.valueOf("R " +
         // ((GMLRefuge)e.getKey()).getRefillCapacity()), x - 10, y + 10);

@@ -60,11 +60,11 @@ public class GMLObjectInspector extends JPanel {
         };
 
     private GMLMap map;
-    private JTable table;
-    private NodeTableModel nodeModel;
-    private EdgeTableModel edgeModel;
-    private ShapeTableModel shapeModel;
-    private Map<Integer, List<ValidationError>> errors;
+    private final JTable table;
+    private final NodeTableModel nodeModel;
+    private final EdgeTableModel edgeModel;
+    private final ShapeTableModel shapeModel;
+    private final Map<Integer, List<ValidationError>> errors;
 
     /**
        Construct a new GMLObjectInspector.

@@ -4,7 +4,7 @@ package maps.osm;
    Abstract base class for OpenStreetMap objects.
 */
 public abstract class OSMObject {
-    private long id;
+    private final long id;
 
     /**
        Construct an OSMObject.

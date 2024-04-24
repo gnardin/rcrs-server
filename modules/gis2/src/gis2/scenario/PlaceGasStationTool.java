@@ -37,7 +37,7 @@ public class PlaceGasStationTool extends ShapeTool {
   }
 
   private class AddGasStationEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public AddGasStationEdit(int id) {
       this.id = id;

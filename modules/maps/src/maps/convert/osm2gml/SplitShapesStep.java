@@ -14,7 +14,7 @@ import rescuecore2.log.Logger;
    This step splits any shapes that overlap.
 */
 public class SplitShapesStep extends ConvertStep {
-    private TemporaryMap map;
+    private final TemporaryMap map;
 
     /**
        Construct a SplitFacesStep.

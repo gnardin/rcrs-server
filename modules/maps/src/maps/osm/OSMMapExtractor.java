@@ -26,14 +26,14 @@ public class OSMMapExtractor extends MouseAdapter {
     private static final int VIEWER_SIZE = 500;
     private static final Color DRAG_COLOUR = new Color(128, 128, 128, 64);
 
-    private JComponent glass;
+    private final JComponent glass;
     private Point press;
     private Point drag;
     private Point release;
 
-    private OSMMap map;
-    private OSMMapViewer viewer;
-    private Writer out;
+    private final OSMMap map;
+    private final OSMMapViewer viewer;
+    private final Writer out;
 
     /**
        Construct an OSMMapExtractor.
@@ -150,8 +150,8 @@ public class OSMMapExtractor extends MouseAdapter {
             g.setColor(DRAG_COLOUR);
             int x = Math.min(press.x, drag.x);
             int y = Math.max(press.y, drag.y);
-            int width = (int)Math.abs(press.x - drag.x);
-            int height = (int)Math.abs(press.y - drag.y);
+            int width = Math.abs(press.x - drag.x);
+            int height = Math.abs(press.y - drag.y);
             g.fillRect(x, y, width, height);
         }
     }

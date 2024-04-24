@@ -28,8 +28,8 @@ import rescuecore2.worldmodel.WorldModel;
 public final class GISServer {
   private static final long WAIT_TIME = 1000;
 
-  private ServerSocket server;
-  private WorldModel<? extends Entity> world;
+  private final ServerSocket server;
+  private final WorldModel<? extends Entity> world;
   private volatile boolean running;
 
   private static final Logger LOG = Logger.getLogger(GISServer.class);
@@ -81,7 +81,7 @@ public final class GISServer {
   }
 
   private class ServerThread extends Thread implements ConnectionListener {
-    private Socket socket;
+    private final Socket socket;
     private boolean dead;
 
     public ServerThread(Socket socket) {

@@ -17,7 +17,7 @@ import java.io.File;
 public class GMLMapGenerator {
     private static final String OUTPUT_FILE_KEY = "generator.output";
 
-    private Config config;
+    private final Config config;
 
     /**
        Construct a GMLMapGenerator.

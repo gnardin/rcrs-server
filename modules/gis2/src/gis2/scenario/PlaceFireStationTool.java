@@ -37,7 +37,7 @@ public class PlaceFireStationTool extends ShapeTool {
   }
 
   private class AddFireStationEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public AddFireStationEdit(int id) {
       this.id = id;

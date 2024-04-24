@@ -20,9 +20,9 @@ public class MergeNodesTool extends AbstractTool {
     private static final Color MERGE_COLOUR = Color.RED;
     private static final int HIGHLIGHT_SIZE = 6;
 
-    private Listener listener;
-    private NodeDecorator hoverHighlight;
-    private NodeDecorator mergeHighlight;
+    private final Listener listener;
+    private final NodeDecorator hoverHighlight;
+    private final NodeDecorator mergeHighlight;
     private GMLNode hover;
     private GMLNode merge;
     private boolean merging;

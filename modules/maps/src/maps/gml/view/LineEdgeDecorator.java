@@ -14,7 +14,7 @@ public class LineEdgeDecorator implements EdgeDecorator {
     private static final Stroke PASSABLE_STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
     private static final Stroke IMPASSABLE_STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
 
-    private Color colour;
+    private final Color colour;
 
     /**
        Construct a LineEdgeDecorator.

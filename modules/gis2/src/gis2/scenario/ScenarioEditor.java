@@ -69,37 +69,37 @@ public class ScenarioEditor extends JPanel {
   // private static final Color DRONE_COLOUR = new Color(0, 255, 255);
 
   private GMLMap map;
-  private GMLMapViewer viewer;
-  private GMLObjectInspector inspector;
-  private DecoratorOverlay fireOverlay;
-  private DecoratorOverlay centreOverlay;
-  private transient AgentOverlay agentOverlay;
+  private final GMLMapViewer viewer;
+  private final GMLObjectInspector inspector;
+  private final DecoratorOverlay fireOverlay;
+  private final DecoratorOverlay centreOverlay;
+  private final transient AgentOverlay agentOverlay;
   private GisScenario scenario;
   private Tool currentTool;
-  private JLabel statusLabel;
+  private final JLabel statusLabel;
 
   private boolean changed;
 
-  private UndoManager undoManager;
+  private final UndoManager undoManager;
   private transient Action undoAction;
   private transient Action redoAction;
 
   private File baseDir;
   private File saveFile;
 
-  private FilledShapeDecorator fireDecorator = new FilledShapeDecorator(
+  private final FilledShapeDecorator fireDecorator = new FilledShapeDecorator(
       FIRE_COLOUR, null, null);
-  private FilledShapeDecorator fireStationDecorator = new FilledShapeDecorator(
+  private final FilledShapeDecorator fireStationDecorator = new FilledShapeDecorator(
       FIRE_STATION_COLOUR, null, null);
-  private FilledShapeDecorator policeOfficeDecorator = new FilledShapeDecorator(
+  private final FilledShapeDecorator policeOfficeDecorator = new FilledShapeDecorator(
       POLICE_OFFICE_COLOUR, null, null);
-  private FilledShapeDecorator ambulanceCentreDecorator = new FilledShapeDecorator(
+  private final FilledShapeDecorator ambulanceCentreDecorator = new FilledShapeDecorator(
       AMBULANCE_CENTRE_COLOUR, null, null);
-  private FilledShapeDecorator refugeDecorator = new FilledShapeDecorator(
+  private final FilledShapeDecorator refugeDecorator = new FilledShapeDecorator(
       REFUGE_COLOUR, null, null);
-  private FilledShapeDecorator gasStationDecorator = new FilledShapeDecorator(
+  private final FilledShapeDecorator gasStationDecorator = new FilledShapeDecorator(
       GAS_STATION_COLOUR, null, null);
-  private FilledShapeDecorator hydrantDecorator = new FilledShapeDecorator(null,
+  private final FilledShapeDecorator hydrantDecorator = new FilledShapeDecorator(null,
       HYDRANT_COLOUR, null);
 
   /**

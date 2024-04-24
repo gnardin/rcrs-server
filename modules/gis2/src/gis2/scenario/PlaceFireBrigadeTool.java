@@ -36,7 +36,7 @@ public class PlaceFireBrigadeTool extends ShapeTool {
   }
 
   private class AddFireBrigadeEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public AddFireBrigadeEdit(int id) {
       this.id = id;

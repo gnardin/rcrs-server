@@ -32,7 +32,7 @@ public class CreateRoadTool extends CreateShapeTool {
     }
 
     private class CreateRoadEdit extends AbstractUndoableEdit {
-        private GMLRoad road;
+        private final GMLRoad road;
 
         public CreateRoadEdit(GMLRoad road) {
             this.road = road;

@@ -28,9 +28,9 @@ public class SplitEdgeTool extends AbstractTool {
     private static final Color NODE_COLOUR = Color.BLACK;
     private static final int NODE_SIZE = 6;
 
-    private Listener listener;
-    private NodeDecorator nodeHighlight;
-    private EdgeDecorator edgeHighlight;
+    private final Listener listener;
+    private final NodeDecorator nodeHighlight;
+    private final EdgeDecorator edgeHighlight;
     private GMLNode node;
     private GMLEdge edge;
 

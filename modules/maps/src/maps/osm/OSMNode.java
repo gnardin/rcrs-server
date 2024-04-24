@@ -4,8 +4,8 @@ package maps.osm;
    An OpenStreetMap node.
  */
 public class OSMNode extends OSMObject {
-    private double lat;
-    private double lon;
+    private final double lat;
+    private final double lon;
 
     /**
        Construct an OSMNode.

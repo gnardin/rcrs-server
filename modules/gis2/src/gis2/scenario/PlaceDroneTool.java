@@ -36,7 +36,7 @@ public class PlaceDroneTool extends ShapeTool {
     }
 
     private class AddDroneEdit extends AbstractUndoableEdit {
-        private int id;
+        private final int id;
 
         public AddDroneEdit(int id) {
             this.id = id;
