@@ -12,6 +12,7 @@ import rescuecore2.standard.messages.AKRescue;
 import rescuecore2.standard.messages.AKLoad;
 import rescuecore2.standard.messages.AKUnload;
 import rescuecore2.standard.messages.AKRest;
+import rescuecore2.standard.messages.AKDetect;
 
 import kernel.CommandCollector;
 import kernel.AgentProxy;
@@ -68,6 +69,7 @@ public class StandardCommandCollector implements CommandCollector {
                 || (c instanceof AKClearArea)
                 || (c instanceof AKRescue)
                 || (c instanceof AKLoad)
+                || (c instanceof AKDetect)
                 || (c instanceof AKUnload));
     }
 }

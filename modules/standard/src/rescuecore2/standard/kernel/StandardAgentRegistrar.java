@@ -55,6 +55,8 @@ public class StandardAgentRegistrar implements AgentRegistrar {
         VISIBLE_CONFIG_OPTIONS.add(StandardConstants.AMBULANCE_CENTRE_COUNT_KEY.replace(".", "\\."));
         VISIBLE_CONFIG_OPTIONS.add(StandardConstants.POLICE_FORCE_COUNT_KEY.replace(".", "\\."));
         VISIBLE_CONFIG_OPTIONS.add(StandardConstants.POLICE_OFFICE_COUNT_KEY.replace(".", "\\."));
+        VISIBLE_CONFIG_OPTIONS.add(StandardConstants.RESCUE_ROBOT_COUNT_KEY.replace(".", "\\."));
+        VISIBLE_CONFIG_OPTIONS.add(StandardConstants.DRONE_COUNT_KEY.replace(".", "\\."));
         VISIBLE_CONFIG_OPTIONS.add("comms\\.channels\\.count");
         VISIBLE_CONFIG_OPTIONS.add("comms\\.channels\\.max\\.platoon");
         VISIBLE_CONFIG_OPTIONS.add("comms\\.channels\\.max\\.centre");

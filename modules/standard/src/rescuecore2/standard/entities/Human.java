@@ -5,6 +5,7 @@ import rescuecore2.misc.Pair;
 import rescuecore2.worldmodel.EntityID;
 import rescuecore2.worldmodel.Property;
 import rescuecore2.worldmodel.WorldModel;
+import rescuecore2.worldmodel.properties.DoubleProperty;
 import rescuecore2.worldmodel.properties.EntityRefProperty;
 import rescuecore2.worldmodel.properties.IntArrayProperty;
 import rescuecore2.worldmodel.properties.IntProperty;
@@ -24,6 +25,11 @@ public abstract class Human extends StandardEntity {
   private IntProperty       hp;
   private IntProperty       damage;
   private IntProperty       buriedness;
+  private IntProperty       battery;
+  private IntProperty       sensorRange;
+  private DoubleProperty    height;
+  private DoubleProperty    detectionRange;
+  private DoubleProperty    speed;
 
 
   /**
@@ -45,8 +51,12 @@ public abstract class Human extends StandardEntity {
     hp = new IntProperty( StandardPropertyURN.HP );
     damage = new IntProperty( StandardPropertyURN.DAMAGE );
     buriedness = new IntProperty( StandardPropertyURN.BURIEDNESS );
+    battery = new IntProperty( StandardPropertyURN.BATTERY );
+    sensorRange = new IntProperty( StandardPropertyURN.SENSOR_RANGE );
+    height = new DoubleProperty( StandardPropertyURN.HEIGHT );
+    detectionRange = new DoubleProperty( StandardPropertyURN.DETECTION_RANGE );
     registerProperties( x, y, position, positionHistory, travelDistance,
-        direction, stamina, hp, damage, buriedness );
+        direction, stamina, hp, damage, buriedness, battery, sensorRange, height, detectionRange );
   }
 
 
@@ -68,8 +78,12 @@ public abstract class Human extends StandardEntity {
     hp = new IntProperty( other.hp );
     damage = new IntProperty( other.damage );
     buriedness = new IntProperty( other.buriedness );
+    battery = new IntProperty( other.battery );
+    height = new DoubleProperty( other.height );
+    detectionRange = new DoubleProperty( other.detectionRange );
+    sensorRange = new IntProperty( other.sensorRange );
     registerProperties( x, y, position, positionHistory, travelDistance,
-        direction, stamina, hp, damage, buriedness );
+        direction, stamina, hp, damage, buriedness, battery, height, detectionRange );
   }
 
 
@@ -102,6 +116,12 @@ public abstract class Human extends StandardEntity {
         return buriedness;
       case TRAVEL_DISTANCE:
         return travelDistance;
+      case BATTERY:
+        return battery;
+      case HEIGHT:
+        return height;
+      case DETECTION_RANGE:
+        return detectionRange;
       default:
         return super.getProperty( urn );
     }
@@ -666,4 +686,5 @@ public abstract class Human extends StandardEntity {
 
     return jsonObject;
   }
+
 }
