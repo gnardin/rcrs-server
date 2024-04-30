@@ -6,7 +6,7 @@ import rescuecore2.worldmodel.EntityID;
 /**
  * The Drone object.
  */
-public class Drone extends Robot {
+public class Drone extends Human {
 
     /**
      * Construct a Drone object with entirely undefined values.

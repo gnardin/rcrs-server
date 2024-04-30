@@ -23,19 +23,7 @@ import rescuecore2.misc.geometry.Vector2D;
 import rescuecore2.misc.gui.ShapeDebugFrame;
 import rescuecore2.misc.gui.ShapeDebugFrame.Line2DShapeInfo;
 import rescuecore2.standard.components.StandardSimulator;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.Area;
-import rescuecore2.standard.entities.Blockade;
-import rescuecore2.standard.entities.Civilian;
-import rescuecore2.standard.entities.Edge;
-import rescuecore2.standard.entities.FireBrigade;
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.PoliceForce;
-import rescuecore2.standard.entities.Refuge;
-import rescuecore2.standard.entities.Road;
-import rescuecore2.standard.entities.StandardEntity;
-import rescuecore2.standard.entities.StandardEntityURN;
-import rescuecore2.standard.entities.StandardPropertyURN;
+import rescuecore2.standard.entities.*;
 import rescuecore2.standard.messages.AKClear;
 import rescuecore2.standard.messages.AKClearArea;
 import rescuecore2.standard.messages.AKExtinguish;
@@ -282,6 +270,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         case POLICE_OFFICE:
         case REFUGE:
         case AMBULANCE_TEAM:
+        case DRONE:
+        case RESCUE_ROBOT:
         case POLICE_FORCE:
         case CIVILIAN:
         case FIRE_BRIGADE:
@@ -315,7 +305,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       NumberGenerator<Double> civilianVelocityGenerator) {
     double radius = 0;
     double velocityLimit = 0;
-    if (h instanceof FireBrigade || h instanceof PoliceForce || h instanceof AmbulanceTeam) {
+    if (h instanceof FireBrigade || h instanceof PoliceForce || h instanceof AmbulanceTeam || h instanceof RescueRobot || h instanceof Drone) {
       radius = RESCUE_AGENT_RADIUS;
       velocityLimit = agentVelocityGenerator.nextValue();
     } else if (h instanceof Civilian) {

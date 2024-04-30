@@ -36,6 +36,8 @@ public class ClearAllFunction extends AbstractFunction {
     s.setRefuges(new HashSet<Integer>());
     s.setGasStations(new HashSet<Integer>());
     s.setHydrants(new HashSet<Integer>());
+    s.setRescueRobots(new HashSet<Integer>());
+    s.setDrones(new HashSet<Integer>());
     editor.setChanged();
     editor.updateOverlays();
   }

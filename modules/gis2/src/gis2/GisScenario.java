@@ -20,22 +20,7 @@ import org.dom4j.QName;
 import rescuecore2.config.Config;
 import rescuecore2.scenario.compatibilities.CollapseSimCompatibaleScenarioV1_1;
 import rescuecore2.scenario.exceptions.ScenarioException;
-import rescuecore2.standard.entities.AmbulanceCentre;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.Area;
-import rescuecore2.standard.entities.Building;
-import rescuecore2.standard.entities.Civilian;
-import rescuecore2.standard.entities.FireBrigade;
-import rescuecore2.standard.entities.FireStation;
-import rescuecore2.standard.entities.GasStation;
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.Hydrant;
-import rescuecore2.standard.entities.PoliceForce;
-import rescuecore2.standard.entities.PoliceOffice;
-import rescuecore2.standard.entities.Refuge;
-import rescuecore2.standard.entities.Road;
-import rescuecore2.standard.entities.StandardEntity;
-import rescuecore2.standard.entities.StandardWorldModel;
+import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 
@@ -63,6 +48,8 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
   private static final QName FB_QNAME = DocumentHelper.createQName("firebrigade", SCENARIO_NAMESPACE);
   private static final QName AT_QNAME = DocumentHelper.createQName("ambulanceteam", SCENARIO_NAMESPACE);
   private static final QName PF_QNAME = DocumentHelper.createQName("policeforce", SCENARIO_NAMESPACE);
+  private static final QName RR_QNAME = DocumentHelper.createQName("rescuerobot", SCENARIO_NAMESPACE);
+  private static final QName DR_NAME = DocumentHelper.createQName("drone", SCENARIO_NAMESPACE);
   private static final QName FS_QNAME = DocumentHelper.createQName("firestation", SCENARIO_NAMESPACE);
   private static final QName AC_QNAME = DocumentHelper.createQName("ambulancecentre", SCENARIO_NAMESPACE);
   private static final QName PO_QNAME = DocumentHelper.createQName("policeoffice", SCENARIO_NAMESPACE);
@@ -87,6 +74,8 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
   private Collection<Integer> fsLocations;
   private Collection<Integer> acLocations;
   private Collection<Integer> poLocations;
+  private Collection<Integer> rrLocations;
+  private Collection<Integer> drLocations;
 
   /* Refuge Capacity requirements: 2020 */
   private HashMap<Integer, Integer> refugeBedCapacity;
@@ -110,6 +99,8 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
     fsLocations = new ArrayList<Integer>();
     poLocations = new ArrayList<Integer>();
     acLocations = new ArrayList<Integer>();
+    rrLocations = new ArrayList<Integer>();
+    drLocations = new ArrayList<Integer>();
     /* Aftershock requirement:2013 */
     aftershocks = new HashMap<Integer, Float>();
     /* Refuge Capacity requirements: 2020 */
@@ -147,6 +138,8 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
     fsLocations.clear();
     poLocations.clear();
     acLocations.clear();
+    rrLocations.clear();
+    drLocations.clear();
     refugeBedCapacity.clear();
     refugeRefillCapacity.clear();
 
@@ -193,6 +186,14 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
     for (Object next : root.elements(AT_QNAME)) {
       Element e = (Element) next;
       atLocations.add(Integer.parseInt(e.attributeValue(LOCATION_QNAME)));
+    }
+    for (Object next : root.elements(RR_QNAME)) {
+      Element e = (Element) next;
+      rrLocations.add(Integer.parseInt(e.attributeValue(LOCATION_QNAME)));
+    }
+    for (Object next : root.elements(DR_NAME)) {
+      Element e = (Element) next;
+      drLocations.add(Integer.parseInt(e.attributeValue(LOCATION_QNAME)));
     }
     for (Object next : root.elements(FS_QNAME)) {
       Element e = (Element) next;
@@ -264,6 +265,12 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
     }
     for (int next : acLocations) {
       root.addElement(AC_QNAME).addAttribute(LOCATION_QNAME, String.valueOf(next));
+    }
+    for (int next : rrLocations) {
+      root.addElement(RR_QNAME).addAttribute(LOCATION_QNAME, String.valueOf(next));
+    }
+    for (int next : drLocations) {
+      root.addElement(DR_NAME).addAttribute(LOCATION_QNAME, String.valueOf(next));
     }
     root.addNamespace("scenario", SCENARIO_NAMESPACE_URI);
   }
@@ -357,6 +364,20 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
       lastID = getNextId(model, config, lastID);
       AmbulanceTeam a = new AmbulanceTeam(new EntityID(lastID));
       setupAgent(a, id, model, config);
+    }
+    LOG.debug("Creating " + rrLocations.size() + " rescue robots");
+    for (int next : rrLocations) {
+      EntityID id = new EntityID(next);
+      lastID = getNextId(model, config, lastID);
+      RescueRobot r = new RescueRobot(new EntityID(lastID));
+      setupAgent(r, id, model, config);
+    }
+    LOG.debug("Creating " + drLocations.size() + " drones");
+    for (int next : drLocations) {
+      EntityID id = new EntityID(next);
+      lastID = getNextId(model, config, lastID);
+      Drone d = new Drone(new EntityID(lastID));
+      setupAgent(d, id, model, config);
     }
     LOG.debug("Creating " + fsLocations.size() + " fire stations");
     for (int next : fsLocations) {
@@ -555,6 +576,27 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
     return Collections.unmodifiableCollection(acLocations);
   }
 
+
+  /**
+   * Get the list of rescue robots locations.
+   *
+   * @return The list of rescue robot locations.
+   */
+  public Collection<Integer> getRescueRobots() {
+    return Collections.unmodifiableCollection(rrLocations);
+  }
+
+  /**
+   * Get the list of drone locations.
+   *
+   * @return The list of drone locations.
+   */
+  public Collection<Integer> getDrones() {
+    return Collections.unmodifiableCollection(drLocations);
+  }
+
+
+
   /**
    * Set the set of fire locations.
    *
@@ -661,6 +703,26 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    * @param newLocations The new list of locations.
    */
   public void setAmbulanceCentres(Collection<Integer> newLocations) {
+    acLocations.clear();
+    acLocations.addAll(newLocations);
+  }
+
+  /**
+   * Set the list of rescue robots locations
+   *
+   * @param newLocations
+   */
+  public void setRescueRobots(Collection<Integer> newLocations) {
+    acLocations.clear();
+    acLocations.addAll(newLocations);
+  }
+
+  /**
+   * Set the list of drone locations
+   *
+   * @param newLocations
+   */
+  public void setDrones(Collection<Integer> newLocations) {
     acLocations.clear();
     acLocations.addAll(newLocations);
   }
@@ -883,6 +945,42 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    */
   public void removeAmbulanceCentre(int location) {
     acLocations.remove(location);
+  }
+
+  /**
+   * Add a drone
+   *
+   * @param location The new drone location
+   */
+  public void addDrone(int location) {
+    drLocations.add(location);
+  }
+
+  /**
+   * Remove a drone
+   *
+   * @param location The drone location to remove.
+   */
+  public void removeDrone(int location) {
+    drLocations.remove(location);
+  }
+
+  /**
+   * Add a rescue robot.
+   *
+   * @param location The new rescue robot location.
+   */
+  public void addRescueRobot(int location) {
+    rrLocations.add(location);
+  }
+
+  /**
+   * Remove a rescue robot.
+   *
+   * @param location The rescue robot location to remove
+   */
+  public void removeRescueRobot(int location) {
+    rrLocations.remove(location);
   }
 
   private void setupAgent(Human h, EntityID position, StandardWorldModel model, Config config)

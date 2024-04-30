@@ -10,25 +10,11 @@ import kernel.ComponentManager;
 import kernel.KernelException;
 
 import rescuecore2.config.Config;
+import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.WorldModel;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.Property;
 import rescuecore2.Constants;
-
-import rescuecore2.standard.entities.FireBrigade;
-import rescuecore2.standard.entities.FireStation;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.AmbulanceCentre;
-import rescuecore2.standard.entities.PoliceForce;
-import rescuecore2.standard.entities.PoliceOffice;
-import rescuecore2.standard.entities.Civilian;
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.Road;
-import rescuecore2.standard.entities.Area;
-import rescuecore2.standard.entities.Building;
-import rescuecore2.standard.entities.StandardPropertyURN;
-import rescuecore2.standard.entities.StandardEntityURN;
-import rescuecore2.standard.entities.StandardWorldModel;
 
 import rescuecore2.standard.StandardConstants;
 
@@ -55,6 +41,8 @@ public class StandardAgentRegistrar implements AgentRegistrar {
         VISIBLE_CONFIG_OPTIONS.add(StandardConstants.AMBULANCE_CENTRE_COUNT_KEY.replace(".", "\\."));
         VISIBLE_CONFIG_OPTIONS.add(StandardConstants.POLICE_FORCE_COUNT_KEY.replace(".", "\\."));
         VISIBLE_CONFIG_OPTIONS.add(StandardConstants.POLICE_OFFICE_COUNT_KEY.replace(".", "\\."));
+        VISIBLE_CONFIG_OPTIONS.add(StandardConstants.RESCUE_ROBOT_COUNT_KEY.replace(".", "\\."));
+        VISIBLE_CONFIG_OPTIONS.add(StandardConstants.DRONE_COUNT_KEY.replace(".", "\\."));
         VISIBLE_CONFIG_OPTIONS.add("comms\\.channels\\.count");
         VISIBLE_CONFIG_OPTIONS.add("comms\\.channels\\.max\\.platoon");
         VISIBLE_CONFIG_OPTIONS.add("comms\\.channels\\.max\\.centre");
@@ -87,6 +75,8 @@ public class StandardAgentRegistrar implements AgentRegistrar {
         agentConfig.setIntValue(StandardConstants.AMBULANCE_CENTRE_COUNT_KEY, model.getEntitiesOfType(StandardEntityURN.AMBULANCE_CENTRE).size());
         agentConfig.setIntValue(StandardConstants.POLICE_FORCE_COUNT_KEY, model.getEntitiesOfType(StandardEntityURN.POLICE_FORCE).size());
         agentConfig.setIntValue(StandardConstants.POLICE_OFFICE_COUNT_KEY, model.getEntitiesOfType(StandardEntityURN.POLICE_OFFICE).size());
+        agentConfig.setIntValue(StandardConstants.RESCUE_ROBOT_COUNT_KEY, model.getEntitiesOfType(StandardEntityURN.RESCUE_ROBOT).size());
+        agentConfig.setIntValue(StandardConstants.DRONE_COUNT_KEY, model.getEntitiesOfType(StandardEntityURN.DRONE).size());
         Set<Entity> initialEntities = new HashSet<Entity>();
         for (Entity e : world) {
             maybeAddInitialEntity(e, initialEntities);
@@ -98,6 +88,8 @@ public class StandardAgentRegistrar implements AgentRegistrar {
                        || e instanceof AmbulanceCentre
                        || e instanceof PoliceForce
                        || e instanceof PoliceOffice
+                       || e instanceof RescueRobot
+                       || e instanceof Drone
                        ) {
                    Set<Entity> s = new HashSet<Entity>(initialEntities);
                    s.remove(e);

@@ -5,6 +5,7 @@ import rescuecore2.misc.Pair;
 import rescuecore2.worldmodel.EntityID;
 import rescuecore2.worldmodel.Property;
 import rescuecore2.worldmodel.WorldModel;
+import rescuecore2.worldmodel.properties.DoubleProperty;
 import rescuecore2.worldmodel.properties.EntityRefProperty;
 import rescuecore2.worldmodel.properties.IntArrayProperty;
 import rescuecore2.worldmodel.properties.IntProperty;
@@ -24,6 +25,12 @@ public abstract class Human extends StandardEntity {
   private IntProperty       hp;
   private IntProperty       damage;
   private IntProperty       buriedness;
+  private IntProperty       battery;
+  private IntProperty       sensorRange;
+  private DoubleProperty    height;
+  private DoubleProperty    detectionRange;
+  private DoubleProperty    speed;
+
 
 
   /**
@@ -45,8 +52,13 @@ public abstract class Human extends StandardEntity {
     hp = new IntProperty( StandardPropertyURN.HP );
     damage = new IntProperty( StandardPropertyURN.DAMAGE );
     buriedness = new IntProperty( StandardPropertyURN.BURIEDNESS );
+    battery = new IntProperty( StandardPropertyURN.BATTERY );
+    sensorRange = new IntProperty( StandardPropertyURN.SENSOR_RANGE );
+    detectionRange = new DoubleProperty( StandardPropertyURN.DETECTION_RANGE );
+    height = new DoubleProperty( StandardPropertyURN.HEIGHT );
+    speed = new DoubleProperty( StandardPropertyURN.SPEED );
     registerProperties( x, y, position, positionHistory, travelDistance,
-        direction, stamina, hp, damage, buriedness );
+        direction, stamina, hp, damage, buriedness, battery, sensorRange, detectionRange, height, speed );
   }
 
 
@@ -68,8 +80,14 @@ public abstract class Human extends StandardEntity {
     hp = new IntProperty( other.hp );
     damage = new IntProperty( other.damage );
     buriedness = new IntProperty( other.buriedness );
+    battery = new IntProperty( other.battery );
+    sensorRange = new IntProperty( other.sensorRange );
+    detectionRange = new DoubleProperty( other.detectionRange );
+    height = new DoubleProperty( other.height );
+    speed = new DoubleProperty( other.speed );
     registerProperties( x, y, position, positionHistory, travelDistance,
-        direction, stamina, hp, damage, buriedness );
+        direction, stamina, hp, damage, buriedness, battery, sensorRange,
+            height, detectionRange, speed );
   }
 
 
@@ -102,6 +120,16 @@ public abstract class Human extends StandardEntity {
         return buriedness;
       case TRAVEL_DISTANCE:
         return travelDistance;
+      case HEIGHT:
+        return height;
+      case SPEED:
+        return speed;
+      case BATTERY:
+        return battery;
+      case SENSOR_RANGE:
+        return sensorRange;
+      case DETECTION_RANGE:
+        return detectionRange;
       default:
         return super.getProperty( urn );
     }
@@ -612,6 +640,193 @@ public abstract class Human extends StandardEntity {
    */
   public void undefineTravelDistance() {
     travelDistance.undefine();
+  }
+
+
+  /** Get the height property
+   *
+   * @return The height property
+   */
+  public DoubleProperty getHeightProperty() {
+    return height;
+  }
+
+  /** Get the height of the robot
+   *
+   * @return The height of the robot
+   */
+  public double getHeight() {
+    return height.getValue();
+  }
+
+  /** Set the height of the robot
+   *
+   * @param h The new height of the robot
+   */
+  public void setHeight( double h ) {
+    this.height.setValue( h );
+  }
+
+  /** Find out if the height has been defined
+   *
+   * @return True if the height has been defined, false otherwise.
+   */
+  public boolean isHeightDefined() {
+    return height.isDefined();
+  }
+
+  /** Undefine the height property */
+  public void undefineHeight() {
+    height.undefine();
+  }
+
+  /**
+   * Get the battery property.
+   *
+   * @return The battery property.
+   */
+  public IntProperty getBatteryProperty() {
+    return travelDistance;
+  }
+
+
+  /**
+   * Get the battery life.
+   *
+   * @return The battery life.
+   */
+  public int getBattery() {
+    return battery.getValue();
+  }
+
+
+  /**
+   * Set the battery life.
+   *
+   * @param b
+   *          The new battery life.
+   */
+  public void setBattery( int b ) {
+    this.battery.setValue( b );
+  }
+
+
+  /**
+   * Find out if the battery life property has been defined.
+   *
+   * @return True if the battery life property has been defined, false
+   *         otherwise.
+   */
+  public boolean isBatteryDefined() {
+    return battery.isDefined();
+  }
+
+
+  /**
+   * Undefine the travel distance property.
+   */
+  public void undefineBattery() {
+    battery.undefine();
+  }
+
+  /**
+   * Get the speed property
+   *
+   * @return The speed property.
+   * */
+  public DoubleProperty getSpeedProperty() {
+    return speed;
+  }
+
+  /**
+   * Get the speed of the robot
+   *
+   * @return The speed of the robot.
+   * */
+  public double getSpeed() {
+    return speed.getValue();
+  }
+
+  /**
+   * Set the speed of the robot
+   *
+   * @param s The new speed of the robot.
+   * */
+  public void setSpeed( double s ) {
+    this.speed.setValue( s );
+  }
+
+  /** Find out if the speed has been defined
+   *
+   * @return True if the speed has been defined, false otherwise.
+   */
+  public boolean isSpeedDefined() {
+    return speed.isDefined();
+  }
+
+  /**
+   * Undefine the speed property
+   */
+  public void undefineSpeed() {
+    speed.undefine();
+  }
+
+  /**
+   * Get the detection range
+   *
+   * @return The detection range of the robot
+   */
+  public DoubleProperty getDetectionRangeProperty() {
+    return detectionRange;
+  }
+
+  /**
+   * Get the detection range of the robot
+   *
+   * @return The detection range of the robot
+   */
+  public double getDetectionRange() {
+    return detectionRange.getValue();
+  }
+
+  /**
+   * Set the detection range of the robot
+   *
+   * @param dr The new detection range of the robot
+   */
+  public void setDetectionRange( double dr ) {
+    this.detectionRange.setValue( dr );
+  }
+
+  /** Find out if the detection range has been defined
+   *
+   * @return True if the detection range has been defined, false otherwise.
+   */
+  public boolean isDetectionRangeDefined() {
+    return detectionRange.isDefined();
+  }
+
+  /** Undefine the detection range property */
+  public void undefineDetectionRange() {
+    detectionRange.undefine();
+  }
+
+  /**
+   * Get the sensor range property
+   *
+   * @return The sensor range of the robot.
+   */
+  public IntProperty getSensorRangeProperty() {
+    return sensorRange;
+  }
+
+  /**
+   * Get the sensor range of the robot.
+   *
+   * @return The sensor range of the robot.
+   */
+  public int getSensorRange() {
+    return sensorRange.getValue();
   }
 
 

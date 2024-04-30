@@ -31,6 +31,8 @@ public class ClearAgentsFunction extends AbstractFunction {
     s.setPoliceOffices(new HashSet<Integer>());
     s.setAmbulanceTeams(new HashSet<Integer>());
     s.setAmbulanceCentres(new HashSet<Integer>());
+    s.setRescueRobots(new HashSet<Integer>());
+    s.setDrones(new HashSet<Integer>());
     editor.setChanged();
     editor.updateOverlays();
   }

@@ -28,6 +28,7 @@ import rescuecore2.misc.gui.DrawingTools;
 import rescuecore2.misc.gui.ScreenTransform;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.PoliceForce;
+import rescuecore2.standard.entities.RescueRobot;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.messages.AKClear;
 import rescuecore2.standard.messages.AKClearArea;
@@ -46,6 +47,7 @@ import rescuecore2.worldmodel.EntityID;
 public class CommandLayer extends StandardViewLayer {
     private static final int SIZE = 15;
     private static final Color CLEAR_COLOUR = new Color(0, 0, 255, 128);
+    private static final Color CLEAR_COLOUR_ROBOT = new Color(255, 0, 255, 128);
     private static final Color RESCUE_COLOUR = new Color(255, 255, 0, 128);
     private static final Color LOAD_COLOUR = new Color(255, 255, 255, 128);
     private static final Color UNLOAD_COLOUR = new Color(255, 255, 255, 128);
@@ -310,15 +312,16 @@ public class CommandLayer extends StandardViewLayer {
         int x = t.xToScreen(location.first()) - SIZE / 2;
         int y = t.yToScreen(location.second()) - SIZE / 2;
 
-        PoliceForce agent = (PoliceForce) world.getEntity(c.getAgentID());
+        //PoliceForce agent = (PoliceForce) world.getEntity(c.getAgentID());
+        RescueRobot agent = (RescueRobot) world.getEntity(c.getAgentID());
 		int targetX = c.getDestinationX();
 		int targetY = c.getDestinationY();
 		Area area = getClearArea(agent, targetX, targetY, 10000, 1250);
-        g.setColor(CLEAR_COLOUR);
+        g.setColor(CLEAR_COLOUR_ROBOT);
 		drawArea(area);
 
         Shape shape = new Ellipse2D.Double(x, y, SIZE, SIZE);
-        g.setColor(CLEAR_COLOUR);
+        g.setColor(CLEAR_COLOUR_ROBOT);
         g.fill(shape);
     }
 

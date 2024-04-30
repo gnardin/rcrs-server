@@ -3,7 +3,7 @@ package rescuecore2.standard.entities;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 
-public class RescueRobot extends Robot {
+public class RescueRobot extends Human {
 
     /**
      * Construct a RescueRobot object with entirely undefined values.

@@ -22,5 +22,11 @@ public final class StandardConstants {
     /** Config key for the number of police offices in the scenario. */
     public static final String POLICE_OFFICE_COUNT_KEY = "scenario.agents.po";
 
+    /** Config key for the number of rescue robots in the scenario. */
+    public static final String RESCUE_ROBOT_COUNT_KEY = "scenario.agents.rr";
+
+    /**Config key for the number of drones in the scenario*/
+    public static final String DRONE_COUNT_KEY = "scenario.agents.dr";
+
     private StandardConstants() {}
 }

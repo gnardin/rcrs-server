@@ -7,22 +7,13 @@ import kernel.AbstractCommunicationModel;
 
 import rescuecore2.messages.Command;
 import rescuecore2.config.Config;
+import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 import rescuecore2.worldmodel.WorldModel;
 import rescuecore2.misc.collections.LazyMap;
 import rescuecore2.log.Logger;
 
-import rescuecore2.standard.entities.StandardWorldModel;
-import rescuecore2.standard.entities.StandardEntity;
-import rescuecore2.standard.entities.StandardEntityURN;
-import rescuecore2.standard.entities.FireBrigade;
-import rescuecore2.standard.entities.FireStation;
-import rescuecore2.standard.entities.PoliceForce;
-import rescuecore2.standard.entities.PoliceOffice;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.AmbulanceCentre;
-import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.messages.AKSay;
 import rescuecore2.standard.messages.AKTell;
 
@@ -41,6 +32,8 @@ public class StandardCommunicationModel extends AbstractCommunicationModel {
     private int fsMax;
     private int poMax;
     private int acMax;
+    private int drMax;
+    private int rrMax;
     private Map<EntityID, Integer> uttered;
     private Map<EntityID, Integer> heard;
 
@@ -77,6 +70,8 @@ public class StandardCommunicationModel extends AbstractCommunicationModel {
         fsMax = world.getEntitiesOfType(StandardEntityURN.FIRE_BRIGADE).size() * 2;
         acMax = world.getEntitiesOfType(StandardEntityURN.AMBULANCE_TEAM).size() * 2;
         poMax = world.getEntitiesOfType(StandardEntityURN.POLICE_FORCE).size() * 2;
+        drMax = world.getEntitiesOfType(StandardEntityURN.DRONE).size() * 2;
+        rrMax = world.getEntitiesOfType(StandardEntityURN.RESCUE_ROBOT).size() * 2;
     }
 
     @Override
@@ -121,7 +116,8 @@ public class StandardCommunicationModel extends AbstractCommunicationModel {
                                                                StandardEntityURN.AMBULANCE_TEAM,
                                                                StandardEntityURN.AMBULANCE_CENTRE,
                                                                StandardEntityURN.POLICE_FORCE,
-                                                               StandardEntityURN.POLICE_OFFICE)) {
+                                                               StandardEntityURN.DRONE,
+                                                               StandardEntityURN.POLICE_OFFICE, StandardEntityURN.RESCUE_ROBOT)) {
             int h = heard.get(receiver.getID());
             if (h >= getMessageMax(receiver)) {
                 continue;
@@ -156,6 +152,8 @@ public class StandardCommunicationModel extends AbstractCommunicationModel {
                                                                StandardEntityURN.AMBULANCE_TEAM,
                                                                StandardEntityURN.AMBULANCE_CENTRE,
                                                                StandardEntityURN.POLICE_FORCE,
+                                                               StandardEntityURN.DRONE,
+                                                               StandardEntityURN.RESCUE_ROBOT,
                                                                StandardEntityURN.POLICE_OFFICE)) {
             int h = heard.get(receiver.getID());
             if (h >= getMessageMax(receiver)) {
@@ -201,6 +199,7 @@ public class StandardCommunicationModel extends AbstractCommunicationModel {
             return sender instanceof PoliceForce
                 || sender instanceof FireStation
                 || sender instanceof PoliceOffice
+                || sender instanceof RescueRobot
                 || sender instanceof AmbulanceCentre;
         }
         if (receiver instanceof AmbulanceTeam) {
@@ -211,6 +210,12 @@ public class StandardCommunicationModel extends AbstractCommunicationModel {
                 || sender instanceof FireStation
                 || sender instanceof PoliceOffice
                 || sender instanceof AmbulanceCentre;
+        }
+        if (receiver instanceof Drone) {
+            return sender instanceof PoliceOffice || sender instanceof RescueRobot;
+        }
+        if (receiver instanceof RescueRobot) {
+            return sender instanceof PoliceOffice;
         }
         return false;
     }
