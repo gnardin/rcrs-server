@@ -34,7 +34,11 @@ public enum StandardMessageURN implements URN {
   /** Channel subscribe command. */
   AK_SUBSCRIBE(MESSAGE_URN_PREFIX | 11, MESSAGE_URN_PREFIX_STR + "subscribe"),
   /** Channel speak command. */
-  AK_SPEAK(MESSAGE_URN_PREFIX | 12, MESSAGE_URN_PREFIX_STR + "speak");
+  AK_SPEAK(MESSAGE_URN_PREFIX | 12, MESSAGE_URN_PREFIX_STR + "speak"),
+  /** Channel fly command */
+  AK_FLY(MESSAGE_URN_PREFIX | 13, MESSAGE_URN_PREFIX_STR + "fly"),
+  /** Channel search command */
+  AK_SEARCH(MESSAGE_URN_PREFIX | 14, MESSAGE_URN_PREFIX_STR + "search");
 
   private int urnId;
   private String urnStr;

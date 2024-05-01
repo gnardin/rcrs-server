@@ -4,14 +4,7 @@ import rescuecore2.config.Config;
 import rescuecore2.messages.Command;
 import rescuecore2.log.Logger;
 
-import rescuecore2.standard.messages.AKClearArea;
-import rescuecore2.standard.messages.AKExtinguish;
-import rescuecore2.standard.messages.AKMove;
-import rescuecore2.standard.messages.AKClear;
-import rescuecore2.standard.messages.AKRescue;
-import rescuecore2.standard.messages.AKLoad;
-import rescuecore2.standard.messages.AKUnload;
-import rescuecore2.standard.messages.AKRest;
+import rescuecore2.standard.messages.*;
 
 import kernel.CommandCollector;
 import kernel.AgentProxy;
@@ -68,6 +61,8 @@ public class StandardCommandCollector implements CommandCollector {
                 || (c instanceof AKClearArea)
                 || (c instanceof AKRescue)
                 || (c instanceof AKLoad)
+                || (c instanceof AKFly)
+                || (c instanceof AKSearch)
                 || (c instanceof AKUnload));
     }
 }

@@ -60,7 +60,8 @@ public abstract class AbstractCommand extends AbstractMessage implements Command
     init(agentID, time);
   }
 
-  @Override
+
+    @Override
   public EntityID getAgentID() {
     return agentID.getValue();
   }

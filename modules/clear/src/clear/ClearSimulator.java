@@ -14,11 +14,7 @@ import rescuecore2.misc.geometry.GeometryTools2D;
 import rescuecore2.misc.geometry.Line2D;
 import rescuecore2.misc.geometry.Point2D;
 import rescuecore2.standard.components.StandardSimulator;
-import rescuecore2.standard.entities.Area;
-import rescuecore2.standard.entities.Blockade;
-import rescuecore2.standard.entities.PoliceForce;
-import rescuecore2.standard.entities.Road;
-import rescuecore2.standard.entities.StandardEntity;
+import rescuecore2.standard.entities.*;
 import rescuecore2.standard.messages.AKClear;
 import rescuecore2.standard.messages.AKClearArea;
 import rescuecore2.worldmodel.ChangeSet;
@@ -298,19 +294,21 @@ public class ClearSimulator extends StandardSimulator {
     }
 
     // Check PoliceForce
-    PoliceForce police = (PoliceForce) agent;
-    StandardEntity agentPosition = police.getPosition(model);
+    //PoliceForce police = (PoliceForce) agent;
+    RescueRobot robot = (RescueRobot) agent;
+    StandardEntity agentPosition = robot.getPosition(model);
     if (agentPosition == null) {
       Logger.info(
           "Rejecting clear command " + clear + ": could not locate the agent");
       return false;
-    } else if (!police.isHPDefined() || police.getHP() <= 0) {
+    } else if (!robot.isHPDefined() || robot.getHP() <= 0) {
       Logger.info("Rejecting clear command " + clear + ": agent is dead");
       return false;
-    } else if (police.isBuriednessDefined() && police.getBuriedness() > 0) {
+    } else if (robot.isBuriednessDefined() && robot.getBuriedness() > 0) {
       Logger.info("Rejecting clear command " + clear + ": agent is buried");
       return false;
     }
+
 
     // Check Blockade
     Blockade targetBlockade = (Blockade) target;
@@ -325,7 +323,7 @@ public class ClearSimulator extends StandardSimulator {
     }
 
     // Check Any Blockade to Clear
-    Point2D agentLocation = new Point2D(police.getX(), police.getY());
+    Point2D agentLocation = new Point2D(robot.getX(), robot.getY());
     double bestDistance = Double.MAX_VALUE;
     for (Line2D line : GeometryTools2D.pointsToLines(
         GeometryTools2D.vertexArrayToPoints(targetBlockade.getApexes()),
@@ -359,16 +357,17 @@ public class ClearSimulator extends StandardSimulator {
     }
 
     // Check PoliceForce
-    PoliceForce police = (PoliceForce) agent;
-    StandardEntity agentPosition = police.getPosition(model);
+    //PoliceForce police = (PoliceForce) agent;
+    RescueRobot robot = (RescueRobot) agent;
+    StandardEntity agentPosition = robot.getPosition(model);
     if (!(agentPosition instanceof Area)) {
       Logger.info(
           "Rejecting clear command " + clear + " : could not locate agent");
       return false;
-    } else if (!police.isHPDefined() || police.getHP() <= 0) {
+    } else if (!robot.isHPDefined() || robot.getHP() <= 0) {
       Logger.info("Rejecting clear command " + clear + " : agent is dead");
       return false;
-    } else if (police.isBuriednessDefined() && police.getBuriedness() > 0) {
+    } else if (robot.isBuriednessDefined() && robot.getBuriedness() > 0) {
       Logger.info("Rejecting clear command " + clear + " : agent is buried");
       return false;
     }

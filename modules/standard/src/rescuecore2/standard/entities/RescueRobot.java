@@ -35,7 +35,7 @@ public class RescueRobot extends Human {
 
     @Override
     protected String getEntityName() {
-        return "RescueRobot";
+        return "Rescue robot";
     }
     
 }

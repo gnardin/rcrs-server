@@ -30,13 +30,7 @@ import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.PoliceForce;
 import rescuecore2.standard.entities.RescueRobot;
 import rescuecore2.standard.entities.StandardEntity;
-import rescuecore2.standard.messages.AKClear;
-import rescuecore2.standard.messages.AKClearArea;
-import rescuecore2.standard.messages.AKExtinguish;
-import rescuecore2.standard.messages.AKLoad;
-import rescuecore2.standard.messages.AKMove;
-import rescuecore2.standard.messages.AKRescue;
-import rescuecore2.standard.messages.AKUnload;
+import rescuecore2.standard.messages.*;
 import rescuecore2.view.Icons;
 import rescuecore2.view.RenderedObject;
 import rescuecore2.worldmodel.EntityID;
@@ -60,6 +54,8 @@ public class CommandLayer extends StandardViewLayer {
     private Collection<Command> commands;
 
     private boolean renderMove;
+    private boolean renderFly;
+    private boolean renderSearch;
     private boolean renderExtinguish;
     private boolean renderClear;
     private boolean renderClearArea;
@@ -74,6 +70,9 @@ public class CommandLayer extends StandardViewLayer {
     private RenderRescueAction renderRescueAction;
     private RenderLoadAction renderLoadAction;
     private RenderUnloadAction renderUnloadAction;
+    private RenderFlyAction renderFlyAction;
+    //private RenderSearchAction renderSearchAction;
+
 
     /**
        Construct a new CommandLayer.
@@ -94,6 +93,8 @@ public class CommandLayer extends StandardViewLayer {
         renderRescueAction = new RenderRescueAction();
         renderLoadAction = new RenderLoadAction();
         renderUnloadAction = new RenderUnloadAction();
+        renderFlyAction = new RenderFlyAction();
+
     }
 
     /**
@@ -151,6 +152,16 @@ public class CommandLayer extends StandardViewLayer {
     }
 
     /**
+     Set whether to render Fly commands.
+     @param render True if fly commands should be rendered, false otherwise.
+     */
+    public void setRenderFly(boolean render) {
+        renderFly = render;
+        renderFlyAction.update();
+    }
+
+
+    /**
        Set whether to render Rescue commands.
        @param render True if rescue commands should be rendered, false otherwise.
     */
@@ -169,6 +180,7 @@ public class CommandLayer extends StandardViewLayer {
         result.add(new JMenuItem(renderRescueAction));
         result.add(new JMenuItem(renderLoadAction));
         result.add(new JMenuItem(renderUnloadAction));
+        result.add(new JMenuItem(renderFlyAction));
         return result;
     }
 
@@ -221,6 +233,9 @@ public class CommandLayer extends StandardViewLayer {
                 if (renderUnload && next instanceof AKUnload) {
                     renderUnload((AKUnload)next);
                 }
+                if (renderFly && next instanceof  AKFly) {
+                    renderFly((AKFly)next);
+                }
             }
             return result;
         }
@@ -249,6 +264,33 @@ public class CommandLayer extends StandardViewLayer {
             startY = nextY;
         }
     }
+
+    private void renderFly(AKFly fly) {
+        g.setColor(Color.RED);
+        List<EntityID> path = fly.getPath();
+        if(path.isEmpty()){
+            return;
+        }
+        Iterator<EntityID> it = path.iterator();
+        StandardEntity first = world.getEntity(it.next());
+        Pair<Integer, Integer> firstLocation = first.getLocation(world);
+        int startX = t.xToScreen(firstLocation.first());
+        int startY = t.yToScreen(firstLocation.second());
+        //int height;
+        while(it.hasNext()) {
+            StandardEntity next = world.getEntity(it.next());
+            Pair<Integer, Integer> nextLocation = next.getLocation(world);
+            int nextX = t.xToScreen(nextLocation.first());
+            int nextY = t.yToScreen(nextLocation.second());
+            g.drawLine(startX, startY, nextX, nextY);
+
+            //draw arrow of flight path
+            DrawingTools.drawArrowHeads(startX, startY, nextX, nextY, g);
+            startX = nextX;
+            startY = nextY;
+        }
+    }
+
 
 	public static Area getClearArea(Human agent, int targetX, int targetY,
 			int clearLength, int clearRad) {
@@ -499,6 +541,24 @@ public class CommandLayer extends StandardViewLayer {
         void update() {
             putValue(Action.SELECTED_KEY, Boolean.valueOf(renderUnload));
             putValue(Action.SMALL_ICON, renderUnload ? Icons.TICK : Icons.CROSS);
+        }
+    }
+
+    private final class RenderFlyAction extends AbstractAction {
+        public RenderFlyAction() {
+            super("Show fly commands");
+            update();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setRenderFly(!renderFly);
+            component.repaint();
+        }
+
+        void update() {
+            putValue(Action.SELECTED_KEY, Boolean.valueOf(renderFly));
+            putValue(Action.SMALL_ICON, renderFly ? Icons.TICK : Icons.CROSS);
         }
     }
 }

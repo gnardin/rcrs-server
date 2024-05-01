@@ -10,20 +10,12 @@ import kernel.AbstractCommunicationModel;
 
 import rescuecore2.messages.Command;
 import rescuecore2.config.Config;
+import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 import rescuecore2.worldmodel.WorldModel;
 import rescuecore2.log.Logger;
 
-import rescuecore2.standard.entities.StandardWorldModel;
-import rescuecore2.standard.entities.StandardEntityURN;
-import rescuecore2.standard.entities.Civilian;
-import rescuecore2.standard.entities.FireBrigade;
-import rescuecore2.standard.entities.FireStation;
-import rescuecore2.standard.entities.PoliceForce;
-import rescuecore2.standard.entities.PoliceOffice;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.AmbulanceCentre;
 import rescuecore2.standard.messages.AKSpeak;
 import rescuecore2.standard.messages.AKSubscribe;
 
@@ -139,6 +131,8 @@ public class ChannelCommunicationModel extends AbstractCommunicationModel {
                                                     StandardEntityURN.POLICE_FORCE,
                                                     StandardEntityURN.POLICE_OFFICE,
                                                     StandardEntityURN.AMBULANCE_TEAM,
+                                                    StandardEntityURN.DRONE,
+                                                    StandardEntityURN.RESCUE_ROBOT,
                                                     StandardEntityURN.AMBULANCE_CENTRE,
                                                     StandardEntityURN.CIVILIAN)) {
             for (Channel channel : channels.values()) {
@@ -194,7 +188,8 @@ public class ChannelCommunicationModel extends AbstractCommunicationModel {
             return;
         }
         int max;
-        if (entity instanceof FireBrigade || entity instanceof PoliceForce || entity instanceof AmbulanceTeam || entity instanceof Civilian) {
+        if (entity instanceof FireBrigade || entity instanceof PoliceForce || entity instanceof AmbulanceTeam || entity instanceof Drone ||
+            entity instanceof Civilian || entity instanceof RescueRobot) {
             max = platoonMax;
         }
         else if (entity instanceof FireStation || entity instanceof PoliceOffice || entity instanceof AmbulanceCentre) {
