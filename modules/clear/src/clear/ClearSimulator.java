@@ -129,7 +129,8 @@ public class ClearSimulator extends StandardSimulator {
 
 
   private void processClearArea(AKClearArea clear, ChangeSet changes) {
-    PoliceForce agent = (PoliceForce) model.getEntity(clear.getAgentID());
+//    PoliceForce agent = (PoliceForce) model.getEntity(clear.getAgentID());
+    RescueRobot agent = (RescueRobot) model.getEntity(clear.getAgentID());
     int targetX = clear.getDestinationX();
     int targetY = clear.getDestinationY();
 
@@ -287,7 +288,7 @@ public class ClearSimulator extends StandardSimulator {
       Logger
           .info("Rejecting clear command " + clear + ": agent does not exist");
       return false;
-    } else if (!(agent instanceof PoliceForce)) {
+    } else if (!(agent instanceof RescueRobot)) {
       Logger.info(
           "Rejecting clear command " + clear + ": agent is not a PoliceForce");
       return false;
@@ -350,7 +351,7 @@ public class ClearSimulator extends StandardSimulator {
       Logger
           .info("Rejecting clear command " + clear + ": agent does not exist");
       return false;
-    } else if (!(agent instanceof PoliceForce)) {
+    } else if (!(agent instanceof RescueRobot)) {
       Logger.info("Rejecting clear command " + clear
           + ": agent is not a police officer");
       return false;

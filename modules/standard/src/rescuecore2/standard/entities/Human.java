@@ -27,7 +27,7 @@ public abstract class Human extends StandardEntity {
   private IntProperty       buriedness;
   private IntProperty       battery;
   private IntProperty       sensorRange;
-  private DoubleProperty    height;
+  private IntProperty       height;
   private DoubleProperty    detectionRange;
   private DoubleProperty    speed;
 
@@ -55,7 +55,7 @@ public abstract class Human extends StandardEntity {
     battery = new IntProperty( StandardPropertyURN.BATTERY );
     sensorRange = new IntProperty( StandardPropertyURN.SENSOR_RANGE );
     detectionRange = new DoubleProperty( StandardPropertyURN.DETECTION_RANGE );
-    height = new DoubleProperty( StandardPropertyURN.HEIGHT );
+    height = new IntProperty( StandardPropertyURN.HEIGHT );
     speed = new DoubleProperty( StandardPropertyURN.SPEED );
     registerProperties( x, y, position, positionHistory, travelDistance,
         direction, stamina, hp, damage, buriedness, battery, sensorRange, detectionRange, height, speed );
@@ -83,7 +83,7 @@ public abstract class Human extends StandardEntity {
     battery = new IntProperty( other.battery );
     sensorRange = new IntProperty( other.sensorRange );
     detectionRange = new DoubleProperty( other.detectionRange );
-    height = new DoubleProperty( other.height );
+    height = new IntProperty( other.height );
     speed = new DoubleProperty( other.speed );
     registerProperties( x, y, position, positionHistory, travelDistance,
         direction, stamina, hp, damage, buriedness, battery, sensorRange,
@@ -647,15 +647,16 @@ public abstract class Human extends StandardEntity {
    *
    * @return The height property
    */
-  public DoubleProperty getHeightProperty() {
+  public IntProperty getHeightProperty() {
     return height;
   }
 
-  /** Get the height of the robot
+  /**
+   * Get the height of the robot
    *
    * @return The height of the robot
    */
-  public double getHeight() {
+  public int getHeight() {
     return height.getValue();
   }
 
@@ -663,7 +664,7 @@ public abstract class Human extends StandardEntity {
    *
    * @param h The new height of the robot
    */
-  public void setHeight( double h ) {
+  public void setHeight( int h ) {
     this.height.setValue( h );
   }
 

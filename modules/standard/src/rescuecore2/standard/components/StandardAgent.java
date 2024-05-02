@@ -10,18 +10,7 @@ import rescuecore2.standard.entities.Refuge;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.standard.entities.StandardWorldModel;
-import rescuecore2.standard.messages.AKClear;
-import rescuecore2.standard.messages.AKClearArea;
-import rescuecore2.standard.messages.AKExtinguish;
-import rescuecore2.standard.messages.AKLoad;
-import rescuecore2.standard.messages.AKMove;
-import rescuecore2.standard.messages.AKRescue;
-import rescuecore2.standard.messages.AKRest;
-import rescuecore2.standard.messages.AKSay;
-import rescuecore2.standard.messages.AKSpeak;
-import rescuecore2.standard.messages.AKSubscribe;
-import rescuecore2.standard.messages.AKTell;
-import rescuecore2.standard.messages.AKUnload;
+import rescuecore2.standard.messages.*;
 import rescuecore2.worldmodel.EntityID;
 
 /**
@@ -71,6 +60,15 @@ public abstract class StandardAgent<E extends StandardEntity> extends AbstractAg
   }
 
   /**
+   * Send a search command to the kernel.
+   *
+   * @param time the current time.
+   */
+  protected void sendSearch(int time) {
+    send(new AKSearch(getID(), time));
+  }
+
+  /**
    * Send a move command to the kernel.
    *
    * @param time The current time.
@@ -90,6 +88,19 @@ public abstract class StandardAgent<E extends StandardEntity> extends AbstractAg
    */
   protected void sendMove(int time, List<EntityID> path, int destX, int destY) {
     send(new AKMove(getID(), time, path, destX, destY));
+  }
+
+  /**
+   * Send a fly command to the kernel.
+   *
+   * @param time current time.
+   * @param height the height of the drone.
+   * @param path path to fly.
+   * @param destX the destination x coordinates
+   * @param destY the destination y coordinate
+   */
+  protected void sendFly(int time, int height, List<EntityID> path, int destX, int destY) {
+    send(new AKFly(getID(), time, height, path, destX, destY));
   }
 
   /**
