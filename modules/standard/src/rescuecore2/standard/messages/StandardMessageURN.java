@@ -38,7 +38,9 @@ public enum StandardMessageURN implements URN {
   /** Channel fly command */
   AK_FLY(MESSAGE_URN_PREFIX | 13, MESSAGE_URN_PREFIX_STR + "fly"),
   /** Channel search command */
-  AK_SEARCH(MESSAGE_URN_PREFIX | 14, MESSAGE_URN_PREFIX_STR + "search");
+  AK_SEARCH(MESSAGE_URN_PREFIX | 14, MESSAGE_URN_PREFIX_STR + "search"),
+  /** Channel detect command */
+  AK_DETECT(MESSAGE_URN_PREFIX | 15, MESSAGE_URN_PREFIX_STR + "detect");
 
   private int urnId;
   private String urnStr;
