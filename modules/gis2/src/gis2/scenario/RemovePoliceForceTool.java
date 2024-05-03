@@ -36,7 +36,7 @@ public class RemovePoliceForceTool extends ShapeTool {
   }
 
   private class RemovePoliceForceEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public RemovePoliceForceEdit(int id) {
       this.id = id;

@@ -33,16 +33,16 @@ public class DeleteNodeTool extends AbstractTool {
 
     private static final Color OVERLAY_COLOUR = new Color(0, 0, 128, 128);
 
-    private Listener listener;
-    private NodeDecorator nodeHighlight;
-    private EdgeDecorator edgeHighlight;
+    private final Listener listener;
+    private final NodeDecorator nodeHighlight;
+    private final EdgeDecorator edgeHighlight;
     private GMLNode selected;
-    private Collection<GMLEdge> attachedEdges;
+    private final Collection<GMLEdge> attachedEdges;
 
     private GMLCoordinates pressPoint;
     private GMLCoordinates dragPoint;
 
-    private RectangleOverlay overlay;
+    private final RectangleOverlay overlay;
 
     /**
        Construct a DeleteNodeTool.
@@ -191,8 +191,8 @@ public class DeleteNodeTool extends AbstractTool {
     }
 
     private class DeleteNodeEdit extends AbstractUndoableEdit {
-        private GMLNode node;
-        private Collection<GMLObject> deletedObjects;
+        private final GMLNode node;
+        private final Collection<GMLObject> deletedObjects;
 
         public DeleteNodeEdit(GMLNode node, Collection<GMLObject> deletedObjects) {
             this.node = node;
@@ -217,8 +217,8 @@ public class DeleteNodeTool extends AbstractTool {
     }
 
     private class DeleteNodesEdit extends AbstractUndoableEdit {
-        private Collection<GMLNode> nodes;
-        private Map<GMLNode, Collection<GMLObject>> deletedObjects;
+        private final Collection<GMLNode> nodes;
+        private final Map<GMLNode, Collection<GMLObject>> deletedObjects;
 
         public DeleteNodesEdit(Collection<GMLNode> nodes, Map<GMLNode, Collection<GMLObject>> deletedObjects) {
             this.nodes = nodes;

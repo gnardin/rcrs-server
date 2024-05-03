@@ -18,7 +18,7 @@ import rescuecore2.misc.gui.PanZoomListener;
 public class OSMMapViewer extends JComponent {
     private OSMMap map;
     private ScreenTransform transform;
-    private PanZoomListener panZoom;
+    private final PanZoomListener panZoom;
 
     /**
        Create an OSMMapViewer.

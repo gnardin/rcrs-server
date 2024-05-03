@@ -18,8 +18,8 @@ import java.util.Collection;
    This step creates the final GML objects.
 */
 public class MakeObjectsStep extends ConvertStep {
-    private TemporaryMap map;
-    private GMLMap gmlMap;
+    private final TemporaryMap map;
+    private final GMLMap gmlMap;
 
     /**
        Construct a MakeObjectsStep.

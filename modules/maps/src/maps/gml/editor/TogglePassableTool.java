@@ -24,8 +24,8 @@ import maps.gml.view.LineEdgeDecorator;
 public class TogglePassableTool extends AbstractTool {
     private static final Color HIGHLIGHT_COLOUR = Color.BLUE;
 
-    private Listener listener;
-    private EdgeDecorator highlight;
+    private final Listener listener;
+    private final EdgeDecorator highlight;
     private GMLEdge selected;
 
     /**
@@ -141,8 +141,8 @@ public class TogglePassableTool extends AbstractTool {
     }
 
     private class ToggleEdit extends AbstractUndoableEdit {
-        private GMLEdge edge;
-        private boolean newPassable;
+        private final GMLEdge edge;
+        private final boolean newPassable;
 
         public ToggleEdit(GMLEdge edge, boolean newPassable) {
             this.edge = edge;

@@ -37,7 +37,7 @@ public class RemoveRefugeTool extends ShapeTool {
   }
 
   private class RemoveRefugeEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public RemoveRefugeEdit(int id) {
       this.id = id;

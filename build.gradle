@@ -99,6 +99,7 @@ publishing {
       groupId = 'com.github.roborescue'
       artifactId = 'rcrs-server'
       version = 'master-SNAPSHOT'
+      //version = 'master'
 
       from components.java
     }

@@ -23,8 +23,8 @@ import java.util.Collection;
 public class DeleteEdgeTool extends AbstractTool {
     private static final Color HIGHLIGHT_COLOUR = Color.BLUE;
 
-    private Listener listener;
-    private EdgeDecorator edgeHighlight;
+    private final Listener listener;
+    private final EdgeDecorator edgeHighlight;
 
     private GMLEdge edge;
 
@@ -113,8 +113,8 @@ public class DeleteEdgeTool extends AbstractTool {
     }
 
     private class DeleteEdgeEdit extends AbstractUndoableEdit {
-        private GMLEdge edge;
-        private Collection<GMLObject> deleted;
+        private final GMLEdge edge;
+        private final Collection<GMLObject> deleted;
 
         public DeleteEdgeEdit(GMLEdge edge, Collection<GMLObject> deleted) {
             this.edge = edge;

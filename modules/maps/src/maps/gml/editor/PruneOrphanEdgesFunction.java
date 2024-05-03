@@ -46,7 +46,7 @@ public class PruneOrphanEdgesFunction extends AbstractFunction {
     }
 
     private class DeleteEdgesEdit extends AbstractUndoableEdit {
-        private Collection<GMLEdge> edges;
+        private final Collection<GMLEdge> edges;
 
         public DeleteEdgesEdit(Collection<GMLEdge> edges) {
             this.edges = edges;

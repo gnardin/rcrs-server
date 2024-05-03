@@ -211,6 +211,14 @@ public class StandardPerception implements Perception, GUIComponent {
             case BLOCKADE:
               addBlockadeProperties((Blockade) next, result);
               break;
+            case RESCUE_ROBOT:
+              if (next == agentEntity) {
+                addSelfProperties((Human) next, result);
+              } else {
+                addHumanProperties((Human) next, result);
+              }
+              break;
+            case DRONE:
             default:
               // Ignore other types
               break;
@@ -278,7 +286,7 @@ public class StandardPerception implements Perception, GUIComponent {
   }
 
   private void addHumanProperties(Human human, ChangeSet result) {
-    // Update POSITION, POSITION_EXTRA, DIRECTION, STAMINA, HP, DAMAGE, BURIEDNESS
+    // Update POSITION, POSITION_EXTRA, DIRECTION, STAMINA, HP, DAMAGE, BURIEDNESS, BATTERY
     result.addChange(human, human.getPositionProperty());
     // result.addChange(human, human.getPositionExtraProperty());
     result.addChange(human, human.getXProperty());
@@ -286,6 +294,7 @@ public class StandardPerception implements Perception, GUIComponent {
     result.addChange(human, human.getDirectionProperty());
     result.addChange(human, human.getStaminaProperty());
     result.addChange(human, human.getBuriednessProperty());
+    //result.addChange(human, human.getBatteryProperty());
     // Round HP and damage
     IntProperty hp = (IntProperty) human.getHPProperty().copy();
     roundProperty(hp, hpPrecision);

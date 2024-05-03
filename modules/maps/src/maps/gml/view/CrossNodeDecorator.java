@@ -9,8 +9,8 @@ import java.awt.Color;
    A NodeDecorator that draws a cross for each node.
 */
 public class CrossNodeDecorator implements NodeDecorator {
-    private Color colour;
-    private int size;
+    private final Color colour;
+    private final int size;
 
     /**
        Construct a CrossNodeDecorator.

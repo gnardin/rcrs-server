@@ -4,7 +4,7 @@ package maps.gml;
    A GML map object.
 */
 public abstract class GMLObject {
-    private int id;
+    private final int id;
 
     /**
        Construct a GML object.
@@ -24,7 +24,7 @@ public abstract class GMLObject {
 
     @Override
     public int hashCode() {
-        return (int)id;
+        return id;
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.ArrayList;
    A GMLDirectedEdge is an edge with an orientation.
  */
 public class GMLDirectedEdge {
-    private GMLEdge edge;
+    private final GMLEdge edge;
     private boolean forward;
 
     /**
@@ -118,8 +118,7 @@ public class GMLDirectedEdge {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof GMLDirectedEdge) {
-            GMLDirectedEdge e = (GMLDirectedEdge)o;
+        if (o instanceof GMLDirectedEdge e) {
             return this.forward == e.forward && this.edge.equals(e.edge);
         }
         return false;

@@ -37,7 +37,7 @@ public class RemoveHydrantTool extends ShapeTool {
   }
 
   private class RemoveHydrantEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public RemoveHydrantEdit(int id) {
       this.id = id;

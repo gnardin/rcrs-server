@@ -37,7 +37,7 @@ public class RemoveFireTool extends ShapeTool {
   }
 
   private class RemoveFireEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public RemoveFireEdit(int id) {
       this.id = id;

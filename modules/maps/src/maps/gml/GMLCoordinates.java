@@ -86,10 +86,9 @@ public class GMLCoordinates {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append(FORMAT.format(x));
-        result.append(",");
-        result.append(FORMAT.format(y));
-        return result.toString();
+        String result = FORMAT.format(x) +
+                "," +
+                FORMAT.format(y);
+        return result;
     }
 }

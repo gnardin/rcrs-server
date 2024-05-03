@@ -17,9 +17,9 @@ import maps.gml.GMLCoordinates;
    A ShapeInfo that knows how to draw TemporaryObjects.
 */
 public class TemporaryObjectInfo extends ShapeDebugFrame.ShapeInfo {
-    private TemporaryObject shape;
-    private Color outlineColour;
-    private Color fillColour;
+    private final TemporaryObject shape;
+    private final Color outlineColour;
+    private final Color fillColour;
     private Rectangle2D bounds;
 
     /**

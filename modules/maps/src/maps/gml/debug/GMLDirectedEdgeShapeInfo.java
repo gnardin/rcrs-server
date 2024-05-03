@@ -14,7 +14,7 @@ import maps.gml.GMLNode;
    A ShapeInfo that knows how to draw GMLDirectedEdges.
 */
 public class GMLDirectedEdgeShapeInfo extends ShapeDebugFrame.Line2DShapeInfo {
-    private GMLDirectedEdge edge;
+    private final GMLDirectedEdge edge;
 
     /**
        Create a new GMLDirectedEdgeShapeInfo.

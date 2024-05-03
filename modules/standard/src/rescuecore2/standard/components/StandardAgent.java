@@ -155,6 +155,16 @@ public abstract class StandardAgent<E extends StandardEntity> extends AbstractAg
     send(new AKLoad(getID(), time, target));
   }
 
+
+  /**
+   * Send a detect command to the kernel.
+   *
+   * @param time   The current time.
+   * @param target The target human.
+   */
+  protected void sendDetect(int time, EntityID target) {
+    send(new AKDetect(getID(), time, target));
+  }
   /**
    * Send an unload command to the kernel.
    *

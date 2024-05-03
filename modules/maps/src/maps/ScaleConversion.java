@@ -4,10 +4,10 @@ package maps;
    A coordinate conversion that scales and translates coordinates.
 */
 public class ScaleConversion implements CoordinateConversion {
-    private double xOrigin;
-    private double yOrigin;
-    private double xScale;
-    private double yScale;
+    private final double xOrigin;
+    private final double yOrigin;
+    private final double xScale;
+    private final double yScale;
 
     /**
        Construct a ScaleConversion.

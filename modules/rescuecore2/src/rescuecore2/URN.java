@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface URN {
-  public int getURNId();
+  int getURNId();
 
-  public String getURNStr();
+  String getURNStr();
 
-  public String name();
+  String name();
 
   static <T extends Enum<?> & URN> Map<Integer, T> generateMap(Class<T> urnEnum) {
     Map<Integer, T> map = new HashMap<>();

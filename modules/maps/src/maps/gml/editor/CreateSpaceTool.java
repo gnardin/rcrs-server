@@ -32,7 +32,7 @@ public class CreateSpaceTool extends CreateShapeTool {
     }
 
     private class CreateSpaceEdit extends AbstractUndoableEdit {
-        private GMLSpace space;
+        private final GMLSpace space;
 
         public CreateSpaceEdit(GMLSpace space) {
             this.space = space;

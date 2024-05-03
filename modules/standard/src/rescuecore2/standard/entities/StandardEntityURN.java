@@ -44,12 +44,12 @@ public enum StandardEntityURN implements URN {
   /** Rescue robot entity */
   RESCUE_ROBOT(ENTITY_URN_PREFIX | 16, ENTITY_URN_PREFIX_STR + "rescuerobot");
 
-  private int urnId;
-  private String urnStr;
+  private final int urnId;
+  private final String urnStr;
   public static final Map<Integer, StandardEntityURN> MAP = URN.generateMap(StandardEntityURN.class);
   public static final Map<String, StandardEntityURN> MAPSTR = URN.generateMapStr(StandardEntityURN.class);
 
-  private StandardEntityURN(int urnId, String urnStr) {
+  StandardEntityURN(int urnId, String urnStr) {
     this.urnId = urnId;
     this.urnStr = urnStr;
   }

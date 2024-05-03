@@ -17,8 +17,8 @@ import rescuecore2.misc.geometry.GeometryTools2D;
    Abstract base class for shapes in GML space.
 */
 public abstract class GMLShape extends GMLObject {
-    private List<GMLDirectedEdge> edges;
-    private Map<GMLDirectedEdge, Integer> neighbours;
+    private final List<GMLDirectedEdge> edges;
+    private final Map<GMLDirectedEdge, Integer> neighbours;
     private List<GMLCoordinates> points;
     private Rectangle2D bounds;
     private Point2D centroid;

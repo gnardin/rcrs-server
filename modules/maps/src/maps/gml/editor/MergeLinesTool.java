@@ -29,11 +29,11 @@ public class MergeLinesTool extends AbstractTool {
     private static final Color HIGHLIGHT_COLOUR = Color.BLUE;
     private static final int HIGHLIGHT_SIZE = 6;
 
-    private Listener listener;
-    private NodeDecorator nodeHighlight;
-    private EdgeDecorator edgeHighlight;
+    private final Listener listener;
+    private final NodeDecorator nodeHighlight;
+    private final EdgeDecorator edgeHighlight;
     private GMLNode selected;
-    private Collection<GMLEdge> attachedEdges;
+    private final Collection<GMLEdge> attachedEdges;
 
     /**
        Construct a MergeLinesTool.
@@ -138,9 +138,9 @@ public class MergeLinesTool extends AbstractTool {
     }
 
     private class MergeEdit extends AbstractUndoableEdit {
-        private GMLNode deletedNode;
-        private Collection<GMLObject> deletedObjects;
-        private GMLEdge newEdge;
+        private final GMLNode deletedNode;
+        private final Collection<GMLObject> deletedObjects;
+        private final GMLEdge newEdge;
 
         public MergeEdit(GMLNode node, Collection<GMLObject> deletedObjects, GMLEdge newEdge) {
             this.deletedNode = node;

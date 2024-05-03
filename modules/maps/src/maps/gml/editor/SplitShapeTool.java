@@ -38,9 +38,9 @@ public class SplitShapeTool extends AbstractTool {
 
   private static final double THRESHOLD        = 0.001;
 
-  private Listener            listener;
-  private NodeDecorator       nodeHighlight;
-  private LineOverlay         overlay;
+  private final Listener            listener;
+  private final NodeDecorator       nodeHighlight;
+  private final LineOverlay         overlay;
 
   private GMLNode             hover;
   private GMLNode             start;
@@ -237,9 +237,8 @@ public class SplitShapeTool extends AbstractTool {
 
       GMLShape s1 = null;
       GMLShape s2 = null;
-      if ( shape instanceof GMLBuilding ) {
-        GMLBuilding b = (GMLBuilding) shape;
-        GMLBuilding b1 = editor.getMap().createBuildingFromNodes( nodes1 );
+      if (shape instanceof GMLBuilding b) {
+          GMLBuilding b1 = editor.getMap().createBuildingFromNodes( nodes1 );
         GMLBuilding b2 = editor.getMap().createBuildingFromNodes( nodes2 );
         b1.setCode( b.getCode() );
         b2.setCode( b.getCode() );
@@ -322,9 +321,9 @@ public class SplitShapeTool extends AbstractTool {
 
   private class SplitShapeEdit extends AbstractUndoableEdit {
 
-    private Collection<GMLShape> add;
-    private Collection<GMLShape> remove;
-    private GMLEdge              edge;
+    private final Collection<GMLShape> add;
+    private final Collection<GMLShape> remove;
+    private final GMLEdge              edge;
 
 
     public SplitShapeEdit( GMLEdge edge, Collection<GMLShape> add, Collection<GMLShape> remove ) {

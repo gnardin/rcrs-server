@@ -4,7 +4,7 @@ package maps;
    A coordinate conversion that multiplies by a number.
 */
 public class ConstantConversion implements CoordinateConversion {
-    private double constant;
+    private final double constant;
 
     /**
        Construct a ConstantConversion.

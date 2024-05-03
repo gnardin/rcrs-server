@@ -15,7 +15,7 @@ import maps.gml.GMLCoordinates;
    A tool for creating nodes.
 */
 public class CreateNodeTool extends AbstractTool {
-    private Listener listener;
+    private final Listener listener;
 
     /**
        Construct a CreateNodeTool.
@@ -82,7 +82,7 @@ public class CreateNodeTool extends AbstractTool {
     }
 
     private class CreateNodeEdit extends AbstractUndoableEdit {
-        private GMLNode node;
+        private final GMLNode node;
 
         public CreateNodeEdit(GMLNode node) {
             this.node = node;

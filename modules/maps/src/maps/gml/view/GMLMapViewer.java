@@ -48,24 +48,24 @@ public class GMLMapViewer extends JComponent {
 
     private GMLMap map;
     private ScreenTransform transform;
-    private PanZoomListener panZoom;
+    private final PanZoomListener panZoom;
 
     private transient NodeDecorator defaultNodeDecorator;
-    private transient Map<GMLNode, NodeDecorator> nodeDecorators;
+    private final transient Map<GMLNode, NodeDecorator> nodeDecorators;
 
     private transient EdgeDecorator defaultEdgeDecorator;
-    private transient Map<GMLEdge, EdgeDecorator> edgeDecorators;
+    private final transient Map<GMLEdge, EdgeDecorator> edgeDecorators;
 
     private transient BuildingDecorator defaultBuildingDecorator;
-    private transient Map<GMLBuilding, BuildingDecorator> buildingDecorators;
+    private final transient Map<GMLBuilding, BuildingDecorator> buildingDecorators;
 
     private transient RoadDecorator defaultRoadDecorator;
-    private transient Map<GMLRoad, RoadDecorator> roadDecorators;
+    private final transient Map<GMLRoad, RoadDecorator> roadDecorators;
 
     private transient SpaceDecorator defaultSpaceDecorator;
-    private transient Map<GMLSpace, SpaceDecorator> spaceDecorators;
+    private final transient Map<GMLSpace, SpaceDecorator> spaceDecorators;
 
-    private transient List<Overlay> overlays;
+    private final transient List<Overlay> overlays;
 
     private boolean grid;
     private double gridResolution;

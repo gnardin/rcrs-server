@@ -51,6 +51,14 @@ public class ControlledAgentGUI extends JPanel {
     private List<ControlledAmbulanceTeam> ats;
     private ListListModel atListModel;
     private JList atList;
+    private List<ControlledDrone> drs;
+    private ListListModel drListModel;
+    private JList drList;
+    private List<ControlledRescueRobot> rrs;
+    private ListListModel rrListModel;
+    private JList rrList;
+    
+    
 
     /**
        Construct a ControlledAgentGUI.
@@ -67,6 +75,12 @@ public class ControlledAgentGUI extends JPanel {
         ats = new ArrayList<ControlledAmbulanceTeam>();
         atListModel = new ListListModel(ats);
         atList = new JList(atListModel);
+        drs = new ArrayList<ControlledDrone>();
+        drListModel = new ListListModel(drs);
+        drList = JList(drListModel);
+        rrs = new ArrayList<>();
+        rrListModel = new ListListModel(rrs);
+        rrList = JList(rrListModel);
         // CHECKSTYLE:OFF:MagicNumber
         JPanel agents = new JPanel(new GridLayout(3, 1));
         // CHECKSTYLE:ON:MagicNumber
@@ -78,6 +92,12 @@ public class ControlledAgentGUI extends JPanel {
         agents.add(scroll);
         scroll = new JScrollPane(atList);
         scroll.setBorder(BorderFactory.createTitledBorder("Ambulance teams"));
+        agents.add(scroll);
+        scroll = new JScrollPane(drList);
+        scroll.setBorder(BorderFactory.createTitledBorder("Drones"));
+        agents.add(scroll);
+        scroll = new JScrollPane(rrList);
+        scroll.setBorder(BorderFactory.createTitledBorder("Rescue robots"));
         agents.add(scroll);
         add(agents, BorderLayout.WEST);
         add(view, BorderLayout.CENTER);
@@ -149,6 +169,8 @@ public class ControlledAgentGUI extends JPanel {
         fbListModel.refresh();
         pfListModel.refresh();
         atListModel.refresh();
+        rrListModel.refresh();
+        drListModel.refresh();
     }
 
     private void handleClick(List<RenderedObject> clicked) {
@@ -196,6 +218,20 @@ public class ControlledAgentGUI extends JPanel {
         atListModel.refresh();
     }
 
+    private void handleDRClick(List<RenderedObject> clicked) {
+        // for (RenderedObject next : clicked) {
+        //     if (next.getObject() instanceof Human) {
+        //         Human human = (Human)next.getObject();
+        //         for (ControlledDrone agent : getSel)
+        //     }
+        // }
+    }
+
+    private void handleRRClick(List<RenderedObject> clicked) {
+
+
+    }
+
     private List<ControlledFireBrigade> getSelectedFireBrigades() {
         int[] selected = fbList.getSelectedIndices();
         List<ControlledFireBrigade> agents = new ArrayList<ControlledFireBrigade>(selected.length);
@@ -219,6 +255,26 @@ public class ControlledAgentGUI extends JPanel {
         List<ControlledAmbulanceTeam> agents = new ArrayList<ControlledAmbulanceTeam>(selected.length);
         for (int next : selected) {
             agents.add(ats.get(next));
+        }
+        return agents;
+    }
+
+    //new 
+    private List<ControlledDrone> getSelectedDrones() {
+        int[] selected = drList.getSelectedIndices();
+        List<ControlledDrone> agents = new ArrayList<ControlledDrone>(selected.length);
+        for (int next : selected) {
+            agents.add(drs.get(next));
+        }
+        return agents;
+    }
+
+    //new
+    private List<ControlledRescueRobot> getSelectedRescueRobots() {
+        int[] selected = rrList.getSelectedIndices();
+        List<ControlledRescueRobot> agents = new ArrayList<ControlledRescueRobot>(selected.length);
+        for (int next : selected) {
+            agents.add(rrs.get(next));
         }
         return agents;
     }
@@ -279,6 +335,8 @@ public class ControlledAgentGUI extends JPanel {
             connectAgents(new FireBrigadeAgentType(), fbs, fbListModel);
             connectAgents(new PoliceForceAgentType(), pfs, pfListModel);
             connectAgents(new AmbulanceTeamAgentType(), ats, atListModel);
+            connectAgents(new RescueRobotAgentType(), rrs, rrListModel);
+            connectAgents(new DroneAgentType(), drs, drListModel);
         }
 
         private <T extends Agent> void connectAgents(AgentType<T> type, List<? super T> list, ListListModel model) {
@@ -345,6 +403,31 @@ public class ControlledAgentGUI extends JPanel {
         @Override
         public String toString() {
             return "ambulance team";
+        }
+    }
+
+    private static class RescueRobotAgentType implements AgentType<ControlledRescueRobot> {
+        @Override
+        public ControlledRescueRobot createAgent() {
+            return new ControlledRescueRobot();
+        }
+
+        @Override
+        public String toString() {
+            return "rescue robot";
+        }
+    }
+
+    private static class DroneAgentType implements AgentType<ControlledDrone> {
+        @Override
+        public ControlledDrone createAgent() {
+            return new ControlledDrone();
+        }
+
+
+        @Override
+        public String toString() {
+            return "drone";
         }
     }
 }

@@ -37,7 +37,7 @@ public class PlacePoliceOfficeTool extends ShapeTool {
   }
 
   private class AddPoliceOfficeEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public AddPoliceOfficeEdit(int id) {
       this.id = id;

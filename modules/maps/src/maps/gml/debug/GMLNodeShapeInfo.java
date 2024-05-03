@@ -12,7 +12,7 @@ import maps.gml.GMLNode;
    A ShapeInfo that knows how to draw GMLNodes.
 */
 public class GMLNodeShapeInfo extends ShapeDebugFrame.Point2DShapeInfo {
-    private GMLNode node;
+    private final GMLNode node;
 
     /**
        Create a new GMLNodeShapeInfo.

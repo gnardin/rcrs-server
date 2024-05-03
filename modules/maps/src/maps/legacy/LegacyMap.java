@@ -19,9 +19,9 @@ import rescuecore2.log.Logger;
    A legacy (version 0) RoboCup Rescue map.
 */
 public class LegacyMap implements maps.Map {
-    private Map<Integer, LegacyNode> nodes;
-    private Map<Integer, LegacyRoad> roads;
-    private Map<Integer, LegacyBuilding> buildings;
+    private final Map<Integer, LegacyNode> nodes;
+    private final Map<Integer, LegacyRoad> roads;
+    private final Map<Integer, LegacyBuilding> buildings;
 
     /**
        Construct an empty map.

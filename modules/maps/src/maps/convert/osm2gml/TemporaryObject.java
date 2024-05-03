@@ -26,8 +26,8 @@ import maps.gml.GMLTools;
    Abstract base class for temporary data structures during conversion.
 */
 public abstract class TemporaryObject {
-    private List<DirectedEdge> edges;
-    private Map<DirectedEdge, TemporaryObject> neighbours;
+    private final List<DirectedEdge> edges;
+    private final Map<DirectedEdge, TemporaryObject> neighbours;
     private Path2D path;
     private Rectangle2D bounds;
 

@@ -72,22 +72,22 @@ public class GMLEditor extends JPanel {
   private static final NumberFormat FORMAT = new DecimalFormat("#0.000");
 
   private GMLMap map;
-  private GMLMapViewer viewer;
-  private GMLObjectInspector inspector;
-  private JLabel x;
-  private JLabel y;
+  private final GMLMapViewer viewer;
+  private final GMLObjectInspector inspector;
+  private final JLabel x;
+  private final JLabel y;
   private boolean changed;
-  private ViewerMouseListener viewerMouseListener;
+  private final ViewerMouseListener viewerMouseListener;
   private Tool currentTool;
 
-  private UndoManager undoManager;
+  private final UndoManager undoManager;
   private Action undoAction;
   private Action redoAction;
 
   private File saveFile;
   private File baseDir;
 
-  private Snap snap;
+  private final Snap snap;
 
   /**
    * Construct a new GMLEditor.
@@ -375,7 +375,6 @@ public class GMLEditor extends JPanel {
           checkForChanges();
           setMap(new GMLMap());
         } catch (CancelledByUserException ex) {
-          return;
         }
       }
     };
@@ -386,7 +385,6 @@ public class GMLEditor extends JPanel {
           checkForChanges();
           load();
         } catch (CancelledByUserException ex) {
-          return;
         } catch (MapException ex) {
           JOptionPane.showMessageDialog(null, ex);
         }

@@ -26,7 +26,7 @@ public class LegacyNode extends LegacyObject {
             edges[j] = readInt32LE(in);
         }
         // Skip signal flag, timing, pocket to turn across, shortcut to turn
-        reallySkip(in, (numEdges * 6 + 1) * 4);
+        reallySkip(in, (numEdges * 6L + 1) * 4);
         // CHECKSTYLE:ON:MagicNumber
     }
 

@@ -51,6 +51,10 @@ public class RandomScenarioGenerator {
   private int maxATs;
   private int minACs;
   private int maxACs;
+  private int maxDRs;
+  private int minDRs;
+  private int maxRRs;
+  private int minRRs;
   private int minFires;
   private int maxFires;
   private int minRefuges;
@@ -74,6 +78,10 @@ public class RandomScenarioGenerator {
     maxPOs = DEFAULT_MAX_CENTRES;
     minACs = DEFAULT_MIN_CENTRES;
     maxACs = DEFAULT_MAX_CENTRES;
+    maxDRs= DEFAULT_MAX_PLATOONS;
+    minDRs = DEFAULT_MIN_PLATOONS;
+    maxRRs = DEFAULT_MAX_PLATOONS;
+    minRRs = DEFAULT_MIN_PLATOONS;
     minFires = DEFAULT_MIN_FIRES;
     maxFires = DEFAULT_MAX_FIRES;
     minRefuges = DEFAULT_MIN_REFUGES;
@@ -142,7 +150,18 @@ public class RandomScenarioGenerator {
         int max = Integer.parseInt(args[i + 2]);
         i += 2;
         generator.setFires(min, max);
+      } else if ("-rr".equals(args[i])) {
+        int min = Integer.parseInt(args[i + 1]);
+        int max = Integer.parseInt(args[i + 2]);
+        i += 2;
+        generator.setDrones(min, max);
+      } else if ("-rr".equals(args[i])) {
+        int min = Integer.parseInt(args[i + 1]);
+        int max = Integer.parseInt(args[i + 2]);
+        i += 2;
+        generator.setRescueRobots(min, max);
       }
+      
     }
     try {
       File dir = new File(dirName);
@@ -175,6 +194,8 @@ public class RandomScenarioGenerator {
     System.out.println("-po\tmin max\tSet the minimum and maximum number of police offices");
     System.out.println("-at\tmin max\tSet the minimum and maximum number of ambulance teams");
     System.out.println("-ac\tmin max\tSet the minimum and maximum number of ambulance centers");
+    System.out.println("-rr\tmin max\tSet the minimum and maximum number of rescue robots");
+    System.out.println("-dr\tmin max\tSet the minimum and maximum number of drones");
     System.out.println("-refuge\tmin max\tSet the minimum and maximum number of refuges");
     System.out.println("-fire\tmin max\tSet the minimum and maximum number of fires");
   }
@@ -279,6 +300,29 @@ public class RandomScenarioGenerator {
   }
 
   /**
+   * Set the minimum and maximum number of drones.
+   * 
+   * @param min The new minimum
+   * @param max The new maximum
+   */
+  public void setDrones(int min, int max) {
+    minDRs = min;
+    maxDRs = max;
+  }
+
+   /**
+   * Set the minimum and maximum number of rescue robots.
+   * 
+   * @param min The new minimum
+   * @param max The new maximum
+   */
+  public void setRescueRobots(int min, int max) {
+    minRRs = min;
+    maxRRs = max;
+  }
+
+
+  /**
    * Generate a random scenario.
    *
    * @param map    The map to generate a scenario for.
@@ -294,6 +338,8 @@ public class RandomScenarioGenerator {
     int po = random.nextInt(maxPOs - minPOs + 1) + minPOs;
     int at = random.nextInt(maxATs - minATs + 1) + minATs;
     int ac = random.nextInt(maxACs - minACs + 1) + minACs;
+    int rr = random.nextInt(maxRRs - minRRs + 1) + minRRs;
+    int dr = random.nextInt(maxDRs - minDRs + 1) + minDRs;
     int fire = random.nextInt(maxFires - minFires + 1) + minFires;
     int refuge = random.nextInt(maxRefuges - minRefuges + 1) + minRefuges;
     List<GMLBuilding> buildings = new ArrayList<GMLBuilding>(map.getBuildings());
@@ -302,7 +348,7 @@ public class RandomScenarioGenerator {
     placeRefuges(it, result, refuge);
     placeCentres(it, result, fs, po, ac);
     placeFires(it, result, fire);
-    placeAgents(map, result, random, fb, pf, at, civ);
+    placeAgents(map, result, random, fb, pf, at, civ, rr, dr);
     return result;
   }
 
@@ -331,7 +377,7 @@ public class RandomScenarioGenerator {
   }
 
   private void placeAgents(GMLMap map, GisScenario result, Random random, int fire, int police, int ambulance,
-      int civ) {
+      int civ, int robots, int drone) {
     List<GMLShape> all = new ArrayList<GMLShape>(map.getAllShapes());
     List<GMLBuilding> buildings = new ArrayList<GMLBuilding>(map.getBuildings());
     for (int i = 0; i < fire; ++i) {
@@ -349,6 +395,14 @@ public class RandomScenarioGenerator {
     for (int i = 0; i < civ; ++i) {
       int id = buildings.get(random.nextInt(buildings.size())).getID();
       result.addCivilian(id);
+    }
+    for (int i = 0; i < drone; ++i) {
+      int id = all.get(random.nextInt(all.size())).getID();
+      result.addRescueRobot(id);
+    }
+    for (int i = 0; i < robots; i++) {
+      int id = all.get(random.nextInt(all.size())).getID();
+      result.addDrone(id);
     }
   }
 }

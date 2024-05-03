@@ -6,7 +6,7 @@ import java.util.List;
    A temporary building during conversion.
 */
 public class TemporaryBuilding extends TemporaryObject {
-    private long id;
+    private final long id;
 
     /**
        Construct a new TemporaryBuilding.

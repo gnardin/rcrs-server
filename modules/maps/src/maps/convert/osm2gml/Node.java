@@ -6,7 +6,7 @@ import rescuecore2.misc.geometry.Point2D;
    A node object.
  */
 public class Node extends ManagedObject {
-    private Point2D coordinates;
+    private final Point2D coordinates;
 
     /**
        Construct a new node.

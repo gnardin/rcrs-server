@@ -17,7 +17,7 @@ import java.util.Iterator;
    This step scans the OpenStreetMap data and generates information about roads, intersections and buildings.
 */
 public class ScanOSMStep extends ConvertStep {
-    private TemporaryMap map;
+    private final TemporaryMap map;
     private Map<OSMNode, OSMIntersectionInfo> nodeToIntersection;
     private List<OSMIntersectionInfo> intersections;
     private List<OSMRoadInfo> roads;

@@ -20,8 +20,8 @@ import maps.gml.view.FilledShapeDecorator;
 public abstract class ShapeTool extends AbstractTool {
   private static final Color HIGHLIGHT_COLOUR = new Color(0, 0, 255, 128);
 
-  private Listener listener;
-  private FilledShapeDecorator highlight;
+  private final Listener listener;
+  private final FilledShapeDecorator highlight;
 
   private GMLShape highlightShape;
 

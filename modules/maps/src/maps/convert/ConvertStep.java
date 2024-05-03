@@ -15,8 +15,8 @@ public abstract class ConvertStep {
     /** A ShapeDebugFrame for use by subclasses. */
     protected ShapeDebugFrame debug;
 
-    private JProgressBar progress;
-    private JLabel status;
+    private final JProgressBar progress;
+    private final JLabel status;
 
     /**
        Construct a ConvertStep.

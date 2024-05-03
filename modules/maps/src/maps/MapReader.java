@@ -73,7 +73,7 @@ public final class MapReader {
         if (format == null) {
             throw new MapException("Unrecognised format");
         }
-        Logger.debug("Reading " + format.toString() + " format");
+        Logger.debug("Reading " + format + " format");
         return format.read(file);
     }
 

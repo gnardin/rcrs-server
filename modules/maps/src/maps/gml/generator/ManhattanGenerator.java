@@ -38,15 +38,15 @@ public class ManhattanGenerator implements MapGenerator {
     private static final String BUILDING_MAX_SIZE_KEY = "generator.manhattan.building.split.max-size";
     private static final String BUILDING_SPLIT_CHANCE_KEY = "generator.manhattan.building.split.chance";
 
-    private Config config;
+    private final Config config;
     //    private NumberGenerator<Double> widthGenerator;
     //    private NumberGenerator<Double> heightGenerator;
-    private NumberGenerator<Double> separationGenerator;
-    private Probability split;
-    private double minSize;
-    private double maxSize;
-    private double minWidth;
-    private double minHeight;
+    private final NumberGenerator<Double> separationGenerator;
+    private final Probability split;
+    private final double minSize;
+    private final double maxSize;
+    private final double minWidth;
+    private final double minHeight;
 
     private GMLMap map;
 

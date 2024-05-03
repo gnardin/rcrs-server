@@ -34,9 +34,9 @@ import rescuecore2.worldmodel.properties.EntityRefListProperty;
  */
 public class ChangeSet {
 
-  private Map<EntityID, Map<Integer, Property>> changes;
-  private Set<EntityID> deleted;
-  private Map<EntityID, Integer> entityURNs;
+  private final Map<EntityID, Map<Integer, Property>> changes;
+  private final Set<EntityID> deleted;
+  private final Map<EntityID, Integer> entityURNs;
 
   /**
    * Create an empty ChangeSet.
@@ -172,15 +172,14 @@ public class ChangeSet {
         // && changes.get( e ).containsKey( BLOCKADES_URN ) ) {
 
         if ((p instanceof EntityRefListProperty)
-            && (changes.get(e).containsKey(urn) && (changes.get(e).get(urn) instanceof EntityRefListProperty))) {
+            && (changes.get(e).containsKey(urn) && (changes.get(e).get(urn) instanceof EntityRefListProperty bp2))) {
 
           EntityRefListProperty bp1 = (EntityRefListProperty) p.copy();
           // EntityRefListProperty bp2 = (EntityRefListProperty)
           // changes.get( e )
           // .get( BLOCKADES_URN );
-          EntityRefListProperty bp2 = (EntityRefListProperty) changes.get(e).get(urn);
 
-          if (bp2.isDefined()) {
+            if (bp2.isDefined()) {
             for (EntityID id : bp2.getValue())
               bp1.addValue(id);
           }

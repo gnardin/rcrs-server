@@ -8,7 +8,7 @@ import java.util.Random;
  * Function for randomizing a scenario.
  */
 public class RandomiseFunction extends AbstractFunction {
-  private Random random;
+  private final Random random;
 
   /**
    * Construct a randomizer function.

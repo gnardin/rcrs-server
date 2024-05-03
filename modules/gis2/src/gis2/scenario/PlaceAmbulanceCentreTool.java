@@ -37,7 +37,7 @@ public class PlaceAmbulanceCentreTool extends ShapeTool {
   }
 
   private class AddAmbulanceCentreEdit extends AbstractUndoableEdit {
-    private int id;
+    private final int id;
 
     public AddAmbulanceCentreEdit(int id) {
       this.id = id;

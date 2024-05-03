@@ -1,18 +1,14 @@
 package sample;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import rescuecore2.components.AbstractAgent;
 import rescuecore2.misc.collections.LazyMap;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.entities.StandardWorldModel;
 import rescuecore2.standard.entities.Area;
+import sample.AbstractSampleAgent;
+import sample.DistanceSorter;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 
@@ -23,6 +19,7 @@ public final class SampleSearch {
 
   private Map<EntityID, Set<EntityID>> graph;
   private Set<EntityID>                buildingSet;
+
 
 
   /**
@@ -161,6 +158,40 @@ public final class SampleSearch {
     } while ( current != start );
     return path;
   }
+
+  private static class Node {
+    EntityID ID;
+    int cost;
+    int heuristic;
+    Node parent;
+
+    public Node(EntityID id, int cost, int heuristic, Node parent) {
+      this.ID = id;
+      this.cost = cost;
+      this.heuristic = heuristic;
+      this.parent = parent;
+    }
+  }
+
+//
+//  public List<EntityID> aStarSearch( EntityID start, Collection<EntityID> goals) {
+//    // Define priority queue for open list
+//    PriorityQueue<Node> openList = new PriorityQueue<>(Comparator.comparingInt(node -> node.cost + node.heuristic));
+//    // Define set for closed list
+//    Set<EntityID> closedList = new HashSet<>();
+//    // initialise start node
+//    Node startNode = new Node(start, 0, calculateHeuristic());
+//    return null;
+//  }
+//
+//  // calculates the heuristic value (manhattan distance)
+//  private int calculateHeuristic(EntityID node, Collection<EntityID> goals, StandardWorldModel world) {
+//    int minDistance = Integer.MAX_VALUE;
+//    int nodeX = world.getEntity(node).getX();
+//    int nodeY;
+//
+//    return minDistance;
+//  }
 
 
   public List<EntityID> breadthFirstSearchForCivilian( EntityID start,

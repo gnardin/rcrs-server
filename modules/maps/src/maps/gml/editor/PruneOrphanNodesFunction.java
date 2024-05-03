@@ -46,7 +46,7 @@ public class PruneOrphanNodesFunction extends AbstractFunction {
     }
 
     private class DeleteNodesEdit extends AbstractUndoableEdit {
-        private Collection<GMLNode> nodes;
+        private final Collection<GMLNode> nodes;
 
         public DeleteNodesEdit(Collection<GMLNode> nodes) {
             this.nodes = nodes;

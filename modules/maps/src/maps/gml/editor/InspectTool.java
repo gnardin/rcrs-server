@@ -35,10 +35,10 @@ public class InspectTool extends AbstractTool {
     private static final Color HIGHLIGHT_COLOUR = Color.BLUE;
     private static final int NODE_SIZE = 5;
 
-    private Listener listener;
-    private NodeDecorator nodeHighlight;
-    private EdgeDecorator edgeHighlight;
-    private FilledShapeDecorator shapeHighlight;
+    private final Listener listener;
+    private final NodeDecorator nodeHighlight;
+    private final EdgeDecorator edgeHighlight;
+    private final FilledShapeDecorator shapeHighlight;
 
     /**
        Construct an InspectTool.

@@ -29,16 +29,16 @@ public class GMLMap implements maps.Map {
     private double maxY;
     private boolean boundsKnown;
 
-    private Map<Integer, GMLNode> nodes;
-    private Map<Integer, GMLEdge> edges;
-    private Map<Integer, GMLBuilding> buildings;
-    private Map<Integer, GMLRoad> roads;
-    private Map<Integer, GMLSpace> spaces;
-    private Set<GMLShape> allShapes;
-    private Set<GMLObject> allObjects;
+    private final Map<Integer, GMLNode> nodes;
+    private final Map<Integer, GMLEdge> edges;
+    private final Map<Integer, GMLBuilding> buildings;
+    private final Map<Integer, GMLRoad> roads;
+    private final Map<Integer, GMLSpace> spaces;
+    private final Set<GMLShape> allShapes;
+    private final Set<GMLObject> allObjects;
 
-    private Map<GMLNode, Collection<GMLEdge>> attachedEdges;
-    private Map<GMLEdge, Collection<GMLShape>> attachedShapes;
+    private final Map<GMLNode, Collection<GMLEdge>> attachedEdges;
+    private final Map<GMLEdge, Collection<GMLShape>> attachedShapes;
 
     private int nextID;
 
@@ -553,10 +553,7 @@ public class GMLMap implements maps.Map {
             return r;
         }
         GMLSpace s = getSpace(id);
-        if (s != null) {
-            return s;
-        }
-        return null;
+        return s;
     }
 
     /**
@@ -582,10 +579,7 @@ public class GMLMap implements maps.Map {
             return r;
         }
         GMLSpace s = getSpace(id);
-        if (s != null) {
-            return s;
-        }
-        return null;
+        return s;
     }
 
     /**

@@ -9,8 +9,8 @@ import java.awt.Color;
    A NodeDecorator that draws a square for each node.
 */
 public class SquareNodeDecorator implements NodeDecorator {
-    private Color colour;
-    private int size;
+    private final Color colour;
+    private final int size;
 
     /**
        Construct a SquareNodeDecorator.

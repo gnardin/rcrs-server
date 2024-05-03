@@ -17,7 +17,7 @@ import maps.convert.ConvertStep;
    This step splits any edges that intersect.
 */
 public class SplitIntersectingEdgesStep extends ConvertStep {
-    private TemporaryMap map;
+    private final TemporaryMap map;
     private int splitCount;
     private int inspectedCount;
     private Deque<Edge> toCheck;

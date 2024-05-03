@@ -17,9 +17,9 @@ import java.util.List;
    This class knows how to decorate buildings, roads and spaces.
 */
 public class FilledShapeDecorator implements BuildingDecorator, RoadDecorator, SpaceDecorator {
-    private Color buildingColour;
-    private Color roadColour;
-    private Color spaceColour;
+    private final Color buildingColour;
+    private final Color roadColour;
+    private final Color spaceColour;
 
     /**
        Construct a FilledShapeDecorator.

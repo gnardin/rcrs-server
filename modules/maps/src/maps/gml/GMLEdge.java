@@ -11,7 +11,7 @@ public class GMLEdge extends GMLObject {
     private GMLNode start;
     private GMLNode end;
     private boolean passable;
-    private List<GMLCoordinates> points;
+    private final List<GMLCoordinates> points;
 
     /**
        Construct a new GMLEdge.
