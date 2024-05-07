@@ -13,7 +13,7 @@ import rescuecore2.standard.entities.Human;
    A view layer that renders position history.
  */
 public class PositionHistoryLayer extends StandardEntityViewLayer<Human> {
-    private static final Color PATH_COLOUR = Color.RED;
+    private static final Color PATH_COLOUR = Color.ORANGE.darker();
 
     /**
        Construct a position history layer.

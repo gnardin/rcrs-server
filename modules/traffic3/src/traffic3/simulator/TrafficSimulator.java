@@ -24,13 +24,7 @@ import rescuecore2.misc.gui.ShapeDebugFrame;
 import rescuecore2.misc.gui.ShapeDebugFrame.Line2DShapeInfo;
 import rescuecore2.standard.components.StandardSimulator;
 import rescuecore2.standard.entities.*;
-import rescuecore2.standard.messages.AKClear;
-import rescuecore2.standard.messages.AKClearArea;
-import rescuecore2.standard.messages.AKExtinguish;
-import rescuecore2.standard.messages.AKLoad;
-import rescuecore2.standard.messages.AKMove;
-import rescuecore2.standard.messages.AKRescue;
-import rescuecore2.standard.messages.AKUnload;
+import rescuecore2.standard.messages.*;
 import rescuecore2.worldmodel.ChangeSet;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
@@ -154,6 +148,9 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       }
       if (next instanceof AKClearArea) {
         handleClear((AKClearArea) next, changes);
+      }
+      if (next instanceof AKFly) {
+        handleFly((AKFly) next, changes);
       }
       if (next instanceof AKExtinguish) {
         handleExtinguish((AKExtinguish) next, changes);
@@ -592,7 +589,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     return min;
 
   }
-
   // Return the loaded civilian (if any)
   private Civilian handleLoad(AKLoad load, ChangeSet changes) {
     EntityID agentID = load.getAgentID();
@@ -718,6 +714,16 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     manager.getTrafficAgent(target).setMobile(false);
     Logger.debug(at + " unloaded " + target);
     return target;
+  }
+
+  private void handleFly(AKFly fly, ChangeSet changes){
+    //Agents flying over the blockades
+    EntityID agentID = fly.getAgentID();
+    Entity agent = model.getEntity(agentID);
+    if(agent instanceof Human) {
+      manager.getTrafficAgent((Human) agent).setMobile(true);
+      Logger.debug(agent + " is flying over");
+    }
   }
 
   private void handleClear(AKClear clear, ChangeSet changes) {

@@ -2,6 +2,7 @@ package rescuecore2.standard.score;
 
 import rescuecore2.score.AbstractScoreFunction;
 import rescuecore2.config.Config;
+import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.WorldModel;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
@@ -10,11 +11,6 @@ import rescuecore2.Timestep;
 
 import java.util.Set;
 import java.util.HashSet;
-
-import rescuecore2.standard.entities.Civilian;
-import rescuecore2.standard.entities.FireBrigade;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.PoliceForce;
 
 /**
    Score function that measures how quickly civilians are discovered by agents.
@@ -64,6 +60,8 @@ public class DiscoveryScoreFunction extends AbstractScoreFunction {
     private boolean isPlatoonAgent(Entity e) {
         return e instanceof FireBrigade
             || e instanceof PoliceForce
+            || e instanceof RescueRobot
+            || e instanceof Drone
             || e instanceof AmbulanceTeam;
     }
 }

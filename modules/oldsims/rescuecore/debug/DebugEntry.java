@@ -45,7 +45,7 @@ public abstract class DebugEntry implements Serializable {
 		}
 
 		public String toString() {
-			return "Object collection: "+objects.size()+" objects";
+			return "Object collection: "+objects.size()+ "traffic4";
 		}
 	}
 
