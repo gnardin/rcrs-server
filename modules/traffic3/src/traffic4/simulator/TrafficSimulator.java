@@ -1,6 +1,7 @@
 package traffic4.simulator;
 
 import java.awt.Color;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -129,7 +130,35 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             return;
         }
         Area currentArea = (Area) currentEntity;
+        List<EntityID> list = move.getPath();
+        List<PathElement> steps = new ArrayList<PathElement>();
+        Edge lastEdge = null;
+        // check elements refer to Area instances
+        // build the list of target points
+        for (Iterator<EntityID> it = list.iterator(); it.hasNext();) {
+            EntityID next = it.next();
+            if (next.equals(current)){
+                continue;
+            }
+            Entity e = model.getEntity(next);
+            if (!(e instanceof Area)) {
+                Logger.warn("Rejecting move: Entity ID " + next + " is not an area: " + e);
+                return;
+            }
 
+            Edge edge = currentArea.getEdgeTo(next);
+            if (edge == null) {
+                Logger.warn("Rejecting move: Entity ID " + next + " is not adjacent to " + currentArea);
+                return;
+            }
+            Area nextArea = (Area) e;
+
+            //steps.addAll(getPathElements2(human, currentArea, lastEdge, nextArea, edge));
+
+            current = next;
+            currentArea = nextArea;
+            lastEdge = edge;
+        }
     }
 }
 
