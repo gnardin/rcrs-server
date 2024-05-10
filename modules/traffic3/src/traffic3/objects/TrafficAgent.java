@@ -389,7 +389,7 @@ public class TrafficAgent {
 	 * @param steps
 	 *            The new path.
 	 */
-	public void setPath(List<PathElement> steps) {
+	public void setPath1(List<PathElement> steps) {
 		if (steps == null || steps.isEmpty()) {
 			clearPath();
 			return;

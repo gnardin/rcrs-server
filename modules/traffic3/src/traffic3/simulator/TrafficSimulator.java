@@ -149,9 +149,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       if (next instanceof AKClearArea) {
         handleClear((AKClearArea) next, changes);
       }
-      if (next instanceof AKFly) {
-        handleFly((AKFly) next, changes);
-      }
       if (next instanceof AKExtinguish) {
         handleExtinguish((AKExtinguish) next, changes);
       }
@@ -371,7 +368,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       return;
     }
     steps.add(new PathElement(current, null, new Point2D(targetX, targetY)));
-    agent.setPath(steps);
+    agent.setPath1(steps);
   }
 
   private Collection<? extends PathElement> getPathElements(Human human, Area lastArea, Edge lastEdge, Area nextArea,

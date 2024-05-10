@@ -39,10 +39,10 @@ import rescuecore2.worldmodel.properties.IntProperty;
 
 
 import traffic3.manager.TrafficManager;
+import traffic3.objects.TrafficArea;
 import traffic3.simulator.TrafficSimulatorGUI;
 import traffic3.objects.TrafficAgent;
 import traffic3.objects.TrafficBlockade;
-import traffic4.objects.TrafficArea;
 
 
 import javax.swing.*;
@@ -131,7 +131,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         }
         Area currentArea = (Area) currentEntity;
         List<EntityID> list = move.getPath();
-        List<PathElement> steps = new ArrayList<PathElement>();
+        List<traffic4.simulator.PathElement> steps1 = new ArrayList<PathElement>();
         Edge lastEdge = null;
         // check elements refer to Area instances
         // build the list of target points
@@ -159,6 +159,158 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             currentArea = nextArea;
             lastEdge = edge;
         }
+        int targetX = move.getDestinationX();
+        int targetY = move.getDestinationY();
+        if(targetX == -1 && targetY == -1) {
+            targetX = currentArea.getX();
+            targetY = currentArea.getY();
+        } else if(list.isEmpty()) {
+            Logger.warn("Rejecting move: path is empty");
+        }
+        steps1.add(new PathElement(current, null, new Point2D(targetX, targetY)));
+        //agent.setPath1(steps1);
+    }
+
+    private Collection<? extends PathElement> getPathElements(Human human, Area lastArea, Edge lastEdge, Area nextArea,
+                                                              Edge nextEdge) {
+        if (human.getID().getValue() == 204623396) {
+            System.out.println(
+                    "lastArea=" + lastArea + " lastEdge=" + lastEdge + " nextArea=" + nextArea + " nextEdge=" + nextEdge);
+        }
+        ArrayList<traffic3.simulator.PathElement> steps = new ArrayList<traffic3.simulator.PathElement>();
+        Point2D edgePoint = getBestPoint(nextEdge, nextArea);
+        Point2D centrePoint = new Point2D(lastArea.getX(), lastArea.getY());
+        if (lastEdge == null) {
+            Point2D entracePoint = getEntranceOfArea(nextEdge, lastArea);
+            if (entracePoint != null) {
+                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), null, entracePoint, centrePoint));
+                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, entracePoint));
+            } else
+                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint));
+
+        } else {
+            Point2D startEntracePoint = getEntranceOfArea(lastEdge, lastArea);
+            if (startEntracePoint != null)
+                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), null, startEntracePoint));
+            Point2D entracePoint = getEntranceOfArea(nextEdge, lastArea);
+            if (entracePoint != null) {
+                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), entracePoint, centrePoint));
+                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, entracePoint));
+            } else {
+                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, centrePoint));
+            }
+        }
+      return null;
+    }
+
+    private Point2D getEntranceOfArea(Edge incomingEdge, Area destination) {
+
+        Point2D edgeMid = getBestPoint(incomingEdge, destination);
+        Line2D wallLine = incomingEdge.getLine();
+
+        int distance = 600;
+        while (distance > 0) {
+            Vector2D offset = wallLine.getDirection().getNormal().normalised().scale(distance);
+            Point2D destinationXY = edgeMid.plus(offset);
+            if (destination.getShape().contains(destinationXY.getX(), destinationXY.getY())) {
+                return destinationXY;
+            }
+            offset = wallLine.getDirection().getNormal().normalised().scale(-distance);
+            destinationXY = edgeMid.plus(offset);
+            if (destination.getShape().contains(destinationXY.getX(), destinationXY.getY())){
+                return destinationXY;
+            }
+         }
+        return null;
+    }
+
+    private Collection<? extends PathElement> getPathElements2(Human human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
+
+        return null;
+    }
+
+    private boolean originalPathOk() {
+        return true;
+    }
+
+    private boolean checkElements(TrafficArea lastArea, List<PathElement> sameAreaElem) {
+        if (sameAreaElem.size() <= 1)
+            return true;
+
+        for (int i = 1; i < sameAreaElem.size(); i++) {
+            Line2D line2D = new Line2D(sameAreaElem.get(i - 1).getGoal(), sameAreaElem.get(i).getGoal());
+            for (Line2D block : lastArea.getAllBlockingLines()) {
+                if (GeometryTools2D.getSegmentIntersectionPoint(line2D, block) != null)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private Point2D getBestPoint(Edge edge, Area destination) {
+        return getMidPoint(edge.getStart(), edge.getEnd());
+    }
+
+    static Point2D getMidPoint(Point2D p1, Point2D p2) {
+        return new Point2D((p1.getX() + p2.getX()) / 2, (p2.getX() + p2.getY()) / 2);
+    }
+
+    private Point2D getTransivit2(Point2D base, Point2D p1) {
+        return new Point2D((base.getX() - (p1.getX() - base.getX())), (base.getY() - (p1.getY()- base.getY())));
+    }
+
+    private double getMinimumDistance(List<Line2D> lines, Point2D point) {
+        double min = Integer.MAX_VALUE;
+        for(Line2D block : lines) {
+            Point2D tempPoint = GeometryTools2D.getClosestPointOnSegment(block, point);
+            double tempDistance = GeometryTools2D.getDistance(point, tempPoint);
+            if (tempDistance < min) {
+                min = tempDistance;
+            }
+        }
+        return min;
+    }
+
+    private void handleFly(AKFly fly, ChangeSet changes) {
+        EntityID agentID = fly.getAgentID();
+        Entity agent = model.getEntity(agentID);
+        if (agent instanceof Human) {
+            manager.getTrafficAgent((Human) agent).setMobile(false);
+            Logger.debug(agent + " is flying");
+        }
+    }
+
+    private void timestep() {
+        long start = System.currentTimeMillis();
+        for (TrafficAgent agent : manager.getAgents()) {
+            agent.beginTimestep();
+        }
+
+        long pre = System.currentTimeMillis();
+        Logger.debug("Running " + MICROSTEPS + " microsteps");
+        for(int i = 0; i < MICROSTEPS; i++){
+            //microstep();
+        }
+
+        long post = System.currentTimeMillis();
+        for(TrafficAgent agent : manager.getAgents()){
+            agent.endTimestep();
+        }
+
+        long end = System.currentTimeMillis();
+        if (manager.getAgents().size() != 0) {
+            Logger.debug("Pre timestep took " + (pre - start) + " ms (average " +((pre - start) / manager.getAgents().size()) + "ms per agent)");
+            Logger.debug("Microsteps: " + (post - pre) + "ms (average " + ((post - pre) / MICROSTEPS) + "ms");
+            Logger.debug("Post timestep: " + (end - post) + " ms (average " + ((end - post) / manager.getAgents().size()) + "ms per agent");
+        }
+        Logger.debug("Total time " + (end - start));
+    }
+
+    private void microstep() {
+        for (TrafficAgent agent : manager.getAgents()) {
+            agent.step(TIME_STEP_MS);
+        }
+        gui.refresh();
     }
 }
 

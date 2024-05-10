@@ -39,7 +39,7 @@ public class TrafficConstants {
         W_FORCE_COEFFICIENT_B = config.getFloatValue("traffic4.wall.force.coefficient.b", W_FORCE_COEFFICIENT_B);
         GROUND_DISTANCE_CUTOFF = config.getFloatValue("traffic4.ground.distance.cutoff", GROUND_DISTANCE_CUTOFF);
         GROUND_F0RCE_COEFFICIENT_B = config.getFloatValue("traffic4.ground.force.coefficient.b", GROUND_F0RCE_COEFFICIENT_B);
-        GROUND_FORCE_COEFFICIENT_A = config.getFloatValue("traffic4.ground.force.coefficient.a", GROUND_FORCE_COEFFICIENT_A)
+        GROUND_FORCE_COEFFICIENT_A = config.getFloatValue("traffic4.ground.force.coefficient.a", GROUND_FORCE_COEFFICIENT_A);
         nudge = new ContinuousUniformGenerator(-NUDGE_MAGNITUDE, NUDGE_MAGNITUDE, config.getRandom());
     }
 
