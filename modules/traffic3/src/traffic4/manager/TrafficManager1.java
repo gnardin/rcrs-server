@@ -7,14 +7,15 @@ import com.infomatiq.jsi.rtree.RTree;
 import gnu.trove.TIntProcedure;
 import rescuecore2.misc.collections.LazyMap;
 import rescuecore2.standard.entities.Area;
-import rescuecore2.standard.entities.Blockade;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.entities.StandardWorldModel;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
-import traffic3.objects.TrafficAgent;
-import traffic3.objects.TrafficArea;
+//import traffic3.objects.TrafficAgent;
+//import traffic3.objects.TrafficArea;
+import traffic4.objects.TrafficAgent1;
+import traffic4.objects.TrafficArea1;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,27 +24,27 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Maintains information about drone objects in traffic simulator
  */
-public class TrafficManager {
+public class TrafficManager1 {
 
-    private Map<Integer, TrafficArea> areaByID;
-    private Map<Area, TrafficArea> areas;
-    private Map<Human, TrafficAgent> agents;
-    private Map<TrafficArea, Collection<TrafficArea>> areaNeighbours;
+    private Map<Integer, TrafficArea1> areaByID;
+    private Map<Area, TrafficArea1> areas;
+    private Map<Human, TrafficAgent1> agents;
+    private Map<TrafficArea1, Collection<TrafficArea1>> areaNeighbours;
 
     private SpatialIndex index;
 
     /**
      * Construct a new Traffic manager for the drone agents
      */
-    public TrafficManager() {
-        areas = new ConcurrentHashMap<Area, TrafficArea>();
-        areaByID = new ConcurrentHashMap<Integer, TrafficArea>();
-        agents = new ConcurrentHashMap<Human, TrafficAgent>();
-        areaNeighbours = new LazyMap<TrafficArea, Collection<TrafficArea>>() {
+    public TrafficManager1() {
+        areas = new ConcurrentHashMap<Area, TrafficArea1>();
+        areaByID = new ConcurrentHashMap<Integer, TrafficArea1>();
+        agents = new ConcurrentHashMap<Human, TrafficAgent1>();
+        areaNeighbours = new LazyMap<TrafficArea1, Collection<TrafficArea1>>() {
 
             @Override
-            public Collection<TrafficArea> createValue() {
-                return new HashSet<TrafficArea>();
+            public Collection<TrafficArea1> createValue() {
+                return new HashSet<TrafficArea1>();
             }
         };
         index = new RTree();
@@ -53,16 +54,13 @@ public class TrafficManager {
     /**
      * Find the area that contains a point.
      *
-     * @param x
-     *   The X coordinate.
-     * @param y
-     *   The Y coordinate.
-     *
+     * @param x The X coordinate.
+     * @param y The Y coordinate.
      * @return The TrafficArea that contains the given point, or null if no such
      * area is found.
      */
-    public TrafficArea findArea(double x, double y) {
-        final List<TrafficArea> found = new ArrayList<TrafficArea>();
+    public TrafficArea1 findArea1(double x, double y) {
+        final List<TrafficArea1> found = new ArrayList<TrafficArea1>();
         index.intersects(new Rectangle((float) x, (float) y, (float) x, (float) y),
                 new TIntProcedure() {
                     @Override
@@ -71,7 +69,7 @@ public class TrafficManager {
                         return true;
                     }
                 });
-        for (TrafficArea next : found) {
+        for (TrafficArea1 next : found) {
             if (next.contains(x, y)) {
                 return next;
             }
@@ -83,7 +81,7 @@ public class TrafficManager {
     /**
      * Get the neighbouring areas to a Traffic Area
      */
-    public Collection<TrafficArea> getNeighbours(TrafficArea area) {
+    public Collection<TrafficArea1> getNeighbours(TrafficArea1 area) {
         return areaNeighbours.get(area);
     }
 
@@ -94,10 +92,10 @@ public class TrafficManager {
      *
      * @return all agents
      */
-    public Collection<TrafficAgent> getNeighbouringAgents(TrafficAgent agent) {
-        Set<TrafficAgent> result = new HashSet<TrafficAgent>();
+    public Collection<TrafficAgent1> getNeighbouringAgents(TrafficAgent1 agent) {
+        Set<TrafficAgent1> result = new HashSet<TrafficAgent1>();
         result.addAll(agent.getArea().getAgents());
-        for (TrafficArea next : getNeighbours(agent.getArea())) {
+        for (TrafficArea1 next : getNeighbours(agent.getArea())) {
             result.addAll(next.getAgents());
         }
         result.remove(agent);
@@ -119,7 +117,7 @@ public class TrafficManager {
     /**
      * Registering a new traffic agent
      */
-    public void register(TrafficAgent agent) {
+    public void register(TrafficAgent1 agent) {
         agents.put(agent.getHuman(), agent);
     }
 
@@ -128,7 +126,7 @@ public class TrafficManager {
      *
      * @return all traffic agents
      */
-    public Collection<TrafficAgent> getALLAgents() {
+    public Collection<TrafficAgent1> getALLAgents() {
         return Collections.unmodifiableCollection(agents.values());
     }
 
@@ -137,7 +135,7 @@ public class TrafficManager {
      *
      * @return all traffic areas.
      */
-    public Collection<TrafficArea> getAllAreas() {
+    public Collection<TrafficArea1> getAllAreas() {
         return Collections.unmodifiableCollection(areas.values());
     }
 
@@ -155,12 +153,16 @@ public class TrafficManager {
         }
     }
 
-    public TrafficArea getTrafficAreaforDrone(Area area) {
+    public TrafficArea1 getTrafficAreaforDrone(Area area) {
         return areas.get(area);
     }
 
+    public TrafficAgent1 getTrafficAgentForDrone(Human human) {
+        return agents.get(human);
+    }
+
     public void computeNeighboursforDrone(Area a, StandardWorldModel world) {
-        Collection<TrafficArea> neighbours = areaNeighbours.get(getTrafficAreaforDrone(a));
+        Collection<TrafficArea1> neighbours = areaNeighbours.get(getTrafficAreaforDrone(a));
         neighbours.clear();
         for (EntityID id: a.getNeighbours()) {
             Entity e = world.getEntity(id);

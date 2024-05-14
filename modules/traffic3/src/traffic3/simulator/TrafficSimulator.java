@@ -713,15 +713,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     return target;
   }
 
-  private void handleFly(AKFly fly, ChangeSet changes){
-    //Agents flying over the blockades
-    EntityID agentID = fly.getAgentID();
-    Entity agent = model.getEntity(agentID);
-    if(agent instanceof Human) {
-      manager.getTrafficAgent((Human) agent).setMobile(true);
-      Logger.debug(agent + " is flying over");
-    }
-  }
 
   private void handleClear(AKClear clear, ChangeSet changes) {
     // Agents clearing roads are not mobile

@@ -38,11 +38,14 @@ import rescuecore2.worldmodel.properties.EntityRefProperty;
 import rescuecore2.worldmodel.properties.IntProperty;
 
 
-import traffic3.manager.TrafficManager;
 import traffic3.objects.TrafficArea;
+import traffic3.simulator.Dijkstra;
+import traffic4.manager.TrafficManager1;
+import traffic4.objects.TrafficArea1;
 import traffic3.simulator.TrafficSimulatorGUI;
-import traffic3.objects.TrafficAgent;
+import traffic4.objects.TrafficAgent1;
 import traffic3.objects.TrafficBlockade;
+import traffic4.objects.TrafficArea1;
 
 
 import javax.swing.*;
@@ -63,7 +66,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 
     private TrafficSimulatorGUI gui;
 
-    private TrafficManager manager;
+    private TrafficManager1 manager;
 
     /**
      * Construct a new traffic simulator but just to manage drones
@@ -81,7 +84,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 
     protected void postConnectDrone() {
         TrafficConstants.init(config);
-        manager.clear();
+        manager.clearObject();
         for (StandardEntity next : model) {
             if (next instanceof Area) {
                 convertAreaToTrafficArea((Area) next);
@@ -91,7 +94,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     }
 
     private void clearAreaCacheDrone(EntityID entityArea) {
-        manager.getTrafficArea((Area) model.getEntity(entityArea)).clearBlockadeCache();
+        manager.getTrafficAreaforDrone((Area) model.getEntity(entityArea)).clearBlockadeCache();
     }
 
     private void convertAreaToTrafficArea(Area area) {
@@ -109,7 +112,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         } else {
             throw new IllegalArgumentException("Unrecognised agent type: " + human + " (" + human.getClass().getName() + ")");
         }
-        TrafficAgent agent = new TrafficAgent(human, manager, radius, velocityLimit);
+        TrafficAgent1 agent = new TrafficAgent1(human, manager, radius, velocityLimit);
         agent.setLocation(human.getX(), human.getY());
         manager.register(agent);
     }
@@ -118,7 +121,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 
     private void handleMove(AKMove move) {
         Human human = (Human) model.getEntity(move.getAgentID());
-        TrafficAgent agent = manager.getTrafficAgent(human);
+        TrafficAgent1 agent = manager.getTrafficAgentForDrone(human);
         EntityID current = human.getPosition();
         if(current == null) {
             Logger.warn("Agent position is not defined");
@@ -203,6 +206,15 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       return null;
     }
 
+    private boolean havePassableEdge(Area destination) {
+        for (Edge edge : destination.getEdges()) {
+            if (edge.isPassable()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private Point2D getEntranceOfArea(Edge incomingEdge, Area destination) {
 
         Point2D edgeMid = getBestPoint(incomingEdge, destination);
@@ -224,16 +236,119 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return null;
     }
 
-    private Collection<? extends PathElement> getPathElements2(Human human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
+//    private Collection<? extends PathElement> getPathElements2(Human human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
+//        Collection<? extends PathElement> originalPaths = getPathElements(human, lastArea, lastEdge, nextArea, nextEdge);
+//        if (isOriginalPathOk(originalPaths))
+//            return originalPaths;
+//        Point2D start;
+//        if (lastEdge == null)
+//            start = new Point2D(human.getX(), human.getY());
+//        else
+//            start = getBestPoint(lastEdge, lastArea);
+//        Point2D startpoint;
+//        if (lastEdge == null)
+//            startpoint = start;
+//        else
+//            startpoint = getMidPoint(lastEdge.getStart(), lastEdge.getEnd());
+//        Point2D edgePoint = getBestPoint(nextEdge, nextArea);
+//        Point2D centrePoint = new Point2D(lastArea.getX(), lastArea.getY());
+//
+//        List<ShapeDebugFrame.ShapeInfo> resultGraph = new ArrayList<ShapeDebugFrame.ShapeInfo>();
+//
+//        resultGraph.add(
+//                new Line2DShapeInfo(new Line2D(startpoint, centrePoint), "path start to center", Color.black, false, true));
+//        resultGraph.add(new Line2DShapeInfo(new Line2D(centrePoint, getMidPoint(nextEdge.getStart(), nextEdge.getEnd())),
+//                "path center to end", Color.white, false, true));
+//
+//        TrafficArea1 trafficArea = manager.getTrafficAreaforDrone(lastArea);
+//        int[][] graph = manager.getTrafficAreaforDrone(lastArea).getGraph();
+//        List<Line2D> oLines = manager.getTrafficAreaforDrone(lastArea).getOpenLines();
+//        List<Line2D> graphline = new ArrayList<>();
+//        resultGraph.add(new Line2DShapeInfo(oLines, "openLines", Color.green, false, false));
+//        for (int i = 0; i < graph.length; i++) {
+//            for (int j = 0; j < graph.length; j++) {
+//                if (graph[i][j] > 10000)
+//                    continue;
+//                Line2D line = new Line2D(getMidPoint(oLines.get(i).getOrigin(), oLines.get(i).getEndPoint()),
+//                        getMidPoint(oLines.get(j).getOrigin(), oLines.get(j).getEndPoint()));
+//                graphline.add(line);
+//            }
+//        }
+//
+//        int src = trafficArea.getNearestLineIndex(start);
+//        int end = trafficArea.getNearestLineIndex(edgePoint);
+//
+//        if (src != end && src != -1 && end != -1) {
+//            traffic3.simulator.Dijkstra dijkstra = new Dijkstra(graph.length);
+//            try {
+//                dijkstra.Run(graph, src);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                if (dijkstra.getWeight(end) < 1000) {
+//                    ArrayList<Integer> path = dijkstra.getpathArray(end);
+//                    if (path.size() > 2) {
+//                        List<Point2D> points = new ArrayList<Point2D>();
+//                        for (Integer integer : path) {
+//                            Point2D point = getMidPoint(oLines.get(integer).getOrigin(), oLines.get(integer).getEndPoint());
+//                            points.add(point);
+//                        }
+//
+//                        ArrayList<PathElement> result = new ArrayList<PathElement>();
+//                        result.add(new PathElement(nextArea.getID(), nextEdge.getLine(), start));
+//
+//                        for (Point2D point : points)
+//                            result.add(new PathElement(nextArea.getID(), nextEdge.getLine(), point));
+//
+//                        result.add(new PathElement(nextArea.getID(), nextEdge.getLine(), edgePoint));
+//
+//                        return result;
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        return originalPaths;
+//    }
 
-        return null;
-    }
+    private boolean isOriginalPathOk(Collection<? extends PathElement> originalPaths) {
+        if(originalPaths.isEmpty()) {
+            Logger.warn("original paths is full");
+            return true;
+        }
 
-    private boolean originalPathOk() {
+        TrafficArea1 lastArea = null;
+        ArrayList<PathElement> SameAreaElements = new ArrayList<>();
+        for (PathElement path : originalPaths) {
+
+            TrafficArea1 area = manager.getTrafficAreaforDrone((Area) model.getEntity(path.getAreaID()));
+            for (TrafficBlockade block : area.getBlockades()) {
+                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
+                    return true;
+            }
+            double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
+
+            if (minDist < TrafficSimulator.AGENT_RADIUS / 2)
+                return false;
+            if (lastArea == null || lastArea == area) {
+                SameAreaElements.add(path);
+            } else {
+                if (!checkElements(lastArea, SameAreaElements)) {
+                    return false;
+                }
+                SameAreaElements.clear();
+            }
+            lastArea = area;
+        }
+        if(!checkElements(lastArea, SameAreaElements))
+            return false;
         return true;
     }
 
-    private boolean checkElements(TrafficArea lastArea, List<PathElement> sameAreaElem) {
+    private boolean checkElements(TrafficArea1 lastArea, List<PathElement> sameAreaElem) {
         if (sameAreaElem.size() <= 1)
             return true;
 
@@ -275,39 +390,39 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         EntityID agentID = fly.getAgentID();
         Entity agent = model.getEntity(agentID);
         if (agent instanceof Human) {
-            manager.getTrafficAgent((Human) agent).setMobile(false);
-            Logger.debug(agent + " is flying");
+            manager.getTrafficAgentForDrone((Human) agent).setMobile(true);
+            Logger.debug(agent + " is flying over " );
         }
     }
 
     private void timestep() {
         long start = System.currentTimeMillis();
-        for (TrafficAgent agent : manager.getAgents()) {
+        for (TrafficAgent1 agent : manager.getALLAgents()) {
             agent.beginTimestep();
         }
 
         long pre = System.currentTimeMillis();
         Logger.debug("Running " + MICROSTEPS + " microsteps");
         for(int i = 0; i < MICROSTEPS; i++){
-            //microstep();
+            microstep();
         }
 
         long post = System.currentTimeMillis();
-        for(TrafficAgent agent : manager.getAgents()){
+        for(TrafficAgent1 agent : manager.getALLAgents()){
             agent.endTimestep();
         }
 
         long end = System.currentTimeMillis();
-        if (manager.getAgents().size() != 0) {
-            Logger.debug("Pre timestep took " + (pre - start) + " ms (average " +((pre - start) / manager.getAgents().size()) + "ms per agent)");
+        if (manager.getALLAgents().size() != 0) {
+            Logger.debug("Pre timestep took " + (pre - start) + " ms (average " +((pre - start) / manager.getALLAgents().size()) + "ms per agent)");
             Logger.debug("Microsteps: " + (post - pre) + "ms (average " + ((post - pre) / MICROSTEPS) + "ms");
-            Logger.debug("Post timestep: " + (end - post) + " ms (average " + ((end - post) / manager.getAgents().size()) + "ms per agent");
+            Logger.debug("Post timestep: " + (end - post) + " ms (average " + ((end - post) / manager.getALLAgents().size()) + "ms per agent");
         }
         Logger.debug("Total time " + (end - start));
     }
 
     private void microstep() {
-        for (TrafficAgent agent : manager.getAgents()) {
+        for (TrafficAgent1 agent : manager.getALLAgents()) {
             agent.step(TIME_STEP_MS);
         }
         gui.refresh();

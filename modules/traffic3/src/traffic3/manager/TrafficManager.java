@@ -250,9 +250,7 @@ public class TrafficManager {
   /**
    * Get the TrafficArea that wraps a given Area.
    *
-   * @param a
-   *   The area to look up.
-   *
+   * @param a The area to look up.
    * @return The TrafficArea that wraps the given area or null if no such
    * TrafficArea exists.
    */
