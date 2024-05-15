@@ -18,5 +18,17 @@ public class IgnoreBlockadesAgent {
             this.height = 200;
             this.area = area;
         }
+
+        public double getHeight() {
+            return this.height;
+        }
+
+        public TrafficArea1 getArea() {
+            return this.area;
+        }
+
+        public Line2D getGround() {
+            return this.ground;
+        }
     }
 }

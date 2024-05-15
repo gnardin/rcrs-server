@@ -82,7 +82,7 @@ public class TrafficSimulatorGUI extends JPanel {
 	private Box verboseBox;
 
 	/**
-	 * Construct a TrafficSimulatorGUI.
+	 * Construct a TrafficSimulatorGUIDrone.
 	 *
 	 * @param manager
 	 *            The traffic manager.

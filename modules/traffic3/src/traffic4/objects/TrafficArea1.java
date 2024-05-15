@@ -233,22 +233,28 @@ public class TrafficArea1 {
 //        return new Point2D((p1.getX() + p1.getX()) / 2, (p1.getY() + p2.getY()) / 2);
 //    }
 //
-/*
     public List<Line2D> getOpenLines() {
         if (openLines == null) {
             openLines = new ArrayList<Line2D>();
             HashSet<Point2D> checkedPoint = new HashSet<Point2D>();
             for (Line2D line : getBlockadeLines()) {
                 if (!checkedPoint.contains(line.getOrigin())) {
-                    createLine();
+                    createLine(line.getOrigin(), openLines);
                 }
+				if (!checkedPoint.contains(line.getEndPoint())) {
+					createLine(line.getEndPoint(), openLines);
+				}
+				checkedPoint.add(line.getOrigin());
+				checkedPoint.add(line.getEndPoint());
             }
         }
+
+		return Collections.unmodifiableList(openLines);
     }
 
 	private Line2D[] getBlockadeLines() {
+		return null;
 	}
-*/
 
 	private void createPassableEdges(List<Line2D> openLines) {
 		for (Edge edge : getArea().getEdges()) {
