@@ -4,7 +4,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,18 +17,13 @@ import traffic4.objects.TrafficAgent1;
 import traffic4.objects.TrafficArea1;
 
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.CountDownLatch;
 
 public class TrafficSimulatorGUIDrone extends JPanel {
     private static final Color SELECTED_AREA_COLOUR = new Color(0,0,255,128);
@@ -126,13 +120,49 @@ public class TrafficSimulatorGUIDrone extends JPanel {
      */
     public void initialise() {
         view.initialise();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                verboseBox.removeAll();
+                for (TrafficAgent1 next : manager.getALLAgents()) {
+                    final TrafficAgent1 ta = next;
+                    final JCheckBox check = new JCheckBox("Agent" + ta.getHuman(), false);
+                    check.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent a) {
+                            ta.setVerbose(check.isSelected());
+                        }
+                    });
+                    verboseBox.add(check);
+                }
+                verboseBox.revalidate();
+            }
+        });
     }
 
     /**
      * Refresh the view and wait for user input if required.
      */
     public void refresh() {
-
+        repaint();
+        if (waitOnRefresh) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    if (timer.isRunning()) {
+                        cont.setEnabled(true);
+                    }
+                }
+            });
+            synchronized (lock) {
+                latch = new CountDownLatch(2);
+            }
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                Logger.warn("Error waiting for continue", e);
+            }
+        }
     }
 
     public void setWaitOnRefresh(boolean b) {

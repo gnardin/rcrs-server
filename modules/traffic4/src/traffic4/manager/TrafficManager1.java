@@ -12,8 +12,6 @@ import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.entities.StandardWorldModel;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
-//import traffic3.objects.TrafficAgent;
-//import traffic3.objects.TrafficArea;
 import traffic4.objects.TrafficAgent1;
 import traffic4.objects.TrafficArea1;
 
@@ -112,6 +110,13 @@ public class TrafficManager1 {
         areaByID.clear();
         index = new RTree();
         index.init(new Properties());
+    }
+
+    public void register(TrafficArea1 area) {
+        areas.put(area.getArea(), area);
+        int id = area.getArea().getID().getValue();
+        areaByID.put(id, area);
+        index.add(area.getBounds(), id);
     }
 
     /**

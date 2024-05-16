@@ -190,7 +190,7 @@ public class TrafficArea {
 	}
 
 	/**
-	 * Add a TrafficBlockade.
+	 * Add a TrafficBlockade1.
 	 *
 	 * @param block
 	 *            The blockade to add.
@@ -201,7 +201,7 @@ public class TrafficArea {
 	}
 
 	/**
-	 * Remove a TrafficBlockade.
+	 * Remove a TrafficBlockade1.
 	 *
 	 * @param block
 	 *            The blockade to remove.

@@ -52,7 +52,7 @@ public class Force {
      @param forces The forces to add.
      */
     public void add(traffic4.objects.Force... forces) {
-        for (traffic4.objects.Force next : forces) {
+        for (/*traffic4.objects.*/Force next : forces) {
             forceX += next.forceX;
             forceY += next.forceY;
         }

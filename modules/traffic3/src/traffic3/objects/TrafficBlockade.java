@@ -22,7 +22,7 @@ public class TrafficBlockade {
     private List<Line2D> lines = new ArrayList<Line2D>();
 
     /**
-       Construct a TrafficBlockade object.
+       Construct a TrafficBlockade1 object.
        @param blockade The wrapped blockade.
        @param area The area containing this blockade.
     */

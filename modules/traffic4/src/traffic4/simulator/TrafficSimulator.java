@@ -1,7 +1,5 @@
 package traffic4.simulator;
 
-import java.awt.Color;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -9,46 +7,31 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+import org.jfree.chart.block.Block;
 import org.uncommons.maths.number.NumberGenerator;
+
+
 import org.uncommons.maths.random.GaussianGenerator;
-
-
 import rescuecore2.GUIComponent;
 import rescuecore2.standard.components.StandardSimulator;
 import rescuecore2.log.Logger;
-import rescuecore2.messages.Command;
-import rescuecore2.messages.control.KSCommands;
-import rescuecore2.messages.control.KSUpdate;
 import rescuecore2.misc.geometry.GeometryTools2D;
 import rescuecore2.misc.geometry.Line2D;
 import rescuecore2.misc.geometry.Point2D;
 import rescuecore2.misc.geometry.Vector2D;
-import rescuecore2.misc.gui.ShapeDebugFrame;
-import rescuecore2.misc.gui.ShapeDebugFrame.Line2DShapeInfo;
-import rescuecore2.standard.components.StandardSimulator;
 import rescuecore2.standard.entities.*;
 import rescuecore2.standard.messages.*;
 import rescuecore2.worldmodel.ChangeSet;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
-import rescuecore2.worldmodel.WorldModel;
-import rescuecore2.worldmodel.WorldModelListener;
-import rescuecore2.worldmodel.properties.EntityRefListProperty;
-import rescuecore2.worldmodel.properties.EntityRefProperty;
-import rescuecore2.worldmodel.properties.IntProperty;
 
 
-import traffic3.objects.TrafficArea;
-import traffic3.simulator.Dijkstra;
 import traffic4.manager.TrafficManager1;
 import traffic4.objects.TrafficArea1;
 import traffic3.simulator.TrafficSimulatorGUI;
 import traffic4.objects.TrafficAgent1;
-import traffic3.objects.TrafficBlockade;
-import traffic4.objects.TrafficArea1;
-
-
-import javax.swing.*;
+import traffic4.objects.TrafficBlockade1;
+import traffic4.simulator.PathElement;
 
 public class TrafficSimulator extends StandardSimulator implements GUIComponent {
     private static final double TIME_STEP_MS = 100;
@@ -60,7 +43,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 //    private static final int CIVILIAN_RADIUS = 200;
     private static final double AGENT_VELOCITY_MEAN = 0.7;
     private static final double AGENT_VELOCITY_SD = 0.1;
-    private static final double AGENT_HEIGHT = 25.0;
+    private static final double AGENT_HEIGHT = 100;
 //    private static final double CIVILIAN_VELOCITY_MEAN = 0.2;
 //    private static final double CIVILIAN_VELOCITY_SD = 0.002;
 
@@ -71,6 +54,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     /**
      * Construct a new traffic simulator but just to manage drones
      */
+    public TrafficSimulator() {
+        manager = new TrafficManager1();
+        //gui = new TrafficSimulatorGUIDrone(manager);
+    }
 
     @Override
     public JComponent getGUIComponent() {
@@ -90,6 +77,16 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
                 convertAreaToTrafficArea((Area) next);
             }
         }
+        NumberGenerator<Double> agentVelocityGenerator = new GaussianGenerator(AGENT_VELOCITY_MEAN,
+                AGENT_VELOCITY_SD, config.getRandom());
+        for (StandardEntity next : model) {
+            if (next instanceof Human) {
+                convertHumanDrone((Human) next, agentVelocityGenerator);
+            }
+            if (next instanceof Blockade) {
+                convertBlockade((Blockade) next);
+            }
+        }
 
     }
 
@@ -98,10 +95,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     }
 
     private void convertAreaToTrafficArea(Area area) {
-        //manager.register(new TrafficArea(area));
+        manager.register(new TrafficArea1(area));
     }
 
-    private void convertHumanDrone(Human human, NumberGenerator<Double> agentVelocityGenerator, NumberGenerator<Double> heightGenerator) {
+    private void convertHumanDrone(Human human, NumberGenerator<Double> agentVelocityGenerator) {
         double radius = 0;
         double height = 0;
         double velocityLimit = 0;
@@ -117,7 +114,15 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         manager.register(agent);
     }
 
-    private void convertGround() {}
+    public void convertBlockade(Blockade blockade) {
+        Logger.debug("Converting blockade: " + blockade.getFullDescription());
+        Area a = (Area) model.getEntity(blockade.getPosition());
+        Logger.debug("Area: " + a);
+        TrafficArea1 area = manager.getTrafficAreaforDrone(a);
+        Logger.debug("Traffic Area: " + area);
+//        TrafficBlockade1 block = new TrafficBlockade1(blockade, area);
+//        manager.register(block);
+    }
 
     private void handleMove(AKMove move) {
         Human human = (Human) model.getEntity(move.getAgentID());
@@ -180,27 +185,27 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             System.out.println(
                     "lastArea=" + lastArea + " lastEdge=" + lastEdge + " nextArea=" + nextArea + " nextEdge=" + nextEdge);
         }
-        ArrayList<traffic3.simulator.PathElement> steps = new ArrayList<traffic3.simulator.PathElement>();
+        ArrayList<PathElement> steps = new ArrayList<PathElement>();
         Point2D edgePoint = getBestPoint(nextEdge, nextArea);
         Point2D centrePoint = new Point2D(lastArea.getX(), lastArea.getY());
         if (lastEdge == null) {
             Point2D entracePoint = getEntranceOfArea(nextEdge, lastArea);
             if (entracePoint != null) {
-                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), null, entracePoint, centrePoint));
-                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, entracePoint));
+                steps.add(new PathElement(lastArea.getID(), null, entracePoint, centrePoint));
+                steps.add(new PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, entracePoint));
             } else
-                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint));
+                steps.add(new PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint));
 
         } else {
             Point2D startEntracePoint = getEntranceOfArea(lastEdge, lastArea);
             if (startEntracePoint != null)
-                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), null, startEntracePoint));
+                steps.add(new PathElement(lastArea.getID(), null, startEntracePoint));
             Point2D entracePoint = getEntranceOfArea(nextEdge, lastArea);
             if (entracePoint != null) {
-                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), entracePoint, centrePoint));
-                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, entracePoint));
+                steps.add(new PathElement(lastArea.getID(), nextEdge.getLine(), entracePoint, centrePoint));
+                steps.add(new PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, entracePoint));
             } else {
-                steps.add(new traffic3.simulator.PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, centrePoint));
+                steps.add(new PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, centrePoint));
             }
         }
       return null;
@@ -236,84 +241,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return null;
     }
 
-//    private Collection<? extends PathElement> getPathElements2(Human human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
-//        Collection<? extends PathElement> originalPaths = getPathElements(human, lastArea, lastEdge, nextArea, nextEdge);
-//        if (isOriginalPathOk(originalPaths))
-//            return originalPaths;
-//        Point2D start;
-//        if (lastEdge == null)
-//            start = new Point2D(human.getX(), human.getY());
-//        else
-//            start = getBestPoint(lastEdge, lastArea);
-//        Point2D startpoint;
-//        if (lastEdge == null)
-//            startpoint = start;
-//        else
-//            startpoint = getMidPoint(lastEdge.getStart(), lastEdge.getEnd());
-//        Point2D edgePoint = getBestPoint(nextEdge, nextArea);
-//        Point2D centrePoint = new Point2D(lastArea.getX(), lastArea.getY());
-//
-//        List<ShapeDebugFrame.ShapeInfo> resultGraph = new ArrayList<ShapeDebugFrame.ShapeInfo>();
-//
-//        resultGraph.add(
-//                new Line2DShapeInfo(new Line2D(startpoint, centrePoint), "path start to center", Color.black, false, true));
-//        resultGraph.add(new Line2DShapeInfo(new Line2D(centrePoint, getMidPoint(nextEdge.getStart(), nextEdge.getEnd())),
-//                "path center to end", Color.white, false, true));
-//
-//        TrafficArea1 trafficArea = manager.getTrafficAreaforDrone(lastArea);
-//        int[][] graph = manager.getTrafficAreaforDrone(lastArea).getGraph();
-//        List<Line2D> oLines = manager.getTrafficAreaforDrone(lastArea).getOpenLines();
-//        List<Line2D> graphline = new ArrayList<>();
-//        resultGraph.add(new Line2DShapeInfo(oLines, "openLines", Color.green, false, false));
-//        for (int i = 0; i < graph.length; i++) {
-//            for (int j = 0; j < graph.length; j++) {
-//                if (graph[i][j] > 10000)
-//                    continue;
-//                Line2D line = new Line2D(getMidPoint(oLines.get(i).getOrigin(), oLines.get(i).getEndPoint()),
-//                        getMidPoint(oLines.get(j).getOrigin(), oLines.get(j).getEndPoint()));
-//                graphline.add(line);
-//            }
-//        }
-//
-//        int src = trafficArea.getNearestLineIndex(start);
-//        int end = trafficArea.getNearestLineIndex(edgePoint);
-//
-//        if (src != end && src != -1 && end != -1) {
-//            traffic3.simulator.Dijkstra dijkstra = new Dijkstra(graph.length);
-//            try {
-//                dijkstra.Run(graph, src);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                if (dijkstra.getWeight(end) < 1000) {
-//                    ArrayList<Integer> path = dijkstra.getpathArray(end);
-//                    if (path.size() > 2) {
-//                        List<Point2D> points = new ArrayList<Point2D>();
-//                        for (Integer integer : path) {
-//                            Point2D point = getMidPoint(oLines.get(integer).getOrigin(), oLines.get(integer).getEndPoint());
-//                            points.add(point);
-//                        }
-//
-//                        ArrayList<PathElement> result = new ArrayList<PathElement>();
-//                        result.add(new PathElement(nextArea.getID(), nextEdge.getLine(), start));
-//
-//                        for (Point2D point : points)
-//                            result.add(new PathElement(nextArea.getID(), nextEdge.getLine(), point));
-//
-//                        result.add(new PathElement(nextArea.getID(), nextEdge.getLine(), edgePoint));
-//
-//                        return result;
-//                    }
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        return originalPaths;
-//    }
-
     private boolean isOriginalPathOk(Collection<? extends PathElement> originalPaths) {
         if(originalPaths.isEmpty()) {
             Logger.warn("original paths is full");
@@ -325,10 +252,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         for (PathElement path : originalPaths) {
 
             TrafficArea1 area = manager.getTrafficAreaforDrone((Area) model.getEntity(path.getAreaID()));
-            for (TrafficBlockade block : area.getBlockades()) {
-                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
-                    return true;
-            }
+//            for (TrafficBlockade1 block : area.getBlockades()) {
+//                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
+//                    return true;
+//            }
             double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
 
             if (minDist < TrafficSimulator.AGENT_RADIUS / 2)
@@ -370,9 +297,9 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return new Point2D((p1.getX() + p2.getX()) / 2, (p2.getX() + p2.getY()) / 2);
     }
 
-    private Point2D getTransivit2(Point2D base, Point2D p1) {
-        return new Point2D((base.getX() - (p1.getX() - base.getX())), (base.getY() - (p1.getY()- base.getY())));
-    }
+//    private Point2D getTransivit2(Point2D base, Point2D p1) {
+//        return new Point2D((base.getX() - (p1.getX() - base.getX())), (base.getY() - (p1.getY()- base.getY())));
+//    }
 
     private double getMinimumDistance(List<Line2D> lines, Point2D point) {
         double min = Integer.MAX_VALUE;
@@ -413,7 +340,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         }
 
         long end = System.currentTimeMillis();
-        if (manager.getALLAgents().size() != 0) {
+        if (!manager.getALLAgents().isEmpty()) {
             Logger.debug("Pre timestep took " + (pre - start) + " ms (average " +((pre - start) / manager.getALLAgents().size()) + "ms per agent)");
             Logger.debug("Microsteps: " + (post - pre) + "ms (average " + ((post - pre) / MICROSTEPS) + "ms");
             Logger.debug("Post timestep: " + (end - post) + " ms (average " + ((end - post) / manager.getALLAgents().size()) + "ms per agent");

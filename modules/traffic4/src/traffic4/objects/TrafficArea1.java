@@ -2,26 +2,19 @@ package traffic4.objects;
 
 //import java.awt.geom.Line2D;
 import java.util.*;
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 
-import org.apache.log4j.NDC;
-
 //import rescuecore2.log.Logger;
 
-import rescuecore2.components.AbstractAgent;
 import rescuecore2.misc.geometry.GeometryTools2D;
 import rescuecore2.misc.geometry.Point2D;
 import rescuecore2.misc.geometry.Vector2D;
 import rescuecore2.misc.geometry.Line2D;
-import rescuecore2.misc.gui.ShapeDebugFrame;
 
 import rescuecore2.standard.entities.Area;
 import rescuecore2.standard.entities.Edge;
-import traffic4.objects.TrafficAgent1;
 import traffic3.objects.TrafficBlockade;
-import traffic4.simulator.TrafficSimulator;
 
 import com.infomatiq.jsi.Rectangle;
 
@@ -154,7 +147,7 @@ public class TrafficArea1 {
 //    * @param block
 //    *            The blockade to add
 //     */
-//    public void addBlockade(TrafficBlockade block) {
+//    public void addBlockade(TrafficBlockade1 block) {
 //       // block.add(block);
 //    }
 //
@@ -164,7 +157,7 @@ public class TrafficArea1 {
 //     * @param block
 //     *              The blockade to remove
 //     */
-//    public void removeBlocackade(TrafficBlockade block) {
+//    public void removeBlocackade(TrafficBlockade1 block) {
 //        blocks.remove(block);
 //    }
 
@@ -183,7 +176,7 @@ public class TrafficArea1 {
 	 *
 	 * @return All TrafficBlockades in this area.
 	 */
-	public Collection<TrafficBlockade> getBlockades() {
+	public TrafficBlockade1 getBlockades() {
 		return Collections.unmodifiableCollection(blocks);
 	}
 

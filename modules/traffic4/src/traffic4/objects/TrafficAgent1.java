@@ -10,16 +10,12 @@ import rescuecore2.standard.entities.Civilian;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.Road;
 //import traffic4.manager.TrafficManager;
-import traffic3.objects.TrafficAgent;
-import traffic3.objects.TrafficArea;
 import traffic3.objects.TrafficBlockade;
 import traffic4.manager.TrafficManager1;
 import traffic4.simulator.PathElement;
 import traffic4.simulator.TrafficConstants;
 
-import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingDeque;
 
 public class TrafficAgent1 {
 
