@@ -621,8 +621,8 @@ public class TrafficAgent1 {
         if (currentArea == null) {
             return false;
         }
-        for (TrafficBlockade block : currentArea.getBlockades()) {
-            if (block.contains(location[0], location[1])) {
+        for (TrafficBlockade1 block : currentArea.getBlockades()) {
+            if (block.containsLoc(location[0], location[1])) {
                 return true;
             }
         }

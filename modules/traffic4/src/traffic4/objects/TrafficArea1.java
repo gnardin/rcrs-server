@@ -22,7 +22,7 @@ public class TrafficArea1 {
     private Collection<TrafficAgent1> agents;
     private List<Line2D> areaLines;
 
-	private Collection<TrafficBlockade> blocks;
+	private Collection<TrafficBlockade1> blocks;
 
 	private List<Line2D> blockingLines;
 //	private List<Line2D> blockadeLines;
@@ -176,7 +176,7 @@ public class TrafficArea1 {
 	 *
 	 * @return All TrafficBlockades in this area.
 	 */
-	public TrafficBlockade1 getBlockades() {
+	public Collection<TrafficBlockade1> getBlockades() {
 		return Collections.unmodifiableCollection(blocks);
 	}
 
@@ -398,7 +398,7 @@ public class TrafficArea1 {
 		Point midPoint = new Point((int) (line.getOrigin().getX() + line.getEndPoint().getX()) /2, (int) (line.getOrigin().getY() + line.getEndPoint().getY()) / 2);
 		if (!getArea().getShape().contains(midPoint)) {
 			return false;
-		} for (TrafficBlockade blockade : getBlockades()) {
+		} for (TrafficBlockade1 blockade : getBlockades()) {
 			if (blockade.getBlockade().getShape().contains(midPoint)) {
 				return true;
 			}

@@ -252,10 +252,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         for (PathElement path : originalPaths) {
 
             TrafficArea1 area = manager.getTrafficAreaforDrone((Area) model.getEntity(path.getAreaID()));
-//            for (TrafficBlockade1 block : area.getBlockades()) {
-//                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
-//                    return true;
-//            }
+            for (TrafficBlockade1 block : area.getBlockades()) {
+                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
+                    return true;
+            }
             double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
 
             if (minDist < TrafficSimulator.AGENT_RADIUS / 2)
