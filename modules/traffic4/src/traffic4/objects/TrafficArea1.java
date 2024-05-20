@@ -21,12 +21,12 @@ import com.infomatiq.jsi.Rectangle;
 public class TrafficArea1 {
     private Collection<TrafficAgent1> agents;
     private List<Line2D> areaLines;
-
 	private Collection<TrafficBlockade1> blocks;
 
 	private List<Line2D> blockingLines;
 //	private List<Line2D> blockadeLines;
 	private List<Line2D> allBlockingLines;
+
     private Area area;
     private Rectangle bounds;
     private Vector2D baseVec;
@@ -193,39 +193,35 @@ public class TrafficArea1 {
 		return null;
 	}
 
-//    public int getNearestLineIndex(Point2D point){
-//		List<Line2D> oLines = getOpenLines1();
-//		double minDst=Integer.MAX_VALUE;
-//		int minIndex=-1;
-//		/*FOR:*/for (int i = 0; i < oLines.size(); i++) {
-////			Line2D line = new Line2D(point,getMidPoint(oLines.get(i).getOrigin(), oLines.get(i).getEndPoint()));
-////			for (Line2D is :getAllBlockingLines()) {
-////				if (GeometryTools2D.getSegmentIntersectionPoint(line, is) != null) {
-////					continue FOR;
-////				}
-////			}
-////			for (int k = 0; k < oLines.size(); k++) {
-////				if(k==i)
-////					continue;
-////				if (GeometryTools2D.getSegmentIntersectionPoint(line, oLines.get(k)) == null) {
-////					continue FOR;
-////				}
-////			}
-//			Point2D nearestPoint = GeometryTools2D.getClosestPointOnSegment(oLines.get(i), point);
-//			double dst = GeometryTools2D.getDistance(point, nearestPoint);
-//			if(dst<minDst){
-//				minDst=dst;
-//				minIndex=i;
+    public int getNearestLineIndex(Point2D point){
+		List<Line2D> oLines = getOpenLines();
+		double minDst=Integer.MAX_VALUE;
+		int minIndex=-1;
+		/*FOR:*/for (int i = 0; i < oLines.size(); i++) {
+//			Line2D line = new Line2D(point,getMidPoint(oLines.get(i).getOrigin(), oLines.get(i).getEndPoint()));
+//			for (Line2D is :getAllBlockingLines()) {
+//				if (GeometryTools2D.getSegmentIntersectionPoint(line, is) != null) {
+//					continue FOR;
+//				}
 //			}
-////			return i;
-//		}
-//		return minIndex;
-//	}
-//
-//    private Point2D getMiddlePoint(Point2D p1, Point2D p2) {
-//        return new Point2D((p1.getX() + p1.getX()) / 2, (p1.getY() + p2.getY()) / 2);
-//    }
-//
+//			for (int k = 0; k < oLines.size(); k++) {
+//				if(k==i)
+//					continue;
+//				if (GeometryTools2D.getSegmentIntersectionPoint(line, oLines.get(k)) == null) {
+//					continue FOR;
+//				}
+//			}
+			Point2D nearestPoint = GeometryTools2D.getClosestPointOnSegment(oLines.get(i), point);
+			double dst = GeometryTools2D.getDistance(point, nearestPoint);
+			if(dst<minDst){
+				minDst=dst;
+				minIndex=i;
+			}
+//			return i;
+		}
+		return minIndex;
+	}
+
     public List<Line2D> getOpenLines() {
         if (openLines == null) {
             openLines = new ArrayList<Line2D>();

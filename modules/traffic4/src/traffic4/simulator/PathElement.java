@@ -36,10 +36,18 @@ public class PathElement {
          return "Move to area " + areaID + " = " + allPoints;
     }
 
+    /**
+     * Get the goal point.
+     * @return the goal point.
+     */
     public Point2D getGoal() {
         return targetPoint;
     }
 
+    /**
+     * Get the target egde line, if there are any.
+     * @return The target edge line or null.
+     */
     public Line2D getEdgeLines() {
         return edgeLine;
     }
@@ -48,15 +56,27 @@ public class PathElement {
         return targetPoint;
     }
 
+    /**
+     * Get the list of waypoints.
+     * @return The list of waypoints.
+     */
     public List<Point2D> getWayPoints() {
         return Collections.unmodifiableList(allPoints);
     }
 
+    /**
+     * Remove a waypoint
+     * @param point the waipoint to remove.
+     */
     public void removeWayPoints(Point2D point) {
         allPoints.remove(point);
     }
 
+    /**
+     * Get the area ID
+     */
     public EntityID getAreaID() {
         return areaID;
     }
+
 }

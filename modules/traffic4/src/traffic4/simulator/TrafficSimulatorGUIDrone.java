@@ -2,13 +2,14 @@ package traffic4.simulator;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import rescuecore2.log.Logger;
 import rescuecore2.misc.geometry.Line2D;
+import rescuecore2.misc.geometry.Point2D;
 import rescuecore2.misc.gui.PanZoomListener;
 import rescuecore2.misc.gui.ScreenTransform;
 import rescuecore2.standard.entities.Edge;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +37,7 @@ public class TrafficSimulatorGUIDrone extends JPanel {
 
     // path node
     private static final int FLIGHT_PATH_NODE_SIZE = 6;
+    private static final int FLIGHT_PATH_SPECIAL_NODE_SIZE = 10;
     private static final int TICK_TIME_MS = 10;
 
     private static final double FORCE_GUI_FACTOR = 1000;
@@ -233,6 +236,7 @@ public class TrafficSimulatorGUIDrone extends JPanel {
 
         private void drawObjects(Graphics2D g) {
             drawAreas((Graphics2D) g.create());
+            drawAgents((Graphics2D) g.create());
         }
 
         private void drawAreas(Graphics2D g) {
@@ -290,10 +294,94 @@ public class TrafficSimulatorGUIDrone extends JPanel {
                 } else {
                     g.setStroke(IMPASSABLE_EDGE_STROKE);
                 }
+                Line2D line = edge.getLine();
+                paintLine(line, g);
             }
         }
 
+        //No drawing of the blockades
 
+        private void drawAgents(Graphics2D graphics) {
+            for (TrafficAgent1 agent : manager.getALLAgents()) {
+                double agentX = agent.getX();
+                double agentY = agent.getY();
+                double ellipseX1 = agentX - agent.getRadius();
+                double ellipseY1 = agentY - agent.getRadius();
+                double ellipseX2 = agentX + agent.getRadius();
+                double ellipseY2 = agentY + agent.getRadius();
+                double velocityX = agentX + (agent.getvX() * 1000);
+                double velocityY = agentY + (agent.getvY() * 1000);
+                double forceX = agentX + (agent.getfX() * FORCE_GUI_FACTOR);
+                double forceY = agentY + (agent.getfY() * FORCE_GUI_FACTOR);
+                double heightX = agentX + agent.getHeight();
+                double heightY = agentY + agent.getHeight();
 
+                int x = transform1.xToScreen(agentX);
+                int y = transform1.yToScreen(agentY);
+                int x1 = transform1.xToScreen(ellipseX1);
+                int y1 = transform1.yToScreen(ellipseY1);
+                int x2 = transform1.xToScreen(ellipseX2);
+                int y2 = transform1.yToScreen(ellipseY2);
+                int vy = transform1.yToScreen(velocityY);
+                int vx = transform1.xToScreen(velocityX);
+                int fy = transform1.yToScreen(forceY);
+                int fx = transform1.xToScreen(forceX);
+                int hx = transform1.xToScreen(heightX);
+                int hy = transform1.yToScreen(heightY);
+                int ellipseWidth = x2 - x1;
+                int ellipseHeight = y1 - y2;
+
+                graphics.setColor(agent == selectedAgent ? Color.ORANGE : Color.RED);
+                Shape shape = new Ellipse2D.Double(x1, y2, ellipseWidth, ellipseHeight);
+                graphics.fill(shape);
+                agents.put(shape, agent);
+
+                //Draw a path of the drone
+                if (agent == selectedAgent) {
+                    List<PathElement> path = new ArrayList<PathElement>(selectedAgent.getPath());
+                    if (selectedAgent.getCurrentElement() != null) {
+                        path.add(0, selectedAgent.getCurrentElement());
+                    }
+                    if (path != null) {
+                        Point2D goal = selectedAgent.getFinalDestination();
+                        Point2D current = selectedAgent.getCurrentDestination();
+                        graphics.setColor(Color.GRAY);
+                        int lastX = x;
+                        int lastY = y;
+                        for (PathElement next : path) {
+                            List<Point2D> waypoints = new ArrayList<Point2D>(next.getWayPoints());
+                            Collections.reverse(waypoints);
+                            for (Point2D point : waypoints) {
+                                int nodeX = transform1.xToScreen(point.getX());
+                                int nodeY = transform1.yToScreen(point.getY());
+                                graphics.fillOval(nodeX - (FLIGHT_PATH_NODE_SIZE / 2), nodeY - (FLIGHT_PATH_NODE_SIZE / 2), FLIGHT_PATH_NODE_SIZE, FLIGHT_PATH_NODE_SIZE);
+                                graphics.drawLine(lastX, lastY, nodeY, nodeX);
+                                lastX = nodeX;
+                                lastY = nodeY;
+                            }
+                        }
+                        if(current != null) {
+                            graphics.setColor(Color.YELLOW);
+                            int nodeX = transform1.xToScreen(current.getX());
+                            int nodeY = transform1.yToScreen(current.getY());
+                            graphics.fillOval(nodeX - (FLIGHT_PATH_SPECIAL_NODE_SIZE / 2), nodeY - (FLIGHT_PATH_SPECIAL_NODE_SIZE / 2), FLIGHT_PATH_SPECIAL_NODE_SIZE, FLIGHT_PATH_SPECIAL_NODE_SIZE);
+                            graphics.drawLine(x, y, nodeX, nodeY);
+                        }
+                        if(goal != null) {
+                            graphics.setColor(Color.WHITE);
+                            int nodeX = transform1.xToScreen(goal.getX());
+                            int nodeY = transform1.yToScreen(goal.getY());
+                            graphics.fillOval(nodeX - (FLIGHT_PATH_SPECIAL_NODE_SIZE / 2), (FLIGHT_PATH_SPECIAL_NODE_SIZE / 2), FLIGHT_PATH_SPECIAL_NODE_SIZE, FLIGHT_PATH_SPECIAL_NODE_SIZE);
+                        }
+                    }
+                }
+                graphics.setColor(Color.blue);
+                graphics.drawLine(x, y, vx, vy);
+                graphics.setColor(Color.green);
+                graphics.drawLine(x, y, fx, fy);
+                graphics.setColor(Color.cyan);
+                graphics.drawLine(x, y, hx, hy);
+            }
+        }
     }
 }
