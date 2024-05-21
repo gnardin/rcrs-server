@@ -372,17 +372,28 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
                 if (dijkstra.getWght(dest) < 1000) {
                     ArrayList<Integer> path = dijkstra.getPathArray(dest);
                     if (path.size() > 2) {
-                        List<Point2D> points = new ArrayList<>();
+                        List<Point2D> points = new ArrayList<Point2D>();
                         for (Integer integer : path) {
                             Point2D point = getMidPoint(openLines.get(integer).getOrigin(), openLines.get(integer).getEndPoint());
+                            points.add(point);
                         }
+
+                        ArrayList<PathElement> res = new ArrayList<PathElement>();
+                        res.add(new PathElement(nextArea.getID(), nextEdge.getLine(), start));
+
+                        for (Point2D point : points)
+                            res.add(new PathElement(nextArea.getID(), nextEdge.getLine(), point));
+
+                        res.add(new PathElement(nextArea.getID(), nextEdge.getLine(), edgePoint));
+
+                        return res;
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-        return null;
+        return originalPath;
     }
 
     private boolean isOriginalPathOk(Collection<? extends PathElement> originalPaths) {
@@ -455,6 +466,50 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             }
         }
         return min;
+    }
+
+    private Civilian handleDetect(AKDetect detect, ChangeSet changes) {
+        EntityID agentID = detect.getAgentID();
+        EntityID targetID = detect.getTarget();
+        Entity agent = model.getEntity(agentID);
+        Entity target = model.getEntity(targetID);
+        if (agent == null) {
+            Logger.warn("Rejecting detect command from agent: " + agentID + " agent does not exist");
+            return null;
+        }
+        if (!(agent instanceof Drone)) {
+            Logger.warn("Rejecting detect command from agent: " + agentID + ". The agent type is: " + agent.getURN());
+            return null;
+        }
+        if (target == null) {
+            Logger.warn("Rejecting detect command from agent: " + agentID + ". Target" + targetID + " does not exist");
+            return null;
+        }
+        Drone drone = (Drone) agent;
+        Civilian civ = (Civilian) target;
+        if (civ.isBuriednessDefined() && civ.getBuriedness() > 0) {
+            int x = civ.getX();
+            int y = civ.getY();
+            Logger.debug("Civilian detected at " + x + ", " + y);
+        }
+        if (drone.isBatteryDefined() && drone.getBattery() == 0) {
+            Logger.warn("Rejecting detect command from agent " + agentID + ". The drone is out of battery");
+            return null;
+        }
+        if (civ.isPositionDefined() || !civ.isPositionDefined() || !civ.getPosition().equals(civ.getPosition())) {
+            Logger.warn("Rejecting detect command from agent + " + agentID + ". Target is non-adjacent " + targetID);
+            return null;
+        }
+        //all checks passed
+        civ.setPosition(agentID);
+        civ.undefineX();
+        civ.undefineY();
+        changes.addChange(civ, civ.getPositionProperty());
+        changes.addChange(civ, civ.getXProperty());
+        changes.addChange(civ, civ.getYProperty());
+        manager.getTrafficAgentForDrone(civ).setMobile(false);
+        manager.getTrafficAgentForDrone(drone).setMobile(false);
+        return civ;
     }
 
 
