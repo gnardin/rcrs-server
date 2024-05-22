@@ -68,18 +68,18 @@ public class SampleLogViewer extends JPanel {
 	private static final int VIEWER_SIZE = 500;
 	private static final int FRAME_DELAY = 1000;
 
-	private LogReader log;
-	private JLabel timestep;
-	private StandardEntityInspector inspector;
-	private JSlider slider;
-	private JList commandsList;
-	private JList updatesList;
-	private ListModelList<Command> commands;
-	private ListModelList<Entity> updates;
+	private final LogReader log;
+	private final JLabel timestep;
+	private final StandardEntityInspector inspector;
+	private final JSlider slider;
+	private final JList commandsList;
+	private final JList updatesList;
+	private final ListModelList<Command> commands;
+	private final ListModelList<Entity> updates;
 	private List<ViewComponent> viewers;
-	private JButton down;
-	private JButton up;
-	private int maxTime;
+	private final JButton down;
+	private final JButton up;
+	private final int maxTime;
 	private EntityID selectedEntityId;
 
 	/**

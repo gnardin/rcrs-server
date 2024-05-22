@@ -16,7 +16,7 @@ import rescuecore2.misc.collections.LazyMap;
    Abstract base class for communication models.
  */
 public abstract class AbstractCommunicationModel implements CommunicationModel {
-    private Map<Entity, List<Command>> hearing;
+    private final Map<Entity, List<Command>> hearing;
 
     /**
        Construct an AbstractCommunicationModel.

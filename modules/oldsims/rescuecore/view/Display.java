@@ -21,10 +21,10 @@ import java.text.NumberFormat;
 import rescuecore.Memory;
 
 public class Display extends JPanel {
-    private Map map;
-    private ObjectInspector inspector;
-    private JLabel timestep;
-    private JLabel score;
+    private final Map map;
+    private final ObjectInspector inspector;
+    private final JLabel timestep;
+    private final JLabel score;
 
     private final static NumberFormat FORMAT = NumberFormat.getInstance();
 

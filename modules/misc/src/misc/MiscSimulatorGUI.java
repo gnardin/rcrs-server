@@ -20,7 +20,7 @@ public class MiscSimulatorGUI extends JPanel {
     private static final int COLUMN_BURIEDNESS = 6;
     private static final int COLUMNS = 7;
 
-    private MiscTableModel model;
+    private final MiscTableModel model;
 
     /**
        Create a MiscSimulatorGUI.

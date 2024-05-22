@@ -76,8 +76,8 @@ public class RemoteGISWorldModelCreator implements WorldModelCreator {
 	 * Listener for the GIS connection.
 	 */
 	private class GISConnectionListener implements ConnectionListener {
-		private CountDownLatch latch;
-		private DefaultWorldModel<Entity> model;
+		private final CountDownLatch latch;
+		private final DefaultWorldModel<Entity> model;
 
 		public GISConnectionListener(CountDownLatch latch,
 				DefaultWorldModel<Entity> model) {

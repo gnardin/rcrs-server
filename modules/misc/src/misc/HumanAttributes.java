@@ -16,12 +16,12 @@ import java.util.Random;
  * May 2020 During Covid-19 :-)))
  * */
 public class HumanAttributes {
-    private Human human;
-    private EntityID id;
-    private DamageType damageFire;
-    private DamageType damageCollapse;
-    private DamageType damageBury;
-    private Random random;
+    private final Human human;
+    private final EntityID id;
+    private final DamageType damageFire;
+    private final DamageType damageCollapse;
+    private final DamageType damageBury;
+    private final Random random;
 
     /**
      Construct a HumanAttributes object that wraps a Human.

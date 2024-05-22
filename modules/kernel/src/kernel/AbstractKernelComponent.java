@@ -13,8 +13,8 @@ import java.util.Collections;
    Abstract base class for KernelComponent implementations.
  */
 public abstract class AbstractKernelComponent implements KernelComponent {
-    private Connection connection;
-    private String name;
+    private final Connection connection;
+    private final String name;
 
     /**
        Construct a new abstract component.

@@ -109,7 +109,7 @@ public class ObjectSelector implements MouseListener {
 		ObjectSelectionEvent e = new ObjectSelectionEvent(map,o);
 		ObjectSelectionListener[] l;
 		synchronized(listeners) {
-			l = (ObjectSelectionListener[])listeners.toArray(new ObjectSelectionListener[0]);
+			l = listeners.toArray(new ObjectSelectionListener[0]);
 		}
 		for (int i=0;i<l.length;++i) {
 			l[i].objectSelected(e);
@@ -123,9 +123,8 @@ public class ObjectSelector implements MouseListener {
 
 		public boolean closeTo(Point point) {
 			if (p==null || point==null) return false;
-			if (Math.abs(p.x-point.x)<2 && Math.abs(p.y-point.y)<2) return true;
-			return false;
-		}
+            return Math.abs(p.x - point.x) < 2 && Math.abs(p.y - point.y) < 2;
+        }
 
 		public Object advancePointer() {
 			++index;

@@ -31,5 +31,5 @@ public interface WorldModelCreator extends EntityIDGenerator {
 	 * @param config
 	 * @return a scenario 
 	 */
-	public Scenario getScenario(Config config) throws DocumentException;
+    Scenario getScenario(Config config) throws DocumentException;
 }

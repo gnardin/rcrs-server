@@ -168,7 +168,7 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                     break;
                 case CIVILIAN:
                 case FIRE_BRIGADE:
-                    case AMBULANCE_TEAM:
+                case AMBULANCE_TEAM:
                 case POLICE_FORCE:
                     // Always send all properties of the agent-controlled object
                     if (next == agentEntity) {

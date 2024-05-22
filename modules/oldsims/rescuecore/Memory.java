@@ -689,9 +689,8 @@ public abstract class Memory implements java.io.Serializable {
   public Road getRoadBetween(Node n1, Node n2) {
     RescueObject[] neighbours = findNodeNeighbours(n1);
     for (int i = 0; i < neighbours.length; ++i) {
-      if (neighbours[i] instanceof Road) {
-        Road r = (Road) neighbours[i];
-        if ((r.getHead() == n1.getID() && r.getTail() == n2.getID())
+      if (neighbours[i] instanceof Road r) {
+          if ((r.getHead() == n1.getID() && r.getTail() == n2.getID())
             || (r.getHead() == n2.getID() && r.getTail() == n1.getID()))
           return r;
       }
@@ -707,9 +706,8 @@ public abstract class Memory implements java.io.Serializable {
         if (entrances[i] == id)
           return true;
     }
-    if (o1 instanceof Edge) {
-      Edge e = (Edge) o1;
-      if (e.getHead() == id || e.getTail() == id)
+    if (o1 instanceof Edge e) {
+        if (e.getHead() == id || e.getTail() == id)
         return true;
     }
     if (o1 instanceof Vertex) {

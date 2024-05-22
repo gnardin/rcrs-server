@@ -11,7 +11,7 @@ import rescuecore2.misc.Pair;
    A class that knows how to connect components to the kernel using inline streams.
  */
 public class InlineComponentLauncher extends ComponentLauncher {
-    private ComponentManager manager;
+    private final ComponentManager manager;
 
     /**
        Construct a new InlineComponentLauncher.

@@ -7,8 +7,8 @@ import rescuecore2.worldmodel.Entity;
    A class for obtaining information about the state of the kernel.
 */
 public class KernelState {
-    private int time;
-    private WorldModel<? extends Entity> model;
+    private final int time;
+    private final WorldModel<? extends Entity> model;
 
     /**
        Construct a snapshot of the kernel state.

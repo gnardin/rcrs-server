@@ -24,14 +24,14 @@ public interface Connection {
     /**
        Close the connection
 	*/
-    public abstract void close();
+    void close();
 
     /**
        Send a message
        @param msg The message to send
        @throws IOException if something goes wrong during sending
 	*/
-    public abstract void send(byte[] data) throws IOException;
+    void send(byte[] data) throws IOException;
 
     /**
        Receive a message. If there is nothing to receive then this method will wait for the specified timeout (in ms, -1 to wait forever, 0 to not wait).
@@ -39,5 +39,5 @@ public interface Connection {
        @return The next message to be received, or null if nothing is available
        @throws IOException if there is an error during receiving
 	*/
-    public abstract byte[] receive(int timeout) throws IOException, InterruptedException;
+    byte[] receive(int timeout) throws IOException, InterruptedException;
 }

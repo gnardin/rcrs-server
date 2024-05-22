@@ -437,12 +437,12 @@ public final class StartKernel {
   }
 
   private static class ComponentStarter implements Callable<Void> {
-    private String className;
-    private ComponentManager componentManager;
-    private int count;
-    private Registry registry;
-    private KernelGUI gui;
-    private Config config;
+    private final String className;
+    private final ComponentManager componentManager;
+    private final int count;
+    private final Registry registry;
+    private final KernelGUI gui;
+    private final Config config;
 
     public ComponentStarter(String className, ComponentManager componentManager, int count, Registry registry,
         KernelGUI gui, Config config) {

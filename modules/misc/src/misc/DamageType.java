@@ -16,10 +16,10 @@ import org.uncommons.maths.number.NumberGenerator;
  * May 2020 During Covid-19 :-)))
  * */
 public class DamageType {
-    private String type;
-    private double k;
-    private double l;
-    private NumberGenerator<Double> noise;
+    private final String type;
+    private final double k;
+    private final double l;
+    private final NumberGenerator<Double> noise;
 
     private double damage;
 

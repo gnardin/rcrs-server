@@ -32,7 +32,7 @@ import rescuecore.commands.*;
    For example, assuming we have the three constructors mentioned above, if the command line provides two arguments then the AgentSystem will use the MyAgent(String arg1, String arg2) constructor. If only one argument is provided then the MyAgent(String[] args) constructor is used.
  */
 public abstract class Agent extends RescueComponent {
-	private int[] agentTypes;
+	private final int[] agentTypes;
     protected int type;
     protected int id;
 	protected int timeStep;
@@ -41,7 +41,7 @@ public abstract class Agent extends RescueComponent {
     private int numReceived, numSent;
     private int sendMax,receiveMax;
 	*/
-	private int tempID;
+	private final int tempID;
 	private volatile boolean running;
 
 	private static int NEXT_ID = 0;
@@ -132,7 +132,7 @@ public abstract class Agent extends RescueComponent {
 		//		System.out.println("Handling "+c);
 		switch (c.getType()) {
 		case RescueConstants.KA_SENSE:
-			handleSense((KASense)c);
+			handleSense(c);
 			break;
 		case RescueConstants.KA_HEAR:
                 case RescueConstants.KA_HEAR_SAY:

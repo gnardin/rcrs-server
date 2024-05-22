@@ -16,5 +16,5 @@
 package rescuecore.view;
 
 public interface ObjectSelectionListener extends java.util.EventListener {
-    public void objectSelected(ObjectSelectionEvent e);
+    void objectSelected(ObjectSelectionEvent e);
 }

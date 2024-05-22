@@ -8,7 +8,7 @@ import rescuecore2.Timestep;
    This class is the kernel interface to a viewer.
  */
 public class ViewerProxy extends AbstractKernelComponent {
-    private int id;
+    private final int id;
 
     /**
        Construct a viewer.

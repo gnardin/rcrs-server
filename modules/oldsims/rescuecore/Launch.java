@@ -163,7 +163,7 @@ public class Launch {
       // Try to find a constructor
       Constructor c;
       try {
-        c = info.clazz.getDeclaredConstructor(new Class[] { String[].class });
+        c = info.clazz.getDeclaredConstructor(String[].class);
         result = (RescueComponent) c.newInstance(new Object[] { info.args });
       } catch (NoSuchMethodException e) {
         try {
@@ -263,8 +263,8 @@ public class Launch {
   private static class InputThread extends Thread {
     private volatile boolean running, alive;
     private final Object aliveLock = new Object();
-    private RescueComponent target;
-    private Connection connection;
+    private final RescueComponent target;
+    private final Connection connection;
 
     InputThread(Connection connection, RescueComponent target) {
       this.connection = connection;

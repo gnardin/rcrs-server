@@ -23,13 +23,13 @@ import java.io.*;
    The TCPSocket class sends messages via TCP
  */
 public class TCPConnection implements Connection {
-	private Socket socket;
-    private List q;
-    private ReadThread read;
+	private final Socket socket;
+    private final List q;
+    private final ReadThread read;
     private IOException toThrow;
-	private InetAddress destination;
-	private int port;
-	private OutputStream out;
+	private final InetAddress destination;
+	private final int port;
+	private final OutputStream out;
 
     /**
        Generate a new TCPSocket with a given destination
@@ -37,7 +37,7 @@ public class TCPConnection implements Connection {
 	   @param port The target port
 	   @throws SocketException if something goes wrong
 	*/
-    public TCPConnection(InetAddress destination, int port) throws SocketException, IOException {
+    public TCPConnection(InetAddress destination, int port) throws IOException {
 		socket = new Socket(destination,port);
 		socket.setSoTimeout(1000);
 		q = new LinkedList();
@@ -94,7 +94,7 @@ public class TCPConnection implements Connection {
 		private boolean running;
 		private boolean alive;
 		private final Object aliveLock = new Object();
-		private InputStream in;
+		private final InputStream in;
 
 		ReadThread() throws IOException {
 			running = true;

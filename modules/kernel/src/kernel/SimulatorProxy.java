@@ -23,8 +23,8 @@ import java.util.ArrayList;
    This class is the kernel interface to a simulator.
  */
 public class SimulatorProxy extends AbstractKernelComponent {
-    private Map<Integer, ChangeSet> updates;
-    private int id;
+    private final Map<Integer, ChangeSet> updates;
+    private final int id;
     private EntityIDGenerator idGenerator;
 
     /**
@@ -112,14 +112,12 @@ public class SimulatorProxy extends AbstractKernelComponent {
         public void messageReceived(Connection connection, Message msg) {
             Logger.pushLogContext(Kernel.KERNEL_LOG_CONTEXT);
             try {
-                if (msg instanceof SKUpdate) {
-                    SKUpdate update = (SKUpdate)msg;
+                if (msg instanceof SKUpdate update) {
                     if (update.getSimulatorID() == id) {
                         updateReceived(update.getTime(), update.getChangeSet());
                     }
                 }
-                if (msg instanceof EntityIDRequest) {
-                    EntityIDRequest req = (EntityIDRequest)msg;
+                if (msg instanceof EntityIDRequest req) {
                     Logger.debug("Simulator proxy " + id + " received entity ID request: " + msg);
                     if (req.getSimulatorID() == id) {
                         int requestID = req.getRequestID();

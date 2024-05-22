@@ -61,26 +61,26 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
   /* Refuge refill capacity:2020 */
   private static final QName REFILLCAPACITY_QNAME = DocumentHelper.createQName("refillCapacity", SCENARIO_NAMESPACE);
 
-  private Set<Integer> refuges;
-  private Set<Integer> hydrants;
-  private Set<Integer> gasStations;
-  private Set<Integer> fires;
+  private final Set<Integer> refuges;
+  private final Set<Integer> hydrants;
+  private final Set<Integer> gasStations;
+  private final Set<Integer> fires;
   /* Aftershock requirement:2013 */
-  private HashMap<Integer, Float> aftershocks;
-  private Collection<Integer> civLocations;
-  private Collection<Integer> fbLocations;
-  private Collection<Integer> atLocations;
-  private Collection<Integer> pfLocations;
-  private Collection<Integer> fsLocations;
-  private Collection<Integer> acLocations;
-  private Collection<Integer> poLocations;
-  private Collection<Integer> rrLocations;
-  private Collection<Integer> drLocations;
+  private final HashMap<Integer, Float> aftershocks;
+  private final Collection<Integer> civLocations;
+  private final Collection<Integer> fbLocations;
+  private final Collection<Integer> atLocations;
+  private final Collection<Integer> pfLocations;
+  private final Collection<Integer> fsLocations;
+  private final Collection<Integer> acLocations;
+  private final Collection<Integer> poLocations;
+  private final Collection<Integer> rrLocations;
+  private final Collection<Integer> drLocations;
 
   /* Refuge Capacity requirements: 2020 */
-  private HashMap<Integer, Integer> refugeBedCapacity;
-  private HashMap<Integer, Integer> refugeRefillCapacity;
-  private Map<Integer, GMLRefuge> gmlRefuges;
+  private final HashMap<Integer, Integer> refugeBedCapacity;
+  private final HashMap<Integer, Integer> refugeRefillCapacity;
+  private final Map<Integer, GMLRefuge> gmlRefuges;
 
   private static final Logger LOG = Logger.getLogger(GisScenario.class);
 
@@ -776,12 +776,8 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    */
   public void removeRefuge(int location) {
     refuges.remove(location);
-    if (refugeRefillCapacity.containsKey(location)) {
       refugeRefillCapacity.remove(location);
-    }
-    if (refugeBedCapacity.containsKey(location)) {
       refugeBedCapacity.remove(location);
-    }
     gmlRefuges.remove(location);
   }
 
@@ -989,11 +985,10 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
     if (areaEntity == null) {
       throw new ScenarioException("Area " + position + " does not exist");
     }
-    if (!(areaEntity instanceof Area)) {
+    if (!(areaEntity instanceof Area area)) {
       throw new ScenarioException("Entity " + position + " is not an area: " + areaEntity);
     }
-    Area area = (Area) areaEntity;
-    h.setX(area.getX());
+      h.setX(area.getX());
     h.setY(area.getY());
     h.setPosition(position);
     h.setStamina(DEFAULT_STAMINA);

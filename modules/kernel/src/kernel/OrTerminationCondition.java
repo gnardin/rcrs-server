@@ -9,7 +9,7 @@ import java.util.Iterator;
    A TerminationCondition that returns true if any of its children return true.
 */
 public class OrTerminationCondition implements TerminationCondition {
-    private Collection<TerminationCondition> children;
+    private final Collection<TerminationCondition> children;
 
     /**
        Construct a new OrTerminationCondition.

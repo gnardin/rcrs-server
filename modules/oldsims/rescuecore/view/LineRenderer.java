@@ -44,7 +44,7 @@ import java.awt.geom.Line2D;
  */
 
 public class LineRenderer implements MapRenderer {
-	private Color colour;
+	private final Color colour;
 
 	public LineRenderer(Color colour) {
 		this.colour = colour;

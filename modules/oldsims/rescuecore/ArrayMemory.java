@@ -26,7 +26,7 @@ public class ArrayMemory extends Memory {
 
 	protected RescueObject[] data;
 	private int dataSize;
-	private int resizeFactor;
+	private final int resizeFactor;
 
 	/**
 	   Construct a new empty memory

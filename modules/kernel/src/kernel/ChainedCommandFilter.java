@@ -11,7 +11,7 @@ import rescuecore2.messages.Command;
    A CommandFilter that chains together a set of filters.
  */
 public class ChainedCommandFilter implements CommandFilter {
-    private List<CommandFilter> filters;
+    private final List<CommandFilter> filters;
 
     /**
        Construct an empty ChainedCommandFilter.

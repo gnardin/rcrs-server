@@ -16,7 +16,7 @@ import rescuecore2.worldmodel.EntityID;
 
 public class AKFly extends AbstractCommand {
 
-    private IntComponent height;
+//    private IntComponent height;
     private EntityIDListComponent path;
     private IntComponent x;
     private IntComponent y;
@@ -46,14 +46,14 @@ public class AKFly extends AbstractCommand {
         this();
         setAgentID(agent);
         setTime(time);
-        this.height.setValue(20);
+//        this.height.setValue(20);
         this.path.setIDs(path);
         this.x.setValue(-1);
         this.y.setValue(-1);
     }
 
     /**
-     * COnstruct a fly command.
+     * Construct a fly command.
      *
      * @param time
      * @param agent
@@ -62,13 +62,13 @@ public class AKFly extends AbstractCommand {
      * @param destinationY
      * @param height
      */
-    public AKFly(EntityID agent, int time, int height, List<EntityID> path,
+    public AKFly(EntityID agent, int time, List<EntityID> path,
                  int destinationX, int destinationY) {
         this();
         setAgentID(agent);
         setTime(time);
         this.path.setIDs(path);
-        this.height.setValue(height);
+//        this.height.setValue(height);
         this.x.setValue(destinationX);
         this.y.setValue(destinationY);
     }
@@ -78,9 +78,9 @@ public class AKFly extends AbstractCommand {
         path = new EntityIDListComponent(StandardMessageComponentURN.Path);
         x = new IntComponent(StandardMessageComponentURN.DestinationX);
         y = new IntComponent(StandardMessageComponentURN.DestinationY);
-        height = new IntComponent(StandardMessageComponentURN.Height);
+//        height = new IntComponent(StandardMessageComponentURN.Height);
         addMessageComponent(path);
-        addMessageComponent(height);
+//        addMessageComponent(height);
         addMessageComponent(x);
         addMessageComponent(y);
     }
@@ -89,6 +89,7 @@ public class AKFly extends AbstractCommand {
         this();
         fromMessageProto(proto);
     }
+
 
     /**
      * Get the desired flight path.
@@ -104,9 +105,9 @@ public class AKFly extends AbstractCommand {
      *
      * @return The height of the drone.
      */
-    public int getHeight() {
-        return height.getValue();
-    }
+//    public int getHeight() {
+//        return height.getValue();
+//    }
 
     /**
      * Get the x coordinate destination of the drone.
@@ -133,7 +134,7 @@ public class AKFly extends AbstractCommand {
         jsonObject.put("Path", this.getPath());
         jsonObject.put("X:", this.getDestinationX());
         jsonObject.put("Y:", this.getDestinationY());
-        jsonObject.put("Height", this.getHeight());
+//        jsonObject.put("Height", this.getHeight());
         return jsonObject;
     }
 

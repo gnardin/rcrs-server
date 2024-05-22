@@ -31,7 +31,7 @@ import rescuecore2.worldmodel.*;
 
 import traffic4.manager.TrafficManager1;
 import traffic4.objects.TrafficArea1;
-import traffic3.simulator.TrafficSimulatorGUI;
+import traffic4.simulator.TrafficSimulatorGUIDrone;
 import traffic4.objects.TrafficAgent1;
 import traffic4.objects.TrafficBlockade1;
 import traffic4.simulator.PathElement;
@@ -50,7 +50,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 //    private static final double CIVILIAN_VELOCITY_MEAN = 0.2;
 //    private static final double CIVILIAN_VELOCITY_SD = 0.002;
 
-    private TrafficSimulatorGUI gui;
+    private TrafficSimulatorGUIDrone gui;
 
     private TrafficManager1 manager;
 
@@ -59,7 +59,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
      */
     public TrafficSimulator() {
         manager = new TrafficManager1();
-        //gui = new TrafficSimulatorGUIDrone(manager);
+        gui = new TrafficSimulatorGUIDrone(manager);
     }
 
     @Override
@@ -155,23 +155,17 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         for (EntityID id : update.getChangeSet().getChangedEntities()) {
             StandardEntity entity = model.getEntity(id);
             switch (StandardEntityURN.fromInt(update.getChangeSet().getEntityURN(id))) {
-                case BUILDING:
                 case DRONE:
-                case ROAD:
-                case RESCUE_ROBOT:
-                case POLICE_OFFICE:
-                case CIVILIAN:
-                case WORLD:
                 default:
                     break;
             }
         }
     }
 
-
-    private void clearAreaCacheDrone(EntityID entityArea) {
-        manager.getTrafficAreaforDrone((Area) model.getEntity(entityArea)).clearBlockadeCache();
-    }
+//
+//    private void clearAreaCacheDrone(EntityID entityArea) {
+//        manager.getTrafficAreaforDrone((Area) model.getEntity(entityArea)).clearBlockadeCache();
+//    }
 
     private void convertAreaToTrafficArea(Area area) {
         manager.register(new TrafficArea1(area));
@@ -192,16 +186,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         agent.setLocation(human.getX(), human.getY());
         manager.register(agent);
     }
-
-//    public void convertBlockade(Blockade blockade) {
-//        Logger.debug("Converting blockade: " + blockade.getFullDescription());
-//        Area a = (Area) model.getEntity(blockade.getPosition());
-//        Logger.debug("Area: " + a);
-//        TrafficArea1 area = manager.getTrafficAreaforDrone(a);
-//        Logger.debug("Traffic Area: " + area);
-////        TrafficBlockade1 block = new TrafficBlockade1(blockade, area);
-////        manager.register(block);
-//    }
 
     private void handleFly(AKFly fly) {
         Human human = (Human) model.getEntity(fly.getAgentID());
@@ -253,6 +237,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             targetY = currentArea.getY();
         } else if(list.isEmpty()) {
             Logger.warn("Rejecting move: path is empty");
+            return;
         }
         steps1.add(new PathElement(current, null, new Point2D(targetX, targetY)));
         agent.setPath(steps1);
@@ -290,15 +275,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       return null;
     }
 
-    private boolean havePassableEdge(Area destination) {
-        for (Edge edge : destination.getEdges()) {
-            if (edge.isPassable()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private Point2D getEntranceOfArea(Edge incomingEdge, Area destination) {
 
         Point2D edgeMid = getBestPoint(incomingEdge, destination);
@@ -318,82 +294,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             }
          }
         return null;
-    }
-
-    private Collection<? extends PathElement> getPathElement2(Human h, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
-        Collection<? extends PathElement> originalPath = getPathElements(h, lastArea, lastEdge, nextArea, nextEdge);
-        if (isOriginalPathOk(originalPath))
-            return originalPath;
-        Point2D start;
-        if (lastEdge == null)
-            start = new Point2D(h.getX(), h.getY());
-        else
-            start = getBestPoint(lastEdge, lastArea);
-        Point2D startPoint;
-        if (lastEdge == null)
-            startPoint = start;
-        else
-            startPoint = getMidPoint(lastEdge.getStart(), lastEdge.getEnd());
-        Point2D edgePoint = getBestPoint(nextEdge, nextArea);
-        Point2D centrePoint = new Point2D(lastArea.getX(), lastArea.getY());
-
-        List<ShapeDebugFrame.ShapeInfo> resultGraph = new ArrayList<ShapeDebugFrame.ShapeInfo>();
-
-        resultGraph.add(
-                new ShapeDebugFrame.Line2DShapeInfo(new Line2D(startPoint, centrePoint), "path start to center", Color.BLACK, false, true));
-        resultGraph.add(new ShapeDebugFrame.Line2DShapeInfo(new Line2D(centrePoint, getMidPoint(nextEdge.getStart(), nextEdge.getEnd())), "Path center to end", Color.white, false, true));
-
-        TrafficArea1 trafficArea1 = manager.getTrafficAreaforDrone(lastArea);
-        int[][] graph = manager.getTrafficAreaforDrone(lastArea).getGraph();
-        List<Line2D> openLines = manager.getTrafficAreaforDrone(lastArea).getOpenLines();
-        List<Line2D> graphLine = new ArrayList<Line2D>();
-        resultGraph.add(new ShapeDebugFrame.Line2DShapeInfo(openLines, "openLines", Color.green, false, true));
-        for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph.length; j++) {
-                if (graph[i][j] > 10000)
-                    continue;
-                Line2D line = new Line2D(getMidPoint(openLines.get(i).getOrigin(), openLines.get(i).getEndPoint()),
-                        getMidPoint(openLines.get(j).getOrigin(), openLines.get(j).getEndPoint()));
-                graphLine.add(line);
-            }
-        }
-
-        int src = trafficArea1.getNearestLineIndex(start);
-        int dest = trafficArea1.getNearestLineIndex(edgePoint);
-
-        if (src != dest && src != -1 && dest != -1) {
-            Dijkstra dijkstra = new Dijkstra(graph.length);
-            try{
-                dijkstra.Run(graph, src);
-            }catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            try {
-                if (dijkstra.getWght(dest) < 1000) {
-                    ArrayList<Integer> path = dijkstra.getPathArray(dest);
-                    if (path.size() > 2) {
-                        List<Point2D> points = new ArrayList<Point2D>();
-                        for (Integer integer : path) {
-                            Point2D point = getMidPoint(openLines.get(integer).getOrigin(), openLines.get(integer).getEndPoint());
-                            points.add(point);
-                        }
-
-                        ArrayList<PathElement> res = new ArrayList<PathElement>();
-                        res.add(new PathElement(nextArea.getID(), nextEdge.getLine(), start));
-
-                        for (Point2D point : points)
-                            res.add(new PathElement(nextArea.getID(), nextEdge.getLine(), point));
-
-                        res.add(new PathElement(nextArea.getID(), nextEdge.getLine(), edgePoint));
-
-                        return res;
-                    }
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-        return originalPath;
     }
 
     private boolean isOriginalPathOk(Collection<? extends PathElement> originalPaths) {
@@ -452,9 +352,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return new Point2D((p1.getX() + p2.getX()) / 2, (p2.getX() + p2.getY()) / 2);
     }
 
-//    private Point2D getTransivit2(Point2D base, Point2D p1) {
-//        return new Point2D((base.getX() - (p1.getX() - base.getX())), (base.getY() - (p1.getY()- base.getY())));
-//    }
 
     private double getMinimumDistance(List<Line2D> lines, Point2D point) {
         double min = Integer.MAX_VALUE;

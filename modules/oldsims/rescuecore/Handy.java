@@ -89,7 +89,7 @@ public class Handy {
 			buffer.append(decodeInt(data,startIndex));
 			buffer.append("\t");
 			buffer.append(description);
-			System.out.println(buffer.toString());
+			System.out.println(buffer);
 		}
 	}
 

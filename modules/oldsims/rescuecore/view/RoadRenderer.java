@@ -66,8 +66,8 @@ public class RoadRenderer implements MapRenderer {
     }
 
     private static class OutlinedRoadRenderer extends RoadRenderer {
-		private int mode;
-		private Color colour;
+		private final int mode;
+		private final Color colour;
 
 		public OutlinedRoadRenderer(int mode, Color colour) {
 			this.mode = mode;

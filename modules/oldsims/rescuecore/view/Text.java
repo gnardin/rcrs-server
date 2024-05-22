@@ -23,9 +23,9 @@ package rescuecore.view;
  *
  */
 public class Text {
-	private String string;
-	private int x;
-	private int y;
+	private final String string;
+	private final int x;
+	private final int y;
 	
 	public Text(String str, int x, int y){
 		this.x = x;

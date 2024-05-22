@@ -26,8 +26,8 @@ public class ConvexHullRenderer implements MapRenderer {
     public static final ConvexHullRenderer YELLOW = new ConvexHullRenderer(Color.YELLOW);
     public static final ConvexHullRenderer WHITE = new ConvexHullRenderer(Color.WHITE);
 
-	private Color outline;
-	private Color fill;
+	private final Color outline;
+	private final Color fill;
 
     private ConvexHullRenderer(Color outline){
 		this.outline = outline;

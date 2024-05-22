@@ -20,8 +20,8 @@ import rescuecore2.registry.Registry;
    This class is the kernel interface to an agent.
  */
 public class AgentProxy extends AbstractKernelComponent {
-    private Entity entity;
-    private Map<Integer, Collection<Command>> commands;
+    private final Entity entity;
+    private final Map<Integer, Collection<Command>> commands;
 
     /**
        Construct an agent.

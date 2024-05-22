@@ -20,10 +20,10 @@ package rescuecore;
  */
 public class LongUDPFragment implements Comparable {
     private final static int MAGIC = 0x0008;
-    private int id;
-    private int number;
-    private int total;
-    private byte[] data;
+    private final int id;
+    private final int number;
+    private final int total;
+    private final byte[] data;
 
     /**
        Generate a new LongUDPFragment ready for sending

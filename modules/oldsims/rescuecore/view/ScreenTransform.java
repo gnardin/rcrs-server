@@ -16,9 +16,12 @@
 package rescuecore.view;
 
 public class ScreenTransform {
-    private int minX, xRange;
-    private int minY, yRange;
-    private int width, height;
+    private final int minX;
+    private final int xRange;
+    private final int minY;
+    private final int yRange;
+    private final int width;
+    private final int height;
 
     public ScreenTransform(int minX, int minY, int xRange, int yRange, int width, int height) {
 		this.minX = minX;

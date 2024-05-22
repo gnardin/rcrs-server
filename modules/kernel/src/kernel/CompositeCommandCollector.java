@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
    A CommandCollector that waits for any of a set of child CommandCollectors to return a result.
 */
 public class CompositeCommandCollector implements CommandCollector {
-    private Set<CommandCollector> children;
+    private final Set<CommandCollector> children;
     private ExecutorService executorService;
 
     /**
@@ -91,9 +91,9 @@ public class CompositeCommandCollector implements CommandCollector {
     }
 
     private static final class ChildCommandsFetcher implements Callable<Collection<Command>> {
-        private CommandCollector child;
-        private Collection<AgentProxy> agents;
-        private int timestep;
+        private final CommandCollector child;
+        private final Collection<AgentProxy> agents;
+        private final int timestep;
 
         ChildCommandsFetcher(CommandCollector child, Collection<AgentProxy> agents, int timestep) {
             this.child = child;

@@ -20,7 +20,7 @@ import rescuecore.objects.*;
 import java.util.*;
 
 public class InputBuffer {
-	private byte[] data;
+	private final byte[] data;
 	private int index;
 
 	public InputBuffer(byte[] b) {
@@ -110,8 +110,8 @@ public class InputBuffer {
                 for (int i = 0; i < count; ++i) {
                     RescueObject next = readObject(timestamp, source);
                     result.add(next);
-		};
-		return (RescueObject[])result.toArray(new RescueObject[0]);
+		}
+        return result.toArray(new RescueObject[0]);
     }
     
 	public Command readCommand() {
@@ -236,6 +236,6 @@ public class InputBuffer {
 				result.add(next);
 			}
 		} while (next!=null);
-		return (Command[])result.toArray(new Command[0]);
+		return result.toArray(new Command[0]);
     }
 }

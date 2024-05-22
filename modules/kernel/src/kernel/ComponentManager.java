@@ -52,26 +52,26 @@ public class ComponentManager implements ConnectionManagerListener,
 
 	private static final int WAIT_TIME = 10000;
 
-	private Kernel kernel;
-	private ComponentManagerGUI gui;
+	private final Kernel kernel;
+	private final ComponentManagerGUI gui;
 
 	// Entities that have no controller yet. Map from type to list of entities.
-	private Map<Integer, Queue<ControlledEntityInfo>> uncontrolledEntities;
+	private final Map<Integer, Queue<ControlledEntityInfo>> uncontrolledEntities;
 
 	// Connected agents
-	private Set<AgentAck> agentsToAcknowledge;
+	private final Set<AgentAck> agentsToAcknowledge;
 
 	// Connected simulators
-	private Set<SimulatorAck> simsToAcknowledge;
+	private final Set<SimulatorAck> simsToAcknowledge;
 	private int nextID;
 
 	// Connected viewers
-	private Set<ViewerAck> viewersToAcknowledge;
+	private final Set<ViewerAck> viewersToAcknowledge;
 
 	// World information
-	private WorldModel<? extends Entity> world;
+	private final WorldModel<? extends Entity> world;
 
-	private Config config;
+	private final Config config;
 
 	/** Lock objects. */
 	private final Object agentLock = new Object();

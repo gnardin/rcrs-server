@@ -19,9 +19,9 @@ import java.util.*;
 import rescuecore.*;
 
 public class ConvexHull {
-    private int[] xs;
-    private int[] ys;
-    private int numPoints;
+    private final int[] xs;
+    private final int[] ys;
+    private final int numPoints;
     private HullPoint pivot;
 
     public ConvexHull(RescueObject[] os, Memory memory) throws CannotFindLocationException {

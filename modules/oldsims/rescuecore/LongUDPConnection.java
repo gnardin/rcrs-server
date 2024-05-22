@@ -24,12 +24,12 @@ import java.io.*;
  */
 public class LongUDPConnection implements Connection {
     private short nextID;
-    private DatagramSocket socket;
-    private List q;
-    private ReadThread read;
+    private final DatagramSocket socket;
+    private final List q;
+    private final ReadThread read;
     private IOException toThrow;
-	private InetAddress destination;
-	private int port;
+	private final InetAddress destination;
+	private final int port;
 
     private final static long WAIT = 10000;
 
@@ -122,7 +122,7 @@ public class LongUDPConnection implements Connection {
 		private boolean running;
 		private boolean alive;
 		private final Object aliveLock = new Object();
-		private Set partial;
+		private final Set partial;
 		private long lastCheck;
 
 		ReadThread() {
@@ -247,7 +247,7 @@ public class LongUDPConnection implements Connection {
 						++received;
 						last = System.currentTimeMillis();
 						size += fragment.getData().length;
-						if (received == total) return true;
+                        return received == total;
 					}
 				}
 				return false;

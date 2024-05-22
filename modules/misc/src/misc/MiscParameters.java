@@ -19,7 +19,7 @@ import rescuecore2.standard.entities.Refuge;
  * @author Cameron Skinner
  */
 public class MiscParameters {
-    private Config config;
+    private final Config config;
 
     // All building classes indexed by building code and degree of collapse. The BuildingClass class knows about buriedness rates, injury rates etc.
     private Map<BuildingCode, Map<BrokennessDegree, BuildingClass>> buildingClasses;
@@ -134,11 +134,11 @@ public class MiscParameters {
     }
 
     private class BuildingClass {
-        private double buriedProbability;
-        private int initialBuriedness;
-        private Map<Injury, Double> collapseInjuryProbability;
-        private Map<Injury, Double> buryInjuryProbability;
-        private Map<Injury, Double> fireInjuryProbability;
+        private final double buriedProbability;
+        private final int initialBuriedness;
+        private final Map<Injury, Double> collapseInjuryProbability;
+        private final Map<Injury, Double> buryInjuryProbability;
+        private final Map<Injury, Double> fireInjuryProbability;
 
         public BuildingClass(Config config, BuildingCode code, BrokennessDegree degree) {
             buriedProbability = config.getFloatValue("misc.buriedness." + code + "." + degree + ".rate");
@@ -212,10 +212,10 @@ public class MiscParameters {
         HALF(26, 50),
         ALL(51, 100);
 
-        private int min;
-        private int max;
+        private final int min;
+        private final int max;
 
-        private BrokennessDegree(int min, int max) {
+        BrokennessDegree(int min, int max) {
             this.min = min;
             this.max = max;
         }
@@ -240,14 +240,14 @@ public class MiscParameters {
         NONE,
         SLIGHT,
         SERIOUS,
-        CRITICAL;
+        CRITICAL
     }
 
     private static class DamageType {
-        private Map<Injury, Integer> damage;
-        private double ambulanceMultiplier;
-        private double policeMultiplier;
-        private double fireMultiplier;
+        private final Map<Injury, Integer> damage;
+        private final double ambulanceMultiplier;
+        private final double policeMultiplier;
+        private final double fireMultiplier;
 
         public DamageType(Config config, String type) {
             damage = new EnumMap<Injury, Integer>(Injury.class);

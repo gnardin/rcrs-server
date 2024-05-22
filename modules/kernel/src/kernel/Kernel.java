@@ -44,26 +44,26 @@ public class Kernel {
 	/** The log context for kernel log messages. */
 	public static final String KERNEL_LOG_CONTEXT = "kernel";
 
-	private Config config;
-	private Perception perception;
-	private CommunicationModel communicationModel;
-	private WorldModel<? extends Entity> worldModel;
-	private LogWriter log;
+	private final Config config;
+	private final Perception perception;
+	private final CommunicationModel communicationModel;
+	private final WorldModel<? extends Entity> worldModel;
+	private final LogWriter log;
 
-	private Set<KernelListener> listeners;
+	private final Set<KernelListener> listeners;
 
-	private Collection<AgentProxy> agents;
-	private Collection<SimulatorProxy> sims;
-	private Collection<ViewerProxy> viewers;
+	private final Collection<AgentProxy> agents;
+	private final Collection<SimulatorProxy> sims;
+	private final Collection<ViewerProxy> viewers;
 	private int time;
 	private Timestep previousTimestep;
 
-	private EntityIDGenerator idGenerator;
-	private CommandFilter commandFilter;
+	private final EntityIDGenerator idGenerator;
+	private final CommandFilter commandFilter;
 
-	private TerminationCondition termination;
-	private ScoreFunction score;
-	private CommandCollector commandCollector;
+	private final TerminationCondition termination;
+	private final ScoreFunction score;
+	private final CommandCollector commandCollector;
 
 	private boolean isShutdown;
 

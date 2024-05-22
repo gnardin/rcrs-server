@@ -57,9 +57,7 @@ public class IntProperty extends Property {
 	   @return A nice string representation of the value of this property
 	*/
 	public String getStringValue() {
-		StringBuffer result = new StringBuffer();
-		result.append(value);
-		return result.toString();
+        return String.valueOf(value);
 	}
 
 	/**

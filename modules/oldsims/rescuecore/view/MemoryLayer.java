@@ -17,7 +17,7 @@ import rescuecore.*;
 import java.util.*;
 
 public class MemoryLayer extends Layer {
-	private Set<Integer> types;
+	private final Set<Integer> types;
 
 	public MemoryLayer(String name) {
 		super(name);

@@ -21,10 +21,10 @@ import rescuecore.*;
 import rescuecore.commands.*;
 
 public class LogVersion2 extends Log {
-    private Map<Integer,Update> updates;
-	private Map<Integer,Commands> commands;
+    private final Map<Integer,Update> updates;
+	private final Map<Integer,Commands> commands;
 	private int maxTimestep;
-	private Map<String,String> config;
+	private final Map<String,String> config;
 
     private Memory memory;
     private int lastTime;
@@ -47,14 +47,12 @@ public class LogVersion2 extends Log {
 		while (in.available()>0) {
 			Command[] newCommands = readCommands(in);
 			for (Command next : newCommands) {
-				if (next instanceof Update) {
-					Update u = (Update)next;
-					updates.put(u.getTime(),u);
+				if (next instanceof Update u) {
+                    updates.put(u.getTime(),u);
 					maxTimestep = Math.max(maxTimestep,u.getTime());
 				}
-				else if (next instanceof Commands) {
-					Commands o = (Commands)next;
-					commands.put(o.getTime(),o);
+				else if (next instanceof Commands o) {
+                    commands.put(o.getTime(),o);
 					maxTimestep = Math.max(maxTimestep,o.getTime());
 				}
 				else {

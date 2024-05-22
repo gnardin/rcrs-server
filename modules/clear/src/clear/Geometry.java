@@ -30,7 +30,7 @@ public class Geometry {
     Vector2D perpend1 = new Vector2D(-dir.getY(), dir.getX());
     Vector2D perpend2 = new Vector2D(dir.getY(), -dir.getX());
 
-    rescuecore2.misc.geometry.Point2D points[] = new rescuecore2.misc.geometry.Point2D[] {
+    rescuecore2.misc.geometry.Point2D[] points = new rescuecore2.misc.geometry.Point2D[] {
         line.getOrigin().plus(perpend1), line.getEndPoint().plus(perpend1),
         line.getEndPoint().plus(perpend2), line.getOrigin().plus(perpend2)};
     int[] xPoints = new int[points.length];
@@ -50,7 +50,7 @@ public class Geometry {
     while (!iter.isDone()) {
       List<double[]> points = new ArrayList<double[]>();
       while (!iter.isDone()) {
-        double point[] = new double[2];
+        double[] point = new double[2];
         int type = iter.currentSegment(point);
         iter.next();
         if (type == PathIterator.SEG_CLOSE) {
@@ -78,7 +78,7 @@ public class Geometry {
     List<int[]> areas = new ArrayList<int[]>();
     ArrayList<Integer> list = new ArrayList<Integer>();
     while (!iter.isDone()) {
-      double point[] = new double[2]; // x, y
+      double[] point = new double[2]; // x, y
       int type = iter.currentSegment(point);
       if (type == PathIterator.SEG_CLOSE) {
         if (list.size() > 0) {

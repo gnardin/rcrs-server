@@ -20,7 +20,7 @@ package rescuecore;
  */
 public class LongUDPMessage {
     public final static int CHUNK_SIZE = 1024;
-    private byte[] data;
+    private final byte[] data;
 
     /**
        Construct a new LongUDPMessage containing the given data

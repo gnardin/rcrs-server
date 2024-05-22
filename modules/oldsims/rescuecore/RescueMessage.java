@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class RescueMessage {
 
-  private List parts;
+  private final List parts;
 
 
   public RescueMessage() {

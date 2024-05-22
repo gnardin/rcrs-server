@@ -193,7 +193,10 @@ public class StandardCommunicationModel extends AbstractCommunicationModel {
                 || sender instanceof AmbulanceCentre;
         }
         if (receiver instanceof PoliceForce) {
-            return sender instanceof PoliceForce || sender instanceof PoliceOffice;
+            return sender instanceof PoliceForce
+                || sender instanceof PoliceOffice
+                || sender instanceof Drone
+                || sender instanceof RescueRobot;
         }
         if (receiver instanceof PoliceOffice) {
             return sender instanceof PoliceForce
@@ -212,10 +215,14 @@ public class StandardCommunicationModel extends AbstractCommunicationModel {
                 || sender instanceof AmbulanceCentre;
         }
         if (receiver instanceof Drone) {
-            return sender instanceof PoliceOffice || sender instanceof RescueRobot;
+            return sender instanceof PoliceOffice
+                || sender instanceof RescueRobot
+                || sender instanceof Drone;
         }
         if (receiver instanceof RescueRobot) {
-            return sender instanceof PoliceOffice;
+            return sender instanceof PoliceOffice
+                || sender instanceof Drone
+                || sender instanceof RescueRobot;
         }
         return false;
     }

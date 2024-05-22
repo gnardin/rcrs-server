@@ -1,5 +1,6 @@
 package sample;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -139,7 +140,7 @@ public class SampleCivilian extends AbstractSampleAgent<Civilian> {
     int maxPathLength = 20;
     List<EntityID> result = new ArrayList<EntityID>(maxPathLength);
     Set<EntityID> seen = new HashSet<EntityID>();
-    EntityID current = ((Human) me()).getPosition();
+    EntityID current = me().getPosition();
 
     for (int i = 0; i < maxPathLength; ++i) {
       result.add(current);
@@ -181,14 +182,10 @@ public class SampleCivilian extends AbstractSampleAgent<Civilian> {
   }
 
   private void say(String message, int time) {
-    try {
       if (useSpeak) {
-        sendSpeak(time, 0, message.getBytes("UTF-8"));
+        sendSpeak(time, 0, message.getBytes(StandardCharsets.UTF_8));
       } else {
-        sendSay(time, message.getBytes("UTF-8"));
+        sendSay(time, message.getBytes(StandardCharsets.UTF_8));
       }
-    } catch (java.io.UnsupportedEncodingException e) {
-      throw new RuntimeException("This should not have happened!", e);
-    }
   }
 }

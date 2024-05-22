@@ -31,7 +31,7 @@ public class SampleViewerEventLogger extends StandardViewer {
 
   private static final int    PRECISION               = 3;
 
-  private String              JSON_RECORD_FILE_FORMAT = "%s__%d_viewer_event_log.jlog";
+  private final String              JSON_RECORD_FILE_FORMAT = "%s__%d_viewer_event_log.jlog";
   private static final String TEAM_NAME_KEY           = "viewer.team-name";
   private static final String RECORDS_DIR_KEY         = "records.dir";
   private ScoreFunction       scoreFunction;

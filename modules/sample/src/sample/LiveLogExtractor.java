@@ -171,7 +171,7 @@ public class LiveLogExtractor extends StandardViewer {
         } else if ( t.getTime() % 50 == 0 ) {
           writeImage( outdir + "/snapshot-" + t.getTime() + ".png" );
         }
-        appendFile( outdir + "/scores.txt", " " + String.valueOf( score ) );
+        appendFile( outdir + "/scores.txt", " " + score);
         if ( t.getTime() == Integer
             .parseInt( config.getValue( "kernel.timesteps" ) ) ) {
           writeImage( outdir + "/snapshot-final.png" );

@@ -53,7 +53,7 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
 
   private Map<EntityID, HumanAttributes> humans;
   private Set<EntityID> newlyBrokenBuildings;
-  private Map<EntityID, Integer> oldBrokenBuildingsBuriedness = new HashMap<>();
+  private final Map<EntityID, Integer> oldBrokenBuildingsBuriedness = new HashMap<>();
   private MiscParameters parameters;
   private MiscSimulatorGUI gui;
   private int GAS_STATION_EXPLOSION_RANG;
@@ -111,10 +111,9 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
       }
       if (et instanceof Building) {
         et.addEntityListener(buildingListener);
-      } else if (et instanceof Human) {
+      } else if (et instanceof Human human) {
         // et.addEntityListener(humanListener);
-        Human human = (Human) et;
-        HumanAttributes ha = new HumanAttributes(human, config);
+          HumanAttributes ha = new HumanAttributes(human, config);
         humans.put(ha.getID(), ha);
       }
     }
@@ -392,21 +391,19 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
       Logger.warn("Rejecting rescue command from agent " + agent.getID() + " for a non-existent target " + targetID);
       return false;
     }
-    if (!(target instanceof Human)) {
+    if (!(target instanceof Human h)) {
       Logger.warn("Rejecting rescue command from agent " + agent.getID() + " for a non-human target: " + targetID
           + " is of type " + target.getURN());
       return false;
     }
-    Human h = (Human) target;
-    if (!h.isBuriednessDefined() || h.getBuriedness() == 0) {
+      if (!h.isBuriednessDefined() || h.getBuriedness() == 0) {
       Logger.warn("Rejecting rescue command from agent " + agent.getID() + " for a non-buried target " + targetID);
       return false;
     }
 
     // || agent instanceof AmbulanceTeam
-    if (agent instanceof FireBrigade) {
-      Human ag = (Human) agent;
-      if (ag.isHPDefined() && ag.getHP() <= 0) {
+    if (agent instanceof FireBrigade ag) {
+        if (ag.isHPDefined() && ag.getHP() <= 0) {
         Logger.warn("Rejecting rescue command from agent " + agent.getID() + ": agent is dead");
         return false;
       }
@@ -427,13 +424,12 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
   }
 
   private boolean checkUnload(AKUnload unload, Entity agent) {
-    if (!(agent instanceof AmbulanceTeam)) {
+    if (!(agent instanceof AmbulanceTeam at)) {
       Logger.warn("Rejecting unload command from agent " + agent.getID() + " who is of type " + agent.getURN());
       return false;
     }
 
-    AmbulanceTeam at = (AmbulanceTeam) agent;
-    if (at.isHPDefined() && at.getHP() <= 0) {
+      if (at.isHPDefined() && at.getHP() <= 0) {
       Logger.warn("Rejecting Unload command from agent " + agent.getID() + ": agent is dead");
       return false;
     }
@@ -442,13 +438,12 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
   }
 
   private boolean checkLoad(AKLoad unload, Entity agent) {
-    if (!(agent instanceof AmbulanceTeam)) {
+    if (!(agent instanceof AmbulanceTeam at)) {
       Logger.warn("Rejecting load command from agent " + agent.getID() + " who is of type " + agent.getURN());
       return false;
     }
 
-    AmbulanceTeam at = (AmbulanceTeam) agent;
-    if (at.isHPDefined() && at.getHP() <= 0) {
+      if (at.isHPDefined() && at.getHP() <= 0) {
       Logger.warn("Rejecting Unload command from agent " + agent.getID() + ": agent is dead");
       return false;
     }
@@ -495,7 +490,7 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
       Logger.warn("Rejecting load command from agent " + agentID + ": agent does not exist");
       return;
     }
-    if (!(agent instanceof AmbulanceTeam)) {
+    if (!(agent instanceof AmbulanceTeam at)) {
       Logger.warn("Rejecting load command from agent " + agentID + ": agent type is " + agent.getURN());
       return;
     }
@@ -504,8 +499,7 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
       return;
     }
 
-    AmbulanceTeam at = (AmbulanceTeam) agent;
-    Civilian h = (Civilian) target;
+      Civilian h = (Civilian) target;
 
     if (at.isHPDefined() && at.getHP() <= 0) {
       Logger.warn("Rejecting load command from agent " + agentID + ": agent is dead");
@@ -534,7 +528,7 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
     Entity AgentPosition = ((Human) agent).getPosition(model);
     if (AgentPosition != null && AgentPosition instanceof Refuge) {
 
-      if (waitingList.get(h.getPosition()).size() > 0 && waitingList.get(h.getPosition()).contains(h.getID())) {
+      if (waitingList.get(h.getPosition()).size() > 0) {
         waitingList.get(h.getPosition()).remove(h.getID());
       }
 
@@ -596,7 +590,7 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
   private void updateRefuges() {
     for (Map.Entry<EntityID, Deque<EntityID>> e : waitingList.entrySet()) {
       ArrayList<EntityID> tempList = new ArrayList<EntityID>();
-      for (EntityID civ : (Deque<EntityID>) e.getValue()) {
+      for (EntityID civ : e.getValue()) {
         if (model.getEntity(civ) instanceof Human) {
           if (((Human) model.getEntity(civ)).getDamage() <= 0) {
             tempList.add(civ);
@@ -607,13 +601,13 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
         }
       }
       if (tempList.size() > 0) {
-        ((Deque<EntityID>) e.getValue()).removeAll(tempList);
+        e.getValue().removeAll(tempList);
       }
     }
 
     for (Map.Entry<EntityID, Deque<EntityID>> e : beds.entrySet()) {
       ArrayList<EntityID> tempList = new ArrayList<EntityID>();
-      for (EntityID civ : (Deque<EntityID>) e.getValue()) {
+      for (EntityID civ : e.getValue()) {
         if (model.getEntity(civ) instanceof Human) {
           if (((Human) model.getEntity(civ)).getDamage() <= 0) {
             tempList.add(civ);
@@ -626,7 +620,7 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
       if (tempList.size() > 0) {
         // ( (Deque<EntityID>) e.getValue() ).removeAll( tempList );
         for (EntityID id : tempList) {
-          if (((Deque<EntityID>) e.getValue()).remove(id)) {
+          if (e.getValue().remove(id)) {
             ((Refuge) model.getEntity(e.getKey())).decreaseOccupiedBeds();
             Logger.warn("decreaseOccupiedBeds in update Refuge");
           }
@@ -659,8 +653,8 @@ public class MiscSimulator extends StandardSimulator implements GUIComponent {
       if (e instanceof Refuge) {
         int size = waitingList.get(e.getID()).size();
         ((Refuge) e).setWaitingListSize(size);
-        changes.addChange((Refuge) e, ((Refuge) e).getOccupiedBedsProperty());
-        changes.addChange((Refuge) e, ((Refuge) e).getWaitingListSizeProperty());
+        changes.addChange(e, ((Refuge) e).getOccupiedBedsProperty());
+        changes.addChange(e, ((Refuge) e).getWaitingListSizeProperty());
       }
   }
 }

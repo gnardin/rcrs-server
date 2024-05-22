@@ -19,7 +19,7 @@ package rescuecore;
    This class encapsulates information about an individual property within a RescueObject
  */
 public abstract class Property implements java.io.Serializable {
-	private int type;
+	private final int type;
 	protected int lastUpdate;
 	protected Object lastUpdateSource;
 

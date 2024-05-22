@@ -30,6 +30,6 @@ public class TimestepTerminationCondition implements TerminationCondition {
 
     @Override
     public String toString() {
-        return "Timestep >= " + time + "";
+        return "Timestep >= " + time;
     }
 }

@@ -25,14 +25,14 @@ import rescuecore2.log.Logger;
 public class KernelStartupOptions {
     private static final String AUTO_SUFFIX = ".auto";
 
-    private List<WorldModelCreator> worldOptions;
-    private List<Perception> perceptionOptions;
-    private List<CommunicationModel> commsOptions;
+    private final List<WorldModelCreator> worldOptions;
+    private final List<Perception> perceptionOptions;
+    private final List<CommunicationModel> commsOptions;
 
-    private Map<Simulator, Integer> sims;
-    private Map<Viewer, Integer> viewers;
-    private Map<Agent, Integer> agents;
-    private Map<Component, Integer> other;
+    private final Map<Simulator, Integer> sims;
+    private final Map<Viewer, Integer> viewers;
+    private final Map<Agent, Integer> agents;
+    private final Map<Component, Integer> other;
 
     private WorldModelCreator world;
     private Perception perception;
