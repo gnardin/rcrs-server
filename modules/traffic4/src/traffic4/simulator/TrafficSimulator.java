@@ -108,6 +108,20 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
                 handleFly((AKFly) next);
             }
         }
+        /**
+         * Drones that have run out of battery are immobile
+         */
+        for (StandardEntity next : model) {
+            if (next instanceof Human) {
+                Human h = (Human) next;
+                if(h.isBatteryDefined() && h.getBattery() <= 0) {
+                    Logger.debug("Drone " + h + " is out of battery");
+                    manager.getTrafficAgentForDrone(h).setMobile(false);
+                }
+            }
+        }
+
+
         timestep();
         for (TrafficAgent1 agent : manager.getALLAgents()) {
             //update position and position history for agents that were not loaded or unloaded
@@ -225,7 +239,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             }
             Area nextArea = (Area) e;
 
-            steps1.addAll(getPathElements(human, currentArea, lastEdge, nextArea, edge));
+            steps1.addAll(getPathElements2(human, currentArea, lastEdge, nextArea, edge));
 
             current = next;
             currentArea = nextArea;

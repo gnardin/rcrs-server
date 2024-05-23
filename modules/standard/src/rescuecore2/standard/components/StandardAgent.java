@@ -97,8 +97,8 @@ public abstract class StandardAgent<E extends StandardEntity> extends AbstractAg
    * @param height the current height
    * @param path the path to send
    */
-  protected void sendFly(int time, int height, List<EntityID> path){
-    send(new AKFly(getID(), time, height, path));
+  protected void sendFly(int time, List<EntityID> path){
+    send(new AKFly(getID(), time, path));
   }
 
   /**
@@ -110,8 +110,8 @@ public abstract class StandardAgent<E extends StandardEntity> extends AbstractAg
    * @param destX the destination x coordinates
    * @param destY the destination y coordinate
    */
-  protected void sendFly(int time, List<EntityID> path, int height, int destX, int destY) {
-    send(new AKFly(getID(), time, path, height, destX, destY));
+  protected void sendFly(int time, List<EntityID> path,  int destX, int destY) {
+    send(new AKFly(getID(), time, path, destX, destY));
   }
 
   /**

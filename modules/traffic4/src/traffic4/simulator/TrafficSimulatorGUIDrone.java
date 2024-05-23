@@ -379,8 +379,7 @@ public class TrafficSimulatorGUIDrone extends JPanel {
                 graphics.drawLine(x, y, vx, vy);
                 graphics.setColor(Color.green);
                 graphics.drawLine(x, y, fx, fy);
-                graphics.setColor(Color.cyan);
-                graphics.drawLine(x, y, hx, hy);
+
             }
         }
     }

@@ -68,6 +68,7 @@ sourceSets {
                   'modules/maps/src',
                   'modules/sample/src',
                   'modules/traffic3/src',
+                  'modules/traffic4/src',
                   'modules/oldsims',
                   'modules/resq-fire/src'
                 ]
@@ -349,12 +350,32 @@ task traffic3Jar(type: Jar) {
   archiveFileName = 'traffic3.jar'
 }
 
+task traffic4SourceJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from(sourceSets.main.allSource) {
+    include 'traffic4/**'
+  }
+  from 'modules/traffic4/resources'
+  destinationDirectory = file('jars/sources')
+  archiveFileName = 'traffic4-sources.jar'
+}
+
+task traffic4Jar(type: Jar) {
+  from(sourceSets.main.output) {
+    include 'traffic4/**'
+  }
+  from 'modules/traffic4/resources'
+  destinationDirectory = file('jars')
+  archiveFileName = 'traffic4.jar'
+}
+
 /* Generate the compressed source in Jar files  */
 task sourcesJar(type: GradleBuild) {
   tasks = [ 'clearSourceJar', 'collapseSourceJar', 'gis2SourceJar',
             'ignitionSourceJar', 'kernelSourceJar', 'mapsSourceJar',
             'miscSourceJar', 'rescuecore2SourceJar', 'resqFireSourceJar',
-            'sampleSourceJar', 'standardSourceJar', 'traffic3SourceJar'
+            'sampleSourceJar', 'standardSourceJar', 'traffic3SourceJar',
+            'traffic4SourceJar'
           ]
 }
 
@@ -362,7 +383,7 @@ task sourcesJar(type: GradleBuild) {
 task completeBuild(type: GradleBuild) {
   tasks = [ 'clean', 'clearJar', 'collapseJar', 'gis2Jar', 'ignitionJar',
             'kernelJar', 'mapsJar', 'miscJar', 'rescuecore2Jar', 'resqFireJar',
-            'sampleJar', 'standardJar', 'traffic3Jar', 'sourcesJar',
+            'sampleJar', 'standardJar', 'traffic3Jar', 'traffic4Jar', 'sourcesJar',
             'exportLibs'
           ]
 }

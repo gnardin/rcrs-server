@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 
 //import rescuecore2.log.Logger;
 
+import org.apache.commons.compress.harmony.pack200.NewAttributeBands;
 import rescuecore2.misc.geometry.GeometryTools2D;
 import rescuecore2.misc.geometry.Point2D;
 import rescuecore2.misc.geometry.Vector2D;
@@ -18,6 +19,9 @@ import traffic3.objects.TrafficBlockade;
 
 import com.infomatiq.jsi.Rectangle;
 
+/**
+ * This class wraps an Area object with some extra information.
+ */
 public class TrafficArea1 {
     private Collection<TrafficAgent1> agents;
     private List<Line2D> areaLines;
@@ -42,6 +46,7 @@ public class TrafficArea1 {
         this.area = area;
         agents = new HashSet<TrafficAgent1>();
         areaLines = null;
+		allBlockingLines = null;
         Rectangle2D rect = area.getShape().getBounds2D();
         bounds = new Rectangle((float) rect.getMinX(), (float) rect.getMinY(), (float) rect.getMaxX(), (float) rect.getMaxY());
     }
@@ -141,35 +146,7 @@ public class TrafficArea1 {
 	public Collection<TrafficAgent1> getAgents() {
 		return Collections.unmodifiableCollection(agents);
 	}
-//
-//    /**
-//    * Add a traffic blockade
-//    * @param block
-//    *            The blockade to add
-//     */
-//    public void addBlockade(TrafficBlockade1 block) {
-//       // block.add(block);
-//    }
-//
-//    /**
-//     * Remove a traffic blockade
-//     *
-//     * @param block
-//     *              The blockade to remove
-//     */
-//    public void removeBlocackade(TrafficBlockade1 block) {
-//        blocks.remove(block);
-//    }
 
-    /**
-	 * Clear any cached blockade information.
-	 */
-	public void clearBlockadeCache() {
-		//blockadeLines = null;
-		allBlockingLines = null;
-		openLines = null;
-		graph=null;
-	}
 
 	/**
 	 * Get all TrafficBlockades inside this area.
@@ -190,7 +167,32 @@ public class TrafficArea1 {
 	}
 
 	public int[][] getGraph() {
-		return null;
+		if (graph == null) {
+			List<Line2D> openLines = getOpenLines();
+			graph = new int[openLines.size()][openLines.size()];
+			for (int i = 0; i < graph.length; i++) {
+				FOR: for (int j = 0; j < graph.length; j++) {
+					Line2D line = new Line2D(getMidPoint(openLines.get(i).getOrigin(), openLines.get(i).getEndPoint()),
+							getMidPoint(openLines.get(j).getOrigin(), openLines.get(j).getOrigin()));
+					for (Line2D is : getAllBlockingLines()) {
+						if (GeometryTools2D.getSegmentIntersectionPoint(line, is) != null) {
+							graph[i][j] = 100000;
+							continue FOR;
+						}
+					}
+					for (int k = 0; k < openLines.size(); k++) {
+						if (k==i || k==j)
+							continue;
+						if (GeometryTools2D.getSegmentIntersectionPoint(line, openLines.get(k)) != null) {
+							graph[i][j] = Integer.MAX_VALUE;
+							continue FOR;
+						}
+					}
+					graph[i][j] = 1;
+				}
+			}
+		}
+		return graph;
 	}
 
     public int getNearestLineIndex(Point2D point){

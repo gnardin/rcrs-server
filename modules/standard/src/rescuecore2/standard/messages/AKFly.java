@@ -16,7 +16,7 @@ import rescuecore2.worldmodel.EntityID;
 
 public class AKFly extends AbstractCommand {
 
-    private IntComponent height;
+    //private IntComponent height;
     private EntityIDListComponent path;
     private IntComponent x;
     private IntComponent y;
@@ -42,11 +42,11 @@ public class AKFly extends AbstractCommand {
      * @param path The drone's path to fly.
      *
      */
-    public AKFly(EntityID agent, int time, int height, List<EntityID> path) {
+    public AKFly(EntityID agent, int time, List<EntityID> path) {
         this();
         setAgentID(agent);
         setTime(time);
-        this.height.setValue(height);
+        //
         this.path.setIDs(path);
         this.x.setValue(-1);
         this.y.setValue(-1);
@@ -62,13 +62,13 @@ public class AKFly extends AbstractCommand {
      * @param destinationY
      * @param height
      */
-    public AKFly(EntityID agent, int time, List<EntityID> path, int height,
+    public AKFly(EntityID agent, int time, List<EntityID> path,
                  int destinationX, int destinationY) {
         this();
         setAgentID(agent);
         setTime(time);
         this.path.setIDs(path);
-        this.height.setValue(height);
+//        this.height.setValue(height);
         this.x.setValue(destinationX);
         this.y.setValue(destinationY);
     }
