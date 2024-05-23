@@ -91,6 +91,17 @@ public abstract class StandardAgent<E extends StandardEntity> extends AbstractAg
   }
 
   /**
+   * Send a fly command to the kernel with path.
+   *
+   * @param time the current time
+   * @param height the current height
+   * @param path the path to send
+   */
+  protected void sendFly(int time, int height, List<EntityID> path){
+    send(new AKFly(getID(), time, height, path));
+  }
+
+  /**
    * Send a fly command to the kernel.
    *
    * @param time current time.

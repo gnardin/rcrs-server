@@ -18,6 +18,7 @@ import rescuecore2.messages.Command;
 import rescuecore2.messages.control.KSCommands;
 import rescuecore2.messages.control.KSUpdate;
 import rescuecore2.misc.gui.ShapeDebugFrame;
+import rescuecore2.misc.gui.ShapeDebugFrame.Line2DShapeInfo;
 import rescuecore2.standard.components.StandardSimulator;
 import rescuecore2.log.Logger;
 import rescuecore2.misc.geometry.GeometryTools2D;
@@ -294,6 +295,83 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             }
          }
         return null;
+    }
+
+    private Collection<? extends PathElement> getPathElements2(Human human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
+        Collection<? extends PathElement> originalPath = getPathElements(human, lastArea, lastEdge, nextArea, nextEdge);
+        if (isOriginalPathOk(originalPath))
+            return originalPath;
+        Point2D start;
+        if (lastEdge == null) {
+            start = new Point2D(human.getX(), human.getY());
+        } else {
+            start = getBestPoint(lastEdge, lastArea);
+        }
+        Point2D startPoint;
+        if (lastEdge == null)
+            startPoint = start;
+        else
+            startPoint = getMidPoint(lastEdge.getStart(), lastEdge.getEnd());
+        Point2D edgePoint = getBestPoint(nextEdge, nextArea);
+        Point2D centrePoint = new Point2D(lastArea.getX(), lastArea.getY());
+
+        List<ShapeDebugFrame.ShapeInfo> result = new ArrayList<ShapeDebugFrame.ShapeInfo>();
+
+        result.add( new Line2DShapeInfo(new Line2D(startPoint, centrePoint), "start -> centre", Color.black, false, true));
+        result.add( new Line2DShapeInfo(new Line2D(centrePoint, getMidPoint(nextEdge.getStart(), nextEdge.getEnd())), "centre -> end", Color.white, false, true));
+
+        TrafficArea1 trafficArea1 = manager.getTrafficAreaforDrone(lastArea);
+        int[][] graph = manager.getTrafficAreaforDrone(lastArea).getGraph();
+        List<Line2D> openLines = manager.getTrafficAreaforDrone(lastArea).getOpenLines();
+        List<Line2D> graphLine  = new ArrayList<>();
+        result.add( new Line2DShapeInfo(openLines, "openLines", Color.green, false, true));
+        for (int i = 0; i < graph.length; i++) {
+            for (int j = 0; j < graph.length; j++) {
+                if (graph[i][j] > 10000)
+                    continue;
+                Line2D line = new Line2D(getMidPoint(openLines.get(i).getOrigin(), openLines.get(i).getEndPoint()),
+                        getMidPoint(openLines.get(j).getOrigin(), openLines.get(j).getEndPoint()));
+                graphLine.add(line);
+            }
+        }
+
+        int src = trafficArea1.getNearestLineIndex(start);
+        int dest = trafficArea1.getNearestLineIndex(edgePoint);
+
+        if (src != dest && src != -1 && dest != -1) {
+            Dijkstra dijkstra = new Dijkstra(graph.length);
+            try {
+                dijkstra.Run(graph, src);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            try {
+                if (dijkstra.getWght(dest) < 1000) {
+                    ArrayList<Integer> path = dijkstra.getPathArray(dest);
+                    if (path.size() > 2) {
+                        List<Point2D> points = new ArrayList<Point2D>();
+                        for (Integer integer : path) {
+                            Point2D point = getMidPoint(openLines.get(integer).getOrigin(), openLines.get(integer).getEndPoint());
+                            points.add(point);
+                        }
+
+                        ArrayList<PathElement> res = new ArrayList<PathElement>();
+                        res.add( new PathElement(nextArea.getID(), nextEdge.getLine(), start) );
+
+                        for (Point2D point : points)
+                            res.add( new PathElement(nextArea.getID(), nextEdge.getLine(), point) );
+
+                        res.add( new PathElement(nextArea.getID(), nextEdge.getLine(), edgePoint) );
+
+                        return res;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return originalPath;
     }
 
     private boolean isOriginalPathOk(Collection<? extends PathElement> originalPaths) {

@@ -42,11 +42,11 @@ public class AKFly extends AbstractCommand {
      * @param path The drone's path to fly.
      *
      */
-    public AKFly(EntityID agent, int time, List<EntityID> path) {
+    public AKFly(EntityID agent, int time, int height, List<EntityID> path) {
         this();
         setAgentID(agent);
         setTime(time);
-        this.height.setValue(20);
+        this.height.setValue(height);
         this.path.setIDs(path);
         this.x.setValue(-1);
         this.y.setValue(-1);
