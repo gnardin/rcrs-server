@@ -35,8 +35,6 @@ public class TrafficAgent1 {
         //vector
         private Vector2D vector;
 
-        //block
-        private Point2D block;
 
         /**
          * Create a wall info object from a line2d in a traffic area.
@@ -52,18 +50,23 @@ public class TrafficAgent1 {
             this.origin = null;
         }
 
+        /**
+         * Get the shortest distance from the agent's position. The distance may
+         * not be accurate if the wall can't affect the agent in this microstep.
+         *
+         * @return The distance to the agent.
+         */
         public double getDistance() {
             return this.distance;
         }
 
-         public TrafficArea1 getArea() {
-            return area;
-        }
-
-        public Vector2D getVector() {
-            return vector;
-        }
-
+        /**
+         * Recompute the distance to the agent and the closest point on the
+         * line.
+         *
+         * @param from
+         *            The position of the agent.
+         */
         public void computeClosestPoint(Point2D from) {
             if(from.equals(origin) && distance >=  0 && closest != null) {
                 return;
@@ -74,6 +77,18 @@ public class TrafficAgent1 {
             vector = line.getDirection();
             distance = vector.getLength();
         }
+
+
+
+        public TrafficArea1 getArea() {
+            return area;
+        }
+
+        public Vector2D getVector() {
+            return vector;
+        }
+
+
 
         public Point2D getClosestPoint() {
             return closest;
@@ -156,6 +171,19 @@ public class TrafficAgent1 {
 
     private TrafficArea1 startPosition;
 
+
+    /**
+     * Construct a TrafficAgent.
+     *
+     * @param h
+     *            The Human wrapped by this object.
+     * @param manager
+     *            The traffic manager.
+     * @param radius
+     *            The radius of this agent in mm.
+     * @param velocityLimit
+     *            The velicity limit.
+     */
     public TrafficAgent1(Human h, TrafficManager1 manager, double radius, double velocityLimit) {
         this.human = h;
         this.manager = manager;
@@ -169,6 +197,11 @@ public class TrafficAgent1 {
         mobile = true;
     }
 
+    /**
+     * Get the Human wrapped by this object.
+     *
+     * @return The wrapped Human.
+     */
     public Human getHuman() {
         return human;
     }
@@ -181,18 +214,37 @@ public class TrafficAgent1 {
        velocityLimit = vlim;
     }
 
+
+    /**
+     * Get the TrafficArea the agent is currently in.
+     *
+     * @return The current TrafficArea.
+     */
     public TrafficArea1 getArea() {
         return currentArea;
     }
 
+    /**
+     * Get the position history.
+     *
+     * @return The position history.
+     */
     public List<Point2D> getPositionHistory() {
         return Collections.unmodifiableList(positionHistory);
     }
 
+    /**
+     * Get the distance travelled so far.
+     *
+     * @return The distance travelled.
+     */
     public double getTravelDistance() {
         return totalDistance;
     }
 
+    /**
+     * Clear the position history and distance travelled.
+     */
     public void clearPositionHistory() {
         positionHistory.clear();
         historyCount = 0;
@@ -231,10 +283,21 @@ public class TrafficAgent1 {
         return velocity[1];
     }
 
+    /**
+     * Set the radius of this agent.
+     *
+     * @param radius
+     *            The new radius in mm.
+     */
     public void setRadius(double radius) {
         this.radius = radius;
     }
 
+    /**
+     * Get the radius of this agent.
+     *
+     * @return The radius in mm.
+     */
     public double getRadius() {
         return this.radius;
     }
@@ -247,17 +310,23 @@ public class TrafficAgent1 {
         return this.height;
     }
 
+    /**
+     * Set the path this agent wants to take.
+     *
+     * @param steps
+     *            The new path.
+     */
     public void setPath(List<PathElement> steps) {
         if(steps == null || steps.isEmpty()) {
-            //clearPath();
+            clearPath();
             return;
         }
         path.clear();
         path.addAll(steps);
-        //finalDestination = steps.get(steps.size() - 1).getGoal();
+        finalDestination = steps.get(steps.size() - 1).getGoal();
         currentDestination = null;
         currentPathElement = null;
-        path.clear();
+
     }
 
     /**
@@ -394,9 +463,10 @@ public class TrafficAgent1 {
 
     public void beginTimestep() {
         findBlockingLines();
-        if (isInsideBlockade()) {
-            setMobile(true);
-        }
+//        if (isInsideBlockade()) {
+//            setMobile(true);
+//        }
+        setMobile(true);
         startPosition = currentArea;
     }
 
@@ -418,7 +488,7 @@ public class TrafficAgent1 {
             return;
     }
 
-    private TrafficArea1 getBestNeighbor(TrafficArea1 area, HashSet<TrafficArea1> checked) {
+    private TrafficArea1 getBestRoadNeighbor(TrafficArea1 area, HashSet<TrafficArea1> checked) {
         checked.add(area);
         if (area.getArea() instanceof Road) {
             return area;
@@ -432,7 +502,7 @@ public class TrafficAgent1 {
             if (checked.contains(neighbour)){
                 continue;
             }
-            TrafficArea1 resarea = getBestNeighbor(neighbour, checked);
+            TrafficArea1 resarea = getBestRoadNeighbor(neighbour, checked);
             if (resarea != null) {
                 return resarea;
             }
@@ -502,17 +572,16 @@ public class TrafficAgent1 {
                         continue;
                     }
                 }
+
+                if (hasLos(current, next, currentArea)) {
+                    currentDestination = next;
+                    if (verbose) {
+                        Logger.debug(this + " has line-of-sight to " + next);
+                    }
+                    break;
+                }
             }
-
-//            if (hasLos(current, next, currentArea)) {
-//                currentDestination = next;
-//                if (verbose) {
-//                    Logger.debug(this + " has line-of-sight to " + next);
-//                }
-//                break;
-//            }
         }
-
     }
 
     private void computeForces(double dt) {
@@ -617,22 +686,48 @@ public class TrafficAgent1 {
     }
 
 
-    private boolean isInsideBlockade() {
-        if (currentArea == null) {
-            return false;
-        }
-        for (TrafficBlockade1 block : currentArea.getBlockades()) {
-            if (block.containsLoc(location[0], location[1])) {
+//    private boolean isInsideBlockade() {
+//        if (currentArea == null) {
+//            return false;
+//        }
+//        for (TrafficBlockade1 block : currentArea.getBlockades()) {
+//            if (block.containsLoc(location[0], location[1])) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
+    public boolean crossedLine(double oldX, double oldY, double newX, double newY, Line2D line) {
+        Line2D moved = new Line2D(oldX, oldY, newX - oldX, newY - oldY);
+        return (GeometryTools2D.getSegmentIntersectionPoint(moved, line) != null);
+    }
+
+    private boolean crossedWall(double oldX, double oldY, double newX, double newY) {
+        Line2D moved =  new Line2D(oldX, oldY, newX - oldX, newY - oldY);;
+        double d = moved.getDirection().getLength();
+        for (WallInformation wall : blockingLines) {
+            if (wall.getDistance() >= d) {
+                continue;
+            }
+            Line2D test = wall.getWall();
+            if (GeometryTools2D.getSegmentIntersectionPoint(moved, test) != null) {
+                // if (crossedLine(oldX, oldY, newX, newY, test)) {
+                /*
+                 * Logger.warn(this + " crossed wall");
+                 * Logger.warn("Old location: " + oldX + ", " + oldY);
+                 * Logger.warn("New location: " + newX + ", " + newY);
+                 * Logger.warn("Movement line: " + moved);
+                 * Logger.warn("Wall         : " + test);
+                 * Logger.warn("Crossed at " +
+                 * GeometryTools2D.getSegmentIntersectionPoint(moved, test));
+                 */
                 return true;
             }
         }
         return false;
     }
 
-    public boolean crossedLine(double oldX, double oldY, double newX, double newY, Line2D line) {
-        Line2D moved = new Line2D(oldX, oldY, newX - oldX, newY - oldY);
-        return (GeometryTools2D.getSegmentIntersectionPoint(moved, line) != null);
-    }
 
     private void findBlockingLines() {
         blockingLines.clear();
@@ -680,20 +775,6 @@ public class TrafficAgent1 {
     }
 
 
-    private boolean crossedWall(double oldX, double oldY, double newX, double newY) {
-        Line2D moved =  new Line2D(oldX, oldY, newX - oldX, newY - oldY);;
-        double d = moved.getDirection().getLength();
-        for (WallInformation wall : blockingLines) {
-            if (wall.getDistance() >= d) {
-                continue;
-            }
-            Line2D test = wall.getWall();
-            if (GeometryTools2D.getSegmentIntersectionPoint(moved, test) != null) {
-                return true;
-            }
-        }
-        return true;
-    }
 
     private void computeDestinationForce(double[] result) {
         double destX = 0;
@@ -817,19 +898,6 @@ public class TrafficAgent1 {
         result[1] = ySum;
     }
 
-//    private void computeGroundForce(double[] result, double dt) {
-//        double xSum = 0;
-//        double ySum = 0;
-//        if (currentArea != null) {
-//            double height = getHeight();
-//            double cutoff = TrafficConstants.getGroundDistanceCutoff();
-//            double a = TrafficConstants.getGroundForceCoefficientA();
-//            double b = TrafficConstants.getGroundF0rceCoefficientB();
-//            Point2D position = new Point2D(location[0], location[1]);
-//
-//            for ()
-//        }
-//    }
 
     private void computeWallForce(double[] result, double dt) {
         double xSum = 0;
@@ -859,6 +927,13 @@ public class TrafficAgent1 {
                 }
                 if (verbose) {
                     Logger.debug("Closest point: " + closest);
+                }
+                if(!hasLos(wall, blockingLines)) {
+                    //No line of sight closest point
+                    if (verbose) {
+                        Logger.debug("No line of sight");
+                    }
+                    continue;
                 }
 
                 boolean endPoint = false;
@@ -930,6 +1005,16 @@ public class TrafficAgent1 {
         result[0] = xSum;
         result[1] = ySum;
 
+        }
+
+        @Override
+        public String toString() {
+            StringBuffer sb = new StringBuffer("TrafficAgent[");
+            sb.append("id:").append(human.getID()).append(";");
+            sb.append("x:").append((int) getX()).append(";");
+            sb.append("y:").append((int) getY()).append(";");
+            sb.append("]");
+            return sb.toString();
         }
 
         @Override

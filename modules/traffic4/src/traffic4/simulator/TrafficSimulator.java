@@ -30,6 +30,9 @@ import rescuecore2.standard.messages.*;
 import rescuecore2.worldmodel.*;
 
 
+import rescuecore2.worldmodel.properties.EntityRefListProperty;
+import rescuecore2.worldmodel.properties.EntityRefProperty;
+import rescuecore2.worldmodel.properties.IntProperty;
 import traffic4.manager.TrafficManager1;
 import traffic4.objects.TrafficArea1;
 import traffic4.simulator.TrafficSimulatorGUIDrone;
@@ -44,12 +47,12 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 
 
     private static final int AGENT_RADIUS = 500;
-//    private static final int CIVILIAN_RADIUS = 200;
+    private static final int CIVILIAN_RADIUS = 200;
     private static final double AGENT_VELOCITY_MEAN = 0.7;
     private static final double AGENT_VELOCITY_SD = 0.1;
     private static final double AGENT_HEIGHT = 100;
-//    private static final double CIVILIAN_VELOCITY_MEAN = 0.2;
-//    private static final double CIVILIAN_VELOCITY_SD = 0.002;
+    private static final double CIVILIAN_VELOCITY_MEAN = 0.2;
+    private static final double CIVILIAN_VELOCITY_SD = 0.002;
 
     private TrafficSimulatorGUIDrone gui;
 
@@ -73,7 +76,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return "Trafffic simulator for drones";
     }
 
-    protected void postConnectDrone() {
+    protected void postConnect() {
         TrafficConstants.init(config);
         manager.clearObject();
         for (StandardEntity next : model) {
@@ -83,9 +86,11 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         }
         NumberGenerator<Double> agentVelocityGenerator = new GaussianGenerator(AGENT_VELOCITY_MEAN,
                 AGENT_VELOCITY_SD, config.getRandom());
+        NumberGenerator<Double> civilianVelocityGenerator = new GaussianGenerator(CIVILIAN_VELOCITY_MEAN,
+                CIVILIAN_VELOCITY_SD, config.getRandom());
         for (StandardEntity next : model) {
             if (next instanceof Human) {
-                convertHumanDrone((Human) next, agentVelocityGenerator);
+                convertHumanDrone((Human) next, agentVelocityGenerator, civilianVelocityGenerator);
             }
         }
         gui.initialise();
@@ -107,6 +112,9 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             if (next instanceof AKFly) {
                 handleFly((AKFly) next);
             }
+            if (next instanceof AKDetect) {
+                handleDetect((AKDetect) next, changes);
+            }
         }
         /**
          * Drones that have run out of battery are immobile
@@ -120,8 +128,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
                 }
             }
         }
-
-
         timestep();
         for (TrafficAgent1 agent : manager.getALLAgents()) {
             //update position and position history for agents that were not loaded or unloaded
@@ -170,7 +176,20 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         for (EntityID id : update.getChangeSet().getChangedEntities()) {
             StandardEntity entity = model.getEntity(id);
             switch (StandardEntityURN.fromInt(update.getChangeSet().getEntityURN(id))) {
+                case ROAD:
+                case BUILDING:
+                case AMBULANCE_CENTRE:
+                case FIRE_STATION:
+                case GAS_STATION:
+                case POLICE_OFFICE:
+                case REFUGE:
+                case AMBULANCE_TEAM:
                 case DRONE:
+                case RESCUE_ROBOT:
+                case POLICE_FORCE:
+                case CIVILIAN:
+                case FIRE_BRIGADE:
+                case WORLD:
                 default:
                     break;
             }
@@ -186,7 +205,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         manager.register(new TrafficArea1(area));
     }
 
-    private void convertHumanDrone(Human human, NumberGenerator<Double> agentVelocityGenerator) {
+    private void convertHumanDrone(Human human, NumberGenerator<Double> agentVelocityGenerator,
+                                   NumberGenerator<Double> civilianVelocityGenerator) {
         double radius = 0;
         double height = 0;
         double velocityLimit = 0;
@@ -194,6 +214,9 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             radius = AGENT_RADIUS;
             height = AGENT_HEIGHT;
             velocityLimit = agentVelocityGenerator.nextValue();
+        } else if(human instanceof Civilian) {
+            radius = CIVILIAN_RADIUS;
+            velocityLimit = civilianVelocityGenerator.nextValue();
         } else {
             throw new IllegalArgumentException("Unrecognised agent type: " + human + " (" + human.getClass().getName() + ")");
         }
@@ -287,7 +310,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
                 steps.add(new PathElement(lastArea.getID(), nextEdge.getLine(), edgePoint, centrePoint));
             }
         }
-      return null;
+      return steps;
     }
 
     private Point2D getEntranceOfArea(Edge incomingEdge, Area destination) {
@@ -307,6 +330,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             if (destination.getShape().contains(destinationXY.getX(), destinationXY.getY())){
                 return destinationXY;
             }
+            distance -= 100;
          }
         return null;
     }
@@ -330,6 +354,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         Point2D centrePoint = new Point2D(lastArea.getX(), lastArea.getY());
 
         List<ShapeDebugFrame.ShapeInfo> result = new ArrayList<ShapeDebugFrame.ShapeInfo>();
+
 
         result.add( new Line2DShapeInfo(new Line2D(startPoint, centrePoint), "start -> centre", Color.black, false, true));
         result.add( new Line2DShapeInfo(new Line2D(centrePoint, getMidPoint(nextEdge.getStart(), nextEdge.getEnd())), "centre -> end", Color.white, false, true));
@@ -399,10 +424,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         for (PathElement path : originalPaths) {
 
             TrafficArea1 area = manager.getTrafficAreaforDrone((Area) model.getEntity(path.getAreaID()));
-            for (TrafficBlockade1 block : area.getBlockades()) {
-                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
-                    return true;
-            }
+//            for (TrafficBlockade1 block : area.getBlockades()) {
+//                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
+//                    return true;
+//            }
             double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
 
             if (minDist < TrafficSimulator.AGENT_RADIUS / 2)

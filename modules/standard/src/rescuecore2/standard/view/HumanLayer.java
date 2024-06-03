@@ -25,15 +25,9 @@ import java.net.URL;
 import rescuecore2.misc.Pair;
 import rescuecore2.misc.gui.ScreenTransform;
 import rescuecore2.config.Config;
+import rescuecore2.standard.entities.*;
 import rescuecore2.view.Icons;
 import rescuecore2.log.Logger;
-
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.Civilian;
-import rescuecore2.standard.entities.Road;
-import rescuecore2.standard.entities.StandardEntityURN;
-import rescuecore2.standard.entities.StandardWorldModel;
 
 /**
    A view layer that renders humans.
@@ -220,6 +214,24 @@ public class HumanLayer extends StandardEntityViewLayer<Human> {
         return iconMap.get(state);
     }
 
+    private BatteryLevel getBattery(Drone d) {
+        int bl = d.getBattery();
+        if (bl <= 0) {
+            return BatteryLevel.DEAD;
+        }
+        if (bl <= 20) {
+            return BatteryLevel.LOW;
+        }
+        if (bl <= 50) {
+            return BatteryLevel.MEDIUM;
+        }
+        if (bl <= 100) {
+            return BatteryLevel.HIGH;
+        }
+        return BatteryLevel.HIGH;
+    }
+
+
     private State getState(Human h) {
         int hp = h.getHP();
         if (hp <= 0) {
@@ -232,6 +244,33 @@ public class HumanLayer extends StandardEntityViewLayer<Human> {
             return State.INJURED;
         }
         return State.HEALTHY;
+    }
+
+    private enum BatteryLevel {
+        HIGH {
+            @Override
+            public String toString() {
+                return "100%";
+            }
+        },
+        MEDIUM {
+            @Override
+            public String toString() {
+                return "50%";
+            }
+        },
+        LOW {
+            @Override
+            public String toString() {
+                return "20%";
+            }
+        },
+        DEAD {
+            @Override
+            public String toString() {
+                return "0%";
+            }
+        }
     }
 
     private enum State {

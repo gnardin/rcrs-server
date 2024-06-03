@@ -2,6 +2,7 @@ package traffic4.simulator;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class Dijkstra {
 
@@ -28,8 +29,44 @@ public class Dijkstra {
     /**
      * Run Dijkstra
      */
-    public void Run(int[][] graph1, int src) throws Exception {
+    public void Run(int[][] graph, int src) throws Exception {
+        marker++;
+        for (int i = 0; i < numberOfVertex; ++i) {
+            minCost[i] = Long.MAX_VALUE/2;
+        }
+        for (int i = 0; i < parent.length; i++) {
+            parent[i] = -1;
+        }
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Cmp());
+            parent[src] = -1;
+            minCost[src] = 0;
+            pq.add(src);
+        while (pq.size() != 0) {
+            int node = (pq.poll());
+            if (mark[node] == marker)
+                continue;
+            else
+                mark[node] = marker;
+            for (int i = 0; i < graph.length; i++) {
+                if (graph[node][i] > 100000)
+                    continue;
+                if (node == i)
+                    continue;
 
+                int childIndex = i;
+                if (mark[childIndex] == marker)
+                    continue;
+                int w = graph[node][i];
+                if (w <= 0 || minCost[node] + w<0)
+                    throw new Exception("Negative Cost");
+
+                if(minCost[childIndex] > minCost[node] + w) {
+                    minCost[childIndex] = minCost[node] + w;
+                    parent[childIndex] = node;
+                    pq.add(childIndex);
+                }
+            }
+        }
     }
 
     /**

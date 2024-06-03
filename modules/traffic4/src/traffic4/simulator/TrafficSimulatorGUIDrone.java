@@ -229,6 +229,8 @@ public class TrafficSimulatorGUIDrone extends JPanel {
                 width -= insets.left + insets.right;
                 height -= insets.top + insets.bottom;
                 transform1.rescale(width, height);
+                Graphics2D copy = (Graphics2D) g.create(insets.left, insets.top, width, height);
+                drawObjects(copy);
             } finally {
                 Logger.popLogContext();
             }

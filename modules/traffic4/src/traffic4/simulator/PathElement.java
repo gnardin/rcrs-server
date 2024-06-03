@@ -68,9 +68,9 @@ public class PathElement {
 //     * Remove a waypoint
 //     * @param point the waipoint to remove.
 //     */
-//    public void removeWayPoints(Point2D point) {
-//        allPoints.remove(point);
-//    }
+    public void removeWayPoints(Point2D point) {
+        allPoints.remove(point);
+    }
 
     /**
      * Get the area ID

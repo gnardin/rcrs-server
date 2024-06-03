@@ -195,7 +195,8 @@ public class SampleViewerEventLogger extends StandardViewer {
       StandardMessageURN.AK_CLEAR, StandardMessageURN.AK_CLEAR_AREA,
       StandardMessageURN.AK_EXTINGUISH, StandardMessageURN.AK_LOAD,
       StandardMessageURN.AK_MOVE, StandardMessageURN.AK_RESCUE,
-      StandardMessageURN.AK_REST, StandardMessageURN.AK_UNLOAD );
+      StandardMessageURN.AK_REST, StandardMessageURN.AK_UNLOAD,
+      StandardMessageURN.AK_DETECT, StandardMessageURN.AK_FLY);
 
 
   private JSONArray getCommandActionLog( final KVTimestep t ) {
