@@ -112,6 +112,9 @@ public class TrafficManager1 {
         index.init(new Properties());
     }
 
+    /**
+     * Registering a new traffic area
+     */
     public void register(TrafficArea1 area) {
         areas.put(area.getArea(), area);
         int id = area.getArea().getID().getValue();

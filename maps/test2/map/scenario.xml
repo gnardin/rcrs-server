@@ -6,7 +6,7 @@
   <scenario:civilian scenario:location="254"/>
   <scenario:civilian scenario:location="254"/>
   <scenario:civilian scenario:location="254"/>
-  <scenario:policeoffice scenario:location="251"/>
-  <scenario:rescuerobot scenario:location="262"/>
-  <scenario:drone scenario:location="254"/>
+  <scenario:ambulancecentre scenario:location="958"/>
+  <scenario:rescuerobot scenario:location="976"/>
+  <scenario:drone scenario:location="274"/>
 </scenario:scenario>

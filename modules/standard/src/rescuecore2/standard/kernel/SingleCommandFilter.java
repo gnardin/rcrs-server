@@ -51,6 +51,7 @@ public class SingleCommandFilter implements CommandFilter {
         || (c instanceof AKClear)
         || (c instanceof AKClearArea)
         || (c instanceof AKFly)
+        || (c instanceof AKDetect)
         || (c instanceof AKSearch)
         || (c instanceof AKExtinguish);
     }

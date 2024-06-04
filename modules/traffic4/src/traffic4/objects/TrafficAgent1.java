@@ -398,7 +398,7 @@ public class TrafficAgent1 {
             }
 
             currentArea = newArea;
-            //findBlockingLines();
+            findBlockingLines();
             currentArea.addAgent(this);
         }
         // Check current destination

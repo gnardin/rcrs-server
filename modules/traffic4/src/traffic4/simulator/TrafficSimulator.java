@@ -461,14 +461,13 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return true;
     }
 
-    private Point2D getBestPoint(Edge edge, Area destination) {
-        return getMidPoint(edge.getStart(), edge.getEnd());
-    }
-
     static Point2D getMidPoint(Point2D p1, Point2D p2) {
         return new Point2D((p1.getX() + p2.getX()) / 2, (p2.getX() + p2.getY()) / 2);
     }
 
+    private Point2D getBestPoint(Edge edge, Area destination) {
+        return getMidPoint(edge.getStart(), edge.getEnd());
+    }
 
     private double getMinimumDistance(List<Line2D> lines, Point2D point) {
         double min = Integer.MAX_VALUE;

@@ -313,6 +313,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     manager.register(agent);
   }
 
+  private void handleMove(AKFly fly) {
+
+  }
+
   private void handleMove(AKMove move) {
     Human human = (Human) model.getEntity(move.getAgentID());
     TrafficAgent agent = manager.getTrafficAgent(human);
@@ -528,7 +532,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       TrafficArea area = manager.getTrafficArea((Area) model.getEntity(pathElement.getAreaID()));
       for (TrafficBlockade block : area.getBlockades()) {
         if (block.getBlockade().getShape().contains(pathElement.getGoal().getX(), pathElement.getGoal().getY()))
-          return false;
+//          return false;
+          return true;
       }
       double minDistance = getMinDistance(area.getAllBlockingLines(), pathElement.getGoal());
 
