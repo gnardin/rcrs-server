@@ -343,9 +343,9 @@ public class TrafficArea {
 	private static List<Line2D> minus(List<Line2D> edgeLines, Line2D line) {
 		List<Line2D> result = new ArrayList<Line2D>();
 		for (Line2D edgeLine : edgeLines) {
-			// System.out.println("Edge====");
-			// System.out.println(edgeLine);
-			// System.out.println(line);
+			 System.out.println("Edge====");
+			 System.out.println(edgeLine);
+			 System.out.println(line);
 			Line2D clone = new Line2D(edgeLine.getOrigin(), edgeLine.getEndPoint());
 			boolean lineContaintEdgeOrigin = GeometryTools2D.contains(line, edgeLine.getOrigin());
 			boolean lineContaintEdgeEnd = GeometryTools2D.contains(line, edgeLine.getEndPoint());

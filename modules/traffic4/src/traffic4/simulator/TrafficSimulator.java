@@ -109,9 +109,9 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             agent.setMobile(true);
         }
         for (Command next : c.getCommands()) {
-            if (next instanceof AKFly) {
-                handleFly((AKFly) next);
-            }
+//            if (next instanceof AKFly) {
+//                handleFly((AKFly) next);
+//            }
             if (next instanceof AKDetect) {
                 handleDetect((AKDetect) next, changes);
             }
@@ -225,61 +225,61 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         manager.register(agent);
     }
 
-    private void handleFly(AKFly fly) {
-        Human human = (Human) model.getEntity(fly.getAgentID());
-        TrafficAgent1 agent = manager.getTrafficAgentForDrone(human);
-        EntityID current = human.getPosition();
-        if(current == null) {
-            Logger.warn("Agent position is not defined");
-            return;
-        }
-        Entity currentEntity = model.getEntity(human.getPosition());
-        if (!(currentEntity instanceof Area)) {
-            Logger.warn("Rejecting move: agent position is not an area: " + currentEntity);
-            return;
-        }
-        Area currentArea = (Area) currentEntity;
-        List<EntityID> list = fly.getPath();
-        List<PathElement> steps1 = new ArrayList<PathElement>();
-        Edge lastEdge = null;
-        // check elements refer to Area instances
-        // build the list of target points
-        for (Iterator<EntityID> it = list.iterator(); it.hasNext();) {
-            EntityID next = it.next();
-            if (next.equals(current)){
-                continue;
-            }
-            Entity e = model.getEntity(next);
-            if (!(e instanceof Area)) {
-                Logger.warn("Rejecting move: Entity ID " + next + " is not an area: " + e);
-                return;
-            }
-
-            Edge edge = currentArea.getEdgeTo(next);
-            if (edge == null) {
-                Logger.warn("Rejecting move: Entity ID " + next + " is not adjacent to " + currentArea);
-                return;
-            }
-            Area nextArea = (Area) e;
-
-            steps1.addAll(getPathElements2(human, currentArea, lastEdge, nextArea, edge));
-
-            current = next;
-            currentArea = nextArea;
-            lastEdge = edge;
-        }
-        int targetX = fly.getDestinationX();
-        int targetY = fly.getDestinationY();
-        if(targetX == -1 && targetY == -1) {
-            targetX = currentArea.getX();
-            targetY = currentArea.getY();
-        } else if(list.isEmpty()) {
-            Logger.warn("Rejecting move: path is empty");
-            return;
-        }
-        steps1.add(new PathElement(current, null, new Point2D(targetX, targetY)));
-        agent.setPath(steps1);
-    }
+//    private void handleFly(AKFly fly) {
+//        Human human = (Human) model.getEntity(fly.getAgentID());
+//        TrafficAgent1 agent = manager.getTrafficAgentForDrone(human);
+//        EntityID current = human.getPosition();
+//        if(current == null) {
+//            Logger.warn("Agent position is not defined");
+//            return;
+//        }
+//        Entity currentEntity = model.getEntity(human.getPosition());
+//        if (!(currentEntity instanceof Area)) {
+//            Logger.warn("Rejecting move: agent position is not an area: " + currentEntity);
+//            return;
+//        }
+//        Area currentArea = (Area) currentEntity;
+//        List<EntityID> list = fly.getPath();
+//        List<PathElement> steps1 = new ArrayList<PathElement>();
+//        Edge lastEdge = null;
+//        // check elements refer to Area instances
+//        // build the list of target points
+//        for (Iterator<EntityID> it = list.iterator(); it.hasNext();) {
+//            EntityID next = it.next();
+//            if (next.equals(current)){
+//                continue;
+//            }
+//            Entity e = model.getEntity(next);
+//            if (!(e instanceof Area)) {
+//                Logger.warn("Rejecting move: Entity ID " + next + " is not an area: " + e);
+//                return;
+//            }
+//
+//            Edge edge = currentArea.getEdgeTo(next);
+//            if (edge == null) {
+//                Logger.warn("Rejecting move: Entity ID " + next + " is not adjacent to " + currentArea);
+//                return;
+//            }
+//            Area nextArea = (Area) e;
+//
+//            steps1.addAll(getPathElements2(human, currentArea, lastEdge, nextArea, edge));
+//
+//            current = next;
+//            currentArea = nextArea;
+//            lastEdge = edge;
+//        }
+//        int targetX = fly.getDestinationX();
+//        int targetY = fly.getDestinationY();
+//        if(targetX == -1 && targetY == -1) {
+//            targetX = currentArea.getX();
+//            targetY = currentArea.getY();
+//        } else if(list.isEmpty()) {
+//            Logger.warn("Rejecting move: path is empty");
+//            return;
+//        }
+//        steps1.add(new PathElement(current, null, new Point2D(targetX, targetY)));
+//        agent.setPath(steps1);
+//    }
 
     private Collection<? extends PathElement> getPathElements(Human human, Area lastArea, Edge lastEdge, Area nextArea,
                                                               Edge nextEdge) {

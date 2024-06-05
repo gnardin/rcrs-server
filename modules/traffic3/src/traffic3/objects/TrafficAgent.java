@@ -529,6 +529,7 @@ public class TrafficAgent {
 			setMobile(true);
 		}
 		startPosition = currentArea;
+		setMobile(true);
 	}
 
 	/**
@@ -551,7 +552,6 @@ public class TrafficAgent {
 	 */
 	public void endTimestep() {
 		handleOutOfActionCivilianMoves();
-
 	}
 
 	private void handleOutOfActionCivilianMoves() {
@@ -566,10 +566,10 @@ public class TrafficAgent {
 		if (haveThisAreaInPath(currentArea))
 			return;
 
-		Logger.warn(getHuman() + " moved to unplaned building(" + currentArea + ") " + this);
+		Logger.warn(getHuman() + " moved to unplaned building (" + currentArea + ") " + this);
 		TrafficArea newDest = getBestRoadNeighbor(currentArea, new HashSet<TrafficArea>());
 		if (newDest == null) {
-			Logger.warn(currentArea + " dosen't connected to any Road!");
+			Logger.warn(currentArea + " dosen't connect to any road!");
 			return;
 		}
 		setLocation(newDest.getArea().getX(), newDest.getArea().getY());

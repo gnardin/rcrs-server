@@ -4,9 +4,14 @@
   <scenario:refuge scenario:location="255" scenario:bedCapacity="5"/>
   <scenario:civilian scenario:location="254"/>
   <scenario:civilian scenario:location="254"/>
-  <scenario:civilian scenario:location="254"/>
-  <scenario:civilian scenario:location="254"/>
-  <scenario:ambulancecentre scenario:location="958"/>
-  <scenario:rescuerobot scenario:location="976"/>
-  <scenario:drone scenario:location="274"/>
+  <scenario:civilian scenario:location="959"/>
+  <scenario:civilian scenario:location="959"/>
+  <scenario:civilian scenario:location="251"/>
+  <scenario:civilian scenario:location="250"/>
+  <scenario:policeoffice scenario:location="960"/>
+  <scenario:rescuerobot scenario:location="273"/>
+  <scenario:rescuerobot scenario:location="297"/>
+  <scenario:drone scenario:location="975"/>
+  <scenario:drone scenario:location="976"/>
+  <scenario:drone scenario:location="268"/>
 </scenario:scenario>

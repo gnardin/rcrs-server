@@ -8,6 +8,10 @@ public class FlySimulator extends StandardSimulator {
 
     private static  final String SIMULATOR_NAME = "Drone Fly Simulator";
 
+    private static final String FLIGHT_HEIGHT = "";
+    private static final String FLIGHT_LANDING_SPEED = "";
+    private static final String FLIGHT_TAKEOFF_SPEED = "";
+
     @Override
     protected void postConnect() {
 
@@ -17,5 +21,7 @@ public class FlySimulator extends StandardSimulator {
     protected void processCommands(KSCommands c, ChangeSet changes) {
 
     }
+
+
 
 }
