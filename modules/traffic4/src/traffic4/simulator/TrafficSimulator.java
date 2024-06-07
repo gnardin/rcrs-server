@@ -8,37 +8,37 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import org.jfree.chart.block.Block;
 import org.uncommons.maths.number.NumberGenerator;
-
-
 import org.uncommons.maths.random.GaussianGenerator;
+
 import rescuecore2.GUIComponent;
+import rescuecore2.log.Logger;
 import rescuecore2.messages.Command;
 import rescuecore2.messages.control.KSCommands;
 import rescuecore2.messages.control.KSUpdate;
-import rescuecore2.misc.gui.ShapeDebugFrame;
-import rescuecore2.misc.gui.ShapeDebugFrame.Line2DShapeInfo;
-import rescuecore2.standard.components.StandardSimulator;
-import rescuecore2.log.Logger;
 import rescuecore2.misc.geometry.GeometryTools2D;
 import rescuecore2.misc.geometry.Line2D;
 import rescuecore2.misc.geometry.Point2D;
 import rescuecore2.misc.geometry.Vector2D;
+import rescuecore2.misc.gui.ShapeDebugFrame;
+import rescuecore2.misc.gui.ShapeDebugFrame.Line2DShapeInfo;
+import rescuecore2.standard.components.StandardSimulator;
 import rescuecore2.standard.entities.*;
 import rescuecore2.standard.messages.*;
-import rescuecore2.worldmodel.*;
-
-
+import rescuecore2.worldmodel.ChangeSet;
+import rescuecore2.worldmodel.Entity;
+import rescuecore2.worldmodel.EntityID;
+import rescuecore2.worldmodel.WorldModel;
+import rescuecore2.worldmodel.WorldModelListener;
 import rescuecore2.worldmodel.properties.EntityRefListProperty;
 import rescuecore2.worldmodel.properties.EntityRefProperty;
 import rescuecore2.worldmodel.properties.IntProperty;
+
+
 import traffic4.manager.TrafficManager1;
 import traffic4.objects.TrafficArea1;
-import traffic4.simulator.TrafficSimulatorGUIDrone;
 import traffic4.objects.TrafficAgent1;
 import traffic4.objects.TrafficBlockade1;
-import traffic4.simulator.PathElement;
 
 public class TrafficSimulator extends StandardSimulator implements GUIComponent {
     private static final double TIME_STEP_MS = 100;
@@ -93,6 +93,17 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
                 convertHumanDrone((Human) next, agentVelocityGenerator, civilianVelocityGenerator);
             }
         }
+        model.addWorldModelListener(new WorldModelListener<StandardEntity>() {
+                                        @Override
+                                        public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
+
+                                        }
+
+                                        @Override
+                                        public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
+
+                                        }
+        });
         gui.initialise();
         manager.cacheInfo(model);
     }
@@ -109,11 +120,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             agent.setMobile(true);
         }
         for (Command next : c.getCommands()) {
-//            if (next instanceof AKFly) {
-//                handleFly((AKFly) next);
-//            }
-            if (next instanceof AKDetect) {
-                handleDetect((AKDetect) next, changes);
+            if (next instanceof AKFly) {
+                handleFly((AKFly) next);
             }
         }
         /**
@@ -176,34 +184,42 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         for (EntityID id : update.getChangeSet().getChangedEntities()) {
             StandardEntity entity = model.getEntity(id);
             switch (StandardEntityURN.fromInt(update.getChangeSet().getEntityURN(id))) {
-                case ROAD:
-                case BUILDING:
-                case AMBULANCE_CENTRE:
-                case FIRE_STATION:
-                case GAS_STATION:
-                case POLICE_OFFICE:
-                case REFUGE:
-                case AMBULANCE_TEAM:
+//                case ROAD:
+//                case BUILDING:
+//                case AMBULANCE_CENTRE:
+//                case FIRE_STATION:
+//                case GAS_STATION:
+//                case POLICE_OFFICE:
+//                case REFUGE:
+//                case AMBULANCE_TEAM:
                 case DRONE:
-                case RESCUE_ROBOT:
-                case POLICE_FORCE:
-                case CIVILIAN:
-                case FIRE_BRIGADE:
-                case WORLD:
+//                case RESCUE_ROBOT:
+//                case POLICE_FORCE:
+//                case CIVILIAN:
+//                case FIRE_BRIGADE:
+//                case WORLD:
                 default:
                     break;
             }
         }
     }
 
-//
-//    private void clearAreaCacheDrone(EntityID entityArea) {
+
+//    private void clearAreaCache(EntityID entityArea) {
 //        manager.getTrafficAreaforDrone((Area) model.getEntity(entityArea)).clearBlockadeCache();
 //    }
 
     private void convertAreaToTrafficArea(Area area) {
         manager.register(new TrafficArea1(area));
     }
+
+//    public void convertBlockade(Blockade blockade) {
+//        Area area = (Area) model.getEntity(blockade.getPosition());
+//        TrafficArea1 a = manager.getTrafficAreaforDrone(area);
+////        TrafficBlockade1 block = new TrafficBlockade1(blockade, a);
+//        manager.register(block);
+//
+//    }
 
     private void convertHumanDrone(Human human, NumberGenerator<Double> agentVelocityGenerator,
                                    NumberGenerator<Double> civilianVelocityGenerator) {
@@ -212,74 +228,79 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         double velocityLimit = 0;
         if(human instanceof Drone) {
             radius = AGENT_RADIUS;
-            height = AGENT_HEIGHT;
+//            height = AGENT_HEIGHT;
             velocityLimit = agentVelocityGenerator.nextValue();
-        } else if(human instanceof Civilian) {
-            radius = CIVILIAN_RADIUS;
+            TrafficAgent1 agent = new TrafficAgent1(human, manager, radius, velocityLimit);
+            agent.setLocation(human.getX(), human.getY());
+            manager.register(agent);
+        } /*else if(human instanceof RescueRobot) {
+            radius = AGENT_RADIUS;
             velocityLimit = civilianVelocityGenerator.nextValue();
-        } else {
+        } *//*else if(human instanceof Civilian) {
+//            radius = CIVILIAN_RADIUS;
+//            velocityLimit = civilianVelocityGenerator.nextValue();
+        }*/ /*else {
             throw new IllegalArgumentException("Unrecognised agent type: " + human + " (" + human.getClass().getName() + ")");
-        }
-        TrafficAgent1 agent = new TrafficAgent1(human, manager, radius, velocityLimit);
-        agent.setLocation(human.getX(), human.getY());
-        manager.register(agent);
+        }*/
     }
 
-//    private void handleFly(AKFly fly) {
-//        Human human = (Human) model.getEntity(fly.getAgentID());
-//        TrafficAgent1 agent = manager.getTrafficAgentForDrone(human);
-//        EntityID current = human.getPosition();
-//        if(current == null) {
-//            Logger.warn("Agent position is not defined");
-//            return;
-//        }
-//        Entity currentEntity = model.getEntity(human.getPosition());
-//        if (!(currentEntity instanceof Area)) {
-//            Logger.warn("Rejecting move: agent position is not an area: " + currentEntity);
-//            return;
-//        }
-//        Area currentArea = (Area) currentEntity;
-//        List<EntityID> list = fly.getPath();
-//        List<PathElement> steps1 = new ArrayList<PathElement>();
-//        Edge lastEdge = null;
-//        // check elements refer to Area instances
-//        // build the list of target points
-//        for (Iterator<EntityID> it = list.iterator(); it.hasNext();) {
-//            EntityID next = it.next();
-//            if (next.equals(current)){
-//                continue;
-//            }
-//            Entity e = model.getEntity(next);
-//            if (!(e instanceof Area)) {
-//                Logger.warn("Rejecting move: Entity ID " + next + " is not an area: " + e);
-//                return;
-//            }
-//
-//            Edge edge = currentArea.getEdgeTo(next);
-//            if (edge == null) {
-//                Logger.warn("Rejecting move: Entity ID " + next + " is not adjacent to " + currentArea);
-//                return;
-//            }
-//            Area nextArea = (Area) e;
-//
-//            steps1.addAll(getPathElements2(human, currentArea, lastEdge, nextArea, edge));
-//
-//            current = next;
-//            currentArea = nextArea;
-//            lastEdge = edge;
-//        }
-//        int targetX = fly.getDestinationX();
-//        int targetY = fly.getDestinationY();
-//        if(targetX == -1 && targetY == -1) {
-//            targetX = currentArea.getX();
-//            targetY = currentArea.getY();
-//        } else if(list.isEmpty()) {
-//            Logger.warn("Rejecting move: path is empty");
-//            return;
-//        }
-//        steps1.add(new PathElement(current, null, new Point2D(targetX, targetY)));
-//        agent.setPath(steps1);
-//    }
+
+
+    private void handleFly(AKFly fly) {
+        Human human = (Human) model.getEntity(fly.getAgentID());
+        TrafficAgent1 agent = manager.getTrafficAgentForDrone(human);
+        EntityID current = human.getPosition();
+        if(current == null) {
+            Logger.warn("Agent position is not defined");
+            return;
+        }
+        Entity currentEntity = model.getEntity(human.getPosition());
+        if (!(currentEntity instanceof Area)) {
+            Logger.warn("Rejecting move: agent position is not an area: " + currentEntity);
+            return;
+        }
+        Area currentArea = (Area) currentEntity;
+        List<EntityID> list = fly.getPath();
+        List<PathElement> steps1 = new ArrayList<PathElement>();
+        Edge lastEdge = null;
+        // check elements refer to Area instances
+        // build the list of target points
+        for (Iterator<EntityID> it = list.iterator(); it.hasNext();) {
+            EntityID next = it.next();
+            if (next.equals(current)){
+                continue;
+            }
+            Entity e = model.getEntity(next);
+            if (!(e instanceof Area)) {
+                Logger.warn("Rejecting move: Entity ID " + next + " is not an area: " + e);
+                return;
+            }
+
+            Edge edge = currentArea.getEdgeTo(next);
+            if (edge == null) {
+                Logger.warn("Rejecting move: Entity ID " + next + " is not adjacent to " + currentArea);
+                return;
+            }
+            Area nextArea = (Area) e;
+
+            steps1.addAll(getPathElements2(human, currentArea, lastEdge, nextArea, edge));
+
+            current = next;
+            currentArea = nextArea;
+            lastEdge = edge;
+        }
+        int targetX = fly.getDestinationX();
+        int targetY = fly.getDestinationY();
+        if(targetX == -1 && targetY == -1) {
+            targetX = currentArea.getX();
+            targetY = currentArea.getY();
+        } else if(list.isEmpty()) {
+            Logger.warn("Rejecting move: path is empty");
+            return;
+        }
+        steps1.add(new PathElement(current, null, new Point2D(targetX, targetY)));
+        agent.setPath(steps1);
+    }
 
     private Collection<? extends PathElement> getPathElements(Human human, Area lastArea, Edge lastEdge, Area nextArea,
                                                               Edge nextEdge) {
@@ -427,11 +448,12 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 //            for (TrafficBlockade1 block : area.getBlockades()) {
 //                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
 //                    return true;
+//                //return false;
 //            }
-            double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
+//            double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
 
-            if (minDist < TrafficSimulator.AGENT_RADIUS / 2)
-                return false;
+//            if (minDist < TrafficSimulator.AGENT_RADIUS / 2)
+//                return false;
             if (lastArea == null || lastArea == area) {
                 SameAreaElements.add(path);
             } else {
@@ -453,10 +475,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 
         for (int i = 1; i < sameAreaElem.size(); i++) {
             Line2D line2D = new Line2D(sameAreaElem.get(i - 1).getGoal(), sameAreaElem.get(i).getGoal());
-            for (Line2D block : lastArea.getAllBlockingLines()) {
-                if (GeometryTools2D.getSegmentIntersectionPoint(line2D, block) != null)
-                    return false;
-            }
+//            for (Line2D block : lastArea.getAllBlockingLines()) {
+//                if (GeometryTools2D.getSegmentIntersectionPoint(line2D, block) != null)
+//                    return false;
+//            }
         }
         return true;
     }
@@ -481,49 +503,49 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return min;
     }
 
-    private Civilian handleDetect(AKDetect detect, ChangeSet changes) {
-        EntityID agentID = detect.getAgentID();
-        EntityID targetID = detect.getTarget();
-        Entity agent = model.getEntity(agentID);
-        Entity target = model.getEntity(targetID);
-        if (agent == null) {
-            Logger.warn("Rejecting detect command from agent: " + agentID + " agent does not exist");
-            return null;
-        }
-        if (!(agent instanceof Drone)) {
-            Logger.warn("Rejecting detect command from agent: " + agentID + ". The agent type is: " + agent.getURN());
-            return null;
-        }
-        if (target == null) {
-            Logger.warn("Rejecting detect command from agent: " + agentID + ". Target" + targetID + " does not exist");
-            return null;
-        }
-        Drone drone = (Drone) agent;
-        Civilian civ = (Civilian) target;
-        if (civ.isBuriednessDefined() && civ.getBuriedness() > 0) {
-            int x = civ.getX();
-            int y = civ.getY();
-            Logger.debug("Civilian detected at " + x + ", " + y);
-        }
-        if (drone.isBatteryDefined() && drone.getBattery() == 0) {
-            Logger.warn("Rejecting detect command from agent " + agentID + ". The drone is out of battery");
-            return null;
-        }
-        if (civ.isPositionDefined() || !civ.isPositionDefined() || !civ.getPosition().equals(civ.getPosition())) {
-            Logger.warn("Rejecting detect command from agent + " + agentID + ". Target is non-adjacent " + targetID);
-            return null;
-        }
-        //all checks passed
-        civ.setPosition(agentID);
-        civ.undefineX();
-        civ.undefineY();
-        changes.addChange(civ, civ.getPositionProperty());
-        changes.addChange(civ, civ.getXProperty());
-        changes.addChange(civ, civ.getYProperty());
-        manager.getTrafficAgentForDrone(civ).setMobile(false);
-        manager.getTrafficAgentForDrone(drone).setMobile(false);
-        return civ;
-    }
+//    private Civilian handleDetect(AKDetect detect, ChangeSet changes) {
+//        EntityID agentID = detect.getAgentID();
+//        EntityID targetID = detect.getTarget();
+//        Entity agent = model.getEntity(agentID);
+//        Entity target = model.getEntity(targetID);
+//        if (agent == null) {
+//            Logger.warn("Rejecting detect command from agent: " + agentID + " agent does not exist");
+//            return null;
+//        }
+//        if (!(agent instanceof Drone)) {
+//            Logger.warn("Rejecting detect command from agent: " + agentID + ". The agent type is: " + agent.getURN());
+//            return null;
+//        }
+//        if (target == null) {
+//            Logger.warn("Rejecting detect command from agent: " + agentID + ". Target" + targetID + " does not exist");
+//            return null;
+//        }
+//        Drone drone = (Drone) agent;
+//        Civilian civ = (Civilian) target;
+//        if (civ.isBuriednessDefined() && civ.getBuriedness() > 0) {
+//            int x = civ.getX();
+//            int y = civ.getY();
+//            Logger.debug("Civilian detected at " + x + ", " + y);
+//        }
+//        if (drone.isBatteryDefined() && drone.getBattery() == 0) {
+//            Logger.warn("Rejecting detect command from agent " + agentID + ". The drone is out of battery");
+//            return null;
+//        }
+//        if (civ.isPositionDefined() || !civ.isPositionDefined() || !civ.getPosition().equals(civ.getPosition())) {
+//            Logger.warn("Rejecting detect command from agent + " + agentID + ". Target is non-adjacent " + targetID);
+//            return null;
+//        }
+//        //all checks passed
+//        civ.setPosition(agentID);
+//        civ.undefineX();
+//        civ.undefineY();
+//        changes.addChange(civ, civ.getPositionProperty());
+//        changes.addChange(civ, civ.getXProperty());
+//        changes.addChange(civ, civ.getYProperty());
+//        manager.getTrafficAgentForDrone(civ).setMobile(false);
+//        manager.getTrafficAgentForDrone(drone).setMobile(false);
+//        return civ;
+//    }
 
 
     private void timestep() {

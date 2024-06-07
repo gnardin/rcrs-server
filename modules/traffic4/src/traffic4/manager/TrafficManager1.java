@@ -4,16 +4,29 @@ package traffic4.manager;
 import com.infomatiq.jsi.Rectangle;
 import com.infomatiq.jsi.SpatialIndex;
 import com.infomatiq.jsi.rtree.RTree;
-import gnu.trove.TIntProcedure;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.jfree.chart.block.Block;
 import rescuecore2.misc.collections.LazyMap;
 import rescuecore2.standard.entities.Area;
+import rescuecore2.standard.entities.Blockade;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.entities.StandardWorldModel;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
+import gnu.trove.TIntProcedure;
 import traffic4.objects.TrafficAgent1;
 import traffic4.objects.TrafficArea1;
+import traffic4.objects.TrafficBlockade1;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +38,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TrafficManager1 {
 
     private Map<Integer, TrafficArea1> areaByID;
+//    private Map<Integer, TrafficBlockade1> blockadeID;
     private Map<Area, TrafficArea1> areas;
+//    private Map<Blockade, TrafficBlockade1> blocks;
     private Map<Human, TrafficAgent1> agents;
     private Map<TrafficArea1, Collection<TrafficArea1>> areaNeighbours;
 
@@ -37,6 +52,8 @@ public class TrafficManager1 {
     public TrafficManager1() {
         areas = new ConcurrentHashMap<Area, TrafficArea1>();
         areaByID = new ConcurrentHashMap<Integer, TrafficArea1>();
+//        blockadeID = new ConcurrentHashMap<Integer, TrafficBlockade1>();
+//        blocks = new ConcurrentHashMap<Blockade, TrafficBlockade1>();
         agents = new ConcurrentHashMap<Human, TrafficAgent1>();
         areaNeighbours = new LazyMap<TrafficArea1, Collection<TrafficArea1>>() {
 
@@ -107,6 +124,8 @@ public class TrafficManager1 {
         areas.clear();
         agents.clear();
         areaNeighbours.clear();
+//        blockadeID.clear();
+//        blocks.clear();
         areaByID.clear();
         index = new RTree();
         index.init(new Properties());
@@ -129,6 +148,33 @@ public class TrafficManager1 {
         agents.put(agent.getHuman(), agent);
     }
 
+//    /**
+//     * Regisyer a new TrafficBlockade
+//     */
+//    public void register(TrafficBlockade1 block) {
+//        blocks.put(block.getBlockade(), block);
+//        blockadeID.put(block.getBlockade().getID().getValue(), block);
+//    }
+//
+//    /**
+//     * Remove a blockade
+//     *
+//     * @param block
+//     */
+//    public void remove(TrafficBlockade1 block) {
+//        remove(block.getBlockade());
+//    }
+//
+//    /**
+//     * Remove a blockade.
+//     *
+//     * @param block
+//     */
+//    public void remove(Blockade block) {
+//        blocks.remove(block);
+//        blockadeID.remove(block.getID().getValue());
+//    }
+
     /**
      * Get all traffic agents
      *
@@ -147,6 +193,15 @@ public class TrafficManager1 {
         return Collections.unmodifiableCollection(areas.values());
     }
 
+//    /**
+//     * Get all TrafficBlockades
+//     *
+//     * @return All traffic blockades
+//     */
+//    public Collection<TrafficBlockade1> getBlockades() {
+//        return Collections.unmodifiableCollection(blocks.values());
+//    }
+
     /**Compute pre cached information about the world.
      *
      * @param world
@@ -164,6 +219,10 @@ public class TrafficManager1 {
     public TrafficArea1 getTrafficAreaforDrone(Area area) {
         return areas.get(area);
     }
+
+//    public TrafficBlockade1 getTrafficBlockade(Blockade blockade) {
+//        return blocks.get(blockade);
+//    }
 
     public TrafficAgent1 getTrafficAgentForDrone(Human human) {
         return agents.get(human);

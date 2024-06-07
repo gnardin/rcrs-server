@@ -27,7 +27,9 @@ import com.infomatiq.jsi.Rectangle;
  */
 public class TrafficArea1 {
 	private Collection<TrafficAgent1> agents;
+//	private Collection<TrafficBlockade1> blocks;
 
+//	private Collection<Line2D> blockadeLines;
 	private List<Line2D> blockingLines;
 	private List<Line2D> allBlockingLines;
 	private List<Line2D> areaLines;
@@ -46,9 +48,9 @@ public class TrafficArea1 {
 	public TrafficArea1(final Area area) {
 		this.area = area;
 		agents = new HashSet<TrafficAgent1>();
-		blockingLines = null;
+//		blockingLines = null;
 		areaLines = null;
-		allBlockingLines = null;
+//		allBlockingLines = null;
 		Rectangle2D rect = area.getShape().getBounds2D();
 		bounds = new Rectangle((float) rect.getMinX(), (float) rect.getMinY(), (float) rect.getMaxX(), (float) rect.getMaxY());
 	}
@@ -71,11 +73,11 @@ public class TrafficArea1 {
 		return bounds;
 	}
 
-	/**
-	 * Get all lines around this area that block movement.
-	 *
-	 * @return All area lines that block movement.
-	 */
+//	/**
+//	 * Get all lines around this area that block movement.
+//	 *
+//	 * @return All area lines that block movement.
+//	 */
 	public List<Line2D> getBlockingLines() {
 		if (blockingLines == null) {
 			blockingLines = new ArrayList<Line2D>();
@@ -99,15 +101,26 @@ public class TrafficArea1 {
 		return Collections.unmodifiableList(areaLines);
 	}
 
-	/**
-	 * Get all lines that block movement. This includes impassable edges of the
-	 * area and all blockade lines.
-	 *
-	 * @return All movement-blocking lines.
-	 */
+//	public List<Line2D> getBlockadeLines() {
+//		if (blockadeLines == null) {
+//			blockadeLines = new ArrayList<Line2D>();
+//			for (TrafficBlockade1 blockade : blocks) {
+//				blockadeLines.addAll(blockade.getLines());
+//			}
+//		}
+//		return Collections.unmodifiableList(blockingLines);
+//	}
+
+//	/**
+//	 * Get all lines that block movement. This includes impassable edges of the
+//	 * area and all blockade lines.
+//	 *
+//	 * @return All movement-blocking lines.
+//	 */
 	public List<Line2D> getAllBlockingLines() {
 		if (allBlockingLines == null) {
 			allBlockingLines = new ArrayList<Line2D>();
+//			allBlockingLines.addAll(getBlockadeLines());
 			allBlockingLines.addAll(getBlockingLines());
 		}
 		return Collections.unmodifiableList(allBlockingLines);
@@ -151,6 +164,36 @@ public class TrafficArea1 {
 		return Collections.unmodifiableCollection(agents);
 	}
 
+//	/**
+//	 * Add a traffic blockade
+//	 *
+//	 * @param block
+//	 */
+//	public void addBlockade(TrafficBlockade1 block) {
+//		blocks.add(block);
+//		//
+//	}
+//
+//	/**
+//	 * Remove a TrafficBlockade
+//	 *
+//	 * @param block
+//	 * 				The blockade to remove
+//	 */
+//	public void removeBlockade(TrafficBlockade1 block) {
+//		blocks.remove(block);
+//		//
+//	}
+//
+//	/**
+//	 * Clear any cached blockades
+//	 */
+//	public void clearBlockadeCache() {
+//		blockadeLines = null;
+//		allBlockingLines = null;
+//		openLines = null;
+//		graph = null;
+//	}
 
 //	/**
 //	 * Get all TrafficBlockades inside this area.
@@ -245,18 +288,12 @@ public class TrafficArea1 {
 				checkedPoint.add(line.getEndPoint());
 			}
 //			createPassableEdges(openLines);
-//			TrafficSimulator.debug.show("Full Lines", new ShapeDebugFrame.AWTShapeInfo(getArea().getShape(), getArea() + "", Color.blue, false),
-//					new ShapeDebugFrame.Line2DShapeInfo(openLines, "openLines", Color.green, false, true)
-//
-//			);
+
 		}
 
 		return Collections.unmodifiableList(openLines);
 	}
-//
-//	private Line2D[] getBlockadeLines() {
-//		return null;
-//	}
+
 
 	private void createPassableEdges(List<Line2D> openLines) {
 		for (Edge edge : getArea().getEdges()) {
@@ -356,7 +393,8 @@ public class TrafficArea1 {
 	}
 
 	private List<Line2D> getAllAreaLines() {
-		List<Line2D> lines = new ArrayList<Line2D>(getBlockingLines());
+//		List<Line2D> lines = new ArrayList<Line2D>(getBlockadeLines());
+		List<Line2D> lines = new ArrayList<Line2D>();
 		lines.addAll(getAreaLines());
 		return lines;
 	}
@@ -407,14 +445,15 @@ public class TrafficArea1 {
 		Point midPoint = new Point((int) (line.getOrigin().getX() + line.getEndPoint().getX()) / 2, (int) (line.getOrigin().getY() + line.getEndPoint().getY()) / 2);
 		if (!getArea().getShape().contains(midPoint)) {
 			return false;
-//		} for (TrafficBlockade1 blockade : getBlockades()) {
-//			if (blockade.getBlockade().getShape().contains(midPoint)) {
-//				return true;
-//			}
-//		}
-		}
+		} /*for (TrafficBlockade1 blockade : getBlockades()) {
+			if (blockade.getBlockade().getShape().contains(midPoint)) {
+				return true;
+				//return false;
+			}
+		}*/
 		return true;
 	}
+
 
 	@Override
 	public int hashCode() {

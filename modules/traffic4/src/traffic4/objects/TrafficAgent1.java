@@ -64,51 +64,73 @@ public class TrafficAgent1 {
          * Recompute the distance to the agent and the closest point on the
          * line.
          *
-         * @param from
-         *            The position of the agent.
+         * @param from The position of the agent.
          */
         public void computeClosestPoint(Point2D from) {
-            if(from.equals(origin) && distance >=  0 && closest != null) {
+            if (from.equals(origin) && distance >= 0 && closest != null) {
                 return;
             }
             origin = from;
             closest = GeometryTools2D.getClosestPointOnSegment(wall, origin);
-            line = new Line2D (origin, closest);
+            line = new Line2D(origin, closest);
             vector = line.getDirection();
             distance = vector.getLength();
         }
 
-
-
-        public TrafficArea1 getArea() {
-            return area;
-        }
-
-        public Vector2D getVector() {
-            return vector;
-        }
-
-
-
+        /**
+         * Get the closest poit to the agent on the wall.
+         *
+         * @return
+         */
         public Point2D getClosestPoint() {
             return closest;
         }
 
+        /**
+         * Decrease the distance from the wall by an amount.
+         *
+         * @param d The amount by which the distance is decreased.
+         */
         public void decreaseDistance(double d) {
             distance -= d;
         }
 
-        public Point2D getOrigin() {
-            return origin;
-        }
-
+        /**
+         * Get the wall this wall information represents.
+         *
+         * @return The wall.
+         */
         public Line2D getWall() {
             return wall;
         }
 
+        /**
+         * Get thd line from agent to the closest point on the wall.
+         *
+         * @return
+         */
         public Line2D getLine() {
             return line;
         }
+
+        /**
+         * Get the vector from the agent to the closest point on the wall.
+         *
+         * @return
+         */
+        public Vector2D getVector() {
+            return vector;
+        }
+
+        /**
+         * Get the area the wall lies in.
+         *
+         * @return The area of this wall.
+         */
+        public TrafficArea1 getArea() {
+            return area;
+        }
+
 
     }
 
@@ -127,8 +149,6 @@ public class TrafficAgent1 {
     // Force away from walls
     private final double[] wallsForce = new double[D];
 
-    //List of blocking lines near the agent
-    private List<WallInformation> blockingLines;
 
     // Location
     private final double[] location = new double[D];
@@ -138,6 +158,9 @@ public class TrafficAgent1 {
 
     // Force
     private final double[] force = new double[D];
+
+    //List of blocking lines near the agent
+    private List<WallInformation> blockingLines;
 
     private double radius;
     private double velocityLimit;
@@ -175,14 +198,10 @@ public class TrafficAgent1 {
     /**
      * Construct a TrafficAgent.
      *
-     * @param h
-     *            The Human wrapped by this object.
-     * @param manager
-     *            The traffic manager.
-     * @param radius
-     *            The radius of this agent in mm.
-     * @param velocityLimit
-     *            The velicity limit.
+     * @param h             The Human wrapped by this object.
+     * @param manager       The traffic manager.
+     * @param radius        The radius of this agent in mm.
+     * @param velocityLimit The velicity limit.
      */
     public TrafficAgent1(Human h, TrafficManager1 manager, double radius, double velocityLimit) {
         this.human = h;
@@ -195,6 +214,7 @@ public class TrafficAgent1 {
         historyCount = 0;
         positionHistoryFrequency = DEFAULT_POSITION_HISTORY_FREQUENCY;
         mobile = true;
+        blockingLines = new ArrayList<WallInformation>();
     }
 
     /**
@@ -206,12 +226,22 @@ public class TrafficAgent1 {
         return human;
     }
 
+    /**
+     * Get the maximum velocity of this agent.
+     *
+     * @return The maximum velocity.
+     */
     public double getMaximumVelocity() {
         return velocityLimit;
     }
 
+    /**
+     * Set the maximum velocity of this agent.
+     *
+     * @param vlim The new maximum velocity limit
+     */
     public void setMaximumVelocity(double vlim) {
-       velocityLimit = vlim;
+        velocityLimit = vlim;
     }
 
 
@@ -259,11 +289,11 @@ public class TrafficAgent1 {
         positionHistoryFrequency = n;
     }
 
-    public double getX(){
+    public double getX() {
         return location[0];
     }
 
-    public double getY(){
+    public double getY() {
         return location[1];
     }
 
@@ -286,8 +316,7 @@ public class TrafficAgent1 {
     /**
      * Set the radius of this agent.
      *
-     * @param radius
-     *            The new radius in mm.
+     * @param radius The new radius in mm.
      */
     public void setRadius(double radius) {
         this.radius = radius;
@@ -302,10 +331,20 @@ public class TrafficAgent1 {
         return this.radius;
     }
 
+    /**
+     * Set the height of this agent.
+     *
+     * @param height
+     */
     public void setHeight(double height) {
         this.height = height;
     }
 
+    /**
+     * Get the height of this agent.
+     *
+     * @return height
+     */
     public double getHeight() {
         return this.height;
     }
@@ -313,11 +352,10 @@ public class TrafficAgent1 {
     /**
      * Set the path this agent wants to take.
      *
-     * @param steps
-     *            The new path.
+     * @param steps The new path.
      */
     public void setPath(List<PathElement> steps) {
-        if(steps == null || steps.isEmpty()) {
+        if (steps == null || steps.isEmpty()) {
             clearPath();
             return;
         }
@@ -326,7 +364,8 @@ public class TrafficAgent1 {
         finalDestination = steps.get(steps.size() - 1).getGoal();
         currentDestination = null;
         currentPathElement = null;
-
+        Logger.debug(this + " destination set " + path);
+        Logger.debug(this + " final destination set " + destinationForce);
     }
 
     /**
@@ -380,10 +419,8 @@ public class TrafficAgent1 {
      * Set the location of this agent. This method will also update the position
      * history (if enabled).
      *
-     * @param x
-     *            location x
-     * @param y
-     *            location y
+     * @param x location x
+     * @param y location y
      */
     public void setLocation(double x, double y) {
         if (currentArea == null || !currentArea.contains(x, y)) {
@@ -439,7 +476,7 @@ public class TrafficAgent1 {
 
     private boolean haveThisAreaInPath(TrafficArea1 newArea) {
         for (PathElement path : getPath()) {
-            if(path.getAreaID().equals(newArea.getArea().getID())) {
+            if (path.getAreaID().equals(newArea.getArea().getID())) {
                 return true;
             }
         }
@@ -466,7 +503,6 @@ public class TrafficAgent1 {
 //        if (isInsideBlockade()) {
 //            setMobile(true);
 //        }
-        setMobile(true);
         startPosition = currentArea;
     }
 
@@ -478,14 +514,22 @@ public class TrafficAgent1 {
     private void handleOutOfActivitiesCivilianMoves() {
         if (!(getHuman() instanceof Civilian))
             return;
-        if(currentArea.getArea().equals(startPosition.getArea()))
+        if (currentArea.getArea().equals(startPosition.getArea()))
             return;
-        if(!(currentArea.getArea() instanceof Building))
+        if (!(currentArea.getArea() instanceof Building))
             return;
-        if(getPath().isEmpty())
+        if (getPath().isEmpty())
             return;
-        if(haveThisAreaInPath(currentArea))
+        if (haveThisAreaInPath(currentArea))
             return;
+
+        Logger.warn(getHuman() + " moved to unplanned building (" + currentArea + ") " + this);
+        TrafficArea1 newDestination = getBestRoadNeighbor(currentArea, new HashSet<TrafficArea1>());
+        if (newDestination == null) {
+            Logger.warn(currentArea + " doesn't connect to any road!");
+            return;
+        }
+        setLocation(newDestination.getArea().getX(), newDestination.getArea().getY());
     }
 
     private TrafficArea1 getBestRoadNeighbor(TrafficArea1 area, HashSet<TrafficArea1> checked) {
@@ -499,12 +543,12 @@ public class TrafficAgent1 {
             }
         }
         for (TrafficArea1 neighbour : manager.getNeighbours(area)) {
-            if (checked.contains(neighbour)){
+            if (checked.contains(neighbour)) {
                 continue;
             }
-            TrafficArea1 resarea = getBestRoadNeighbor(neighbour, checked);
-            if (resarea != null) {
-                return resarea;
+            TrafficArea1 result = getBestRoadNeighbor(neighbour, checked);
+            if (result != null) {
+                return result;
             }
         }
         return null;
@@ -528,12 +572,18 @@ public class TrafficAgent1 {
         return mobile;
     }
 
+    /**
+     * Turn verbose logging on or off.
+     *
+     * @param v True for piles of debugging output, false for smaller piles.
+     */
     public void setVerbose(boolean v) {
         verbose = v;
         Logger.debug(this + " is now " + (verbose ? "" : "not ") + "verbose");
     }
 
-    private void updateGoal(){
+
+    private void updateGoal() {
         if (currentPathElement == null) {
             if (path.isEmpty()) {
                 currentDestination = finalDestination;
@@ -545,7 +595,7 @@ public class TrafficAgent1 {
                 }
             }
         }
-
+        // Head for the best point in the current path element
         if (currentPathElement != null) {
             //target edge
             currentDestination = currentPathElement.getGoal();
@@ -690,11 +740,11 @@ public class TrafficAgent1 {
 //        if (currentArea == null) {
 //            return false;
 //        }
-//        for (TrafficBlockade1 block : currentArea.getBlockades()) {
-//            if (block.containsLoc(location[0], location[1])) {
-//                return true;
-//            }
-//        }
+////        for (TrafficBlockade1 block : currentArea.getBlockades()) {
+////            if (block.contains(location[0], location[1])) {
+////                return true;
+////            }
+////        }
 //        return false;
 //    }
 
@@ -704,7 +754,8 @@ public class TrafficAgent1 {
     }
 
     private boolean crossedWall(double oldX, double oldY, double newX, double newY) {
-        Line2D moved =  new Line2D(oldX, oldY, newX - oldX, newY - oldY);;
+        Line2D moved = new Line2D(oldX, oldY, newX - oldX, newY - oldY);
+        ;
         double d = moved.getDirection().getLength();
         for (WallInformation wall : blockingLines) {
             if (wall.getDistance() >= d) {
@@ -712,19 +763,10 @@ public class TrafficAgent1 {
             }
             Line2D test = wall.getWall();
             if (GeometryTools2D.getSegmentIntersectionPoint(moved, test) != null) {
-                // if (crossedLine(oldX, oldY, newX, newY, test)) {
-                /*
-                 * Logger.warn(this + " crossed wall");
-                 * Logger.warn("Old location: " + oldX + ", " + oldY);
-                 * Logger.warn("New location: " + newX + ", " + newY);
-                 * Logger.warn("Movement line: " + moved);
-                 * Logger.warn("Wall         : " + test);
-                 * Logger.warn("Crossed at " +
-                 * GeometryTools2D.getSegmentIntersectionPoint(moved, test));
-                 */
                 return true;
             }
         }
+
         return false;
     }
 
@@ -756,19 +798,28 @@ public class TrafficAgent1 {
             wall.computeClosestPoint(position);
         }
 
-        for (int i = 1; i <= blockingLines.size(); i++) {
+        for (int i = 0; i <= blockingLines.size(); i++) {
             WallInformation wall = blockingLines.get(i);
             for (int j = i; j >= 0; j--) {
-                if (j == 0) {
-                    blockingLines.remove(i);
-                    blockingLines.add(0, wall);
-                } else if (blockingLines.get(j - 1).getDistance() < wall.getDistance()) {
-                    if (j == i) {
-                        break;
-                    }
+//                if (j == 0) {
+//                    blockingLines.remove(i);
+//                    blockingLines.add(0, wall);
+//                } else if (blockingLines.get(j - 1).getDistance() < wall.getDistance()) {
+//                    if (j == i) {
+//                        break;
+//                    }
+//                    blockingLines.remove(i);
+//                    blockingLines.add(j, wall);
+//                    break;
+//                }
+                if (blockingLines.get(j - 1).getDistance() < wall.getDistance()) {
                     blockingLines.remove(i);
                     blockingLines.add(j, wall);
                     break;
+                }
+                if (j == i) {
+                    blockingLines.remove(i);
+                    blockingLines.add(0, wall);
                 }
             }
         }

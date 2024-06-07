@@ -525,11 +525,10 @@ public class TrafficAgent {
 		findBlockingLines();
 		if (insideBlockade()) {
 			Logger.debug(this + " inside blockade");
-			//setMobile(false);
-			setMobile(true);
+			setMobile(false);
+//			setMobile(true);
 		}
 		startPosition = currentArea;
-		setMobile(true);
 	}
 
 	/**

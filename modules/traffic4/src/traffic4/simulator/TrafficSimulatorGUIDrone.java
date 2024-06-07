@@ -302,6 +302,9 @@ public class TrafficSimulatorGUIDrone extends JPanel {
         }
 
         //No drawing of the blockades
+        private void drawBlockades(Graphics2D g) {
+
+        }
 
         private void drawAgents(Graphics2D graphics) {
             for (TrafficAgent1 agent : manager.getALLAgents()) {

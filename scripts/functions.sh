@@ -206,6 +206,10 @@ function startSims {
   echo "waiting for traffic to connect..."
   waitFor $LOGDIR/traffic-out.log "success"
 
+  execute traffic4 "java -Xmx1024m -cp $CP:$BASEDIR/jars/rescuecore2.jar:$BASEDIR/jars/standard.jar:$BASEDIR/jars/traffic4.jar -Dlog4j.log.dir=$LOGDIR rescuecore2.LaunchComponents traffic4.simulator.TrafficSimulator -c $CONFIGDIR/traffic4.cfg $GUI_OPTION $*"
+    echo "waiting for traffic to connect..."
+    waitFor $LOGDIR/traffic4-out.log "success"
+
   # execute fire "java -Xmx1024m -cp $CP:$BASEDIR/jars/rescuecore2.jar:$BASEDIR/jars/standard.jar:$BASEDIR/jars/resq-fire.jar -Dlog4j.log.dir=$LOGDIR rescuecore2.LaunchComponents firesimulator.FireSimulatorWrapper -c $CONFIGDIR/resq-fire.cfg $GUI_OPTION $*"
   # echo "waiting for fire to connect..."
   # waitFor $LOGDIR/fire-out.log "success"

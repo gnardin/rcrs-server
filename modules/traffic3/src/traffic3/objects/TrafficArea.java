@@ -476,8 +476,8 @@ public class TrafficArea {
 			return false;
 		for (TrafficBlockade blockade : getBlockades()) {
 			if (blockade.getBlockade().getShape().contains(midPoint))
-				//return false;
-				return true;
+				return false;
+//				return true;
 		}
 		return true;
 
