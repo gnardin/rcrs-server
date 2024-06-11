@@ -301,11 +301,6 @@ public class TrafficSimulatorGUIDrone extends JPanel {
             }
         }
 
-        //No drawing of the blockades
-        private void drawBlockades(Graphics2D g) {
-
-        }
-
         private void drawAgents(Graphics2D graphics) {
             for (TrafficAgent1 agent : manager.getALLAgents()) {
                 double agentX = agent.getX();
@@ -318,8 +313,8 @@ public class TrafficSimulatorGUIDrone extends JPanel {
                 double velocityY = agentY + (agent.getvY() * 1000);
                 double forceX = agentX + (agent.getfX() * FORCE_GUI_FACTOR);
                 double forceY = agentY + (agent.getfY() * FORCE_GUI_FACTOR);
-                double heightX = agentX + agent.getHeight();
-                double heightY = agentY + agent.getHeight();
+//                double heightX = agentX + agent.getHeight();
+//                double heightY = agentY + agent.getHeight();
 
                 int x = transform1.xToScreen(agentX);
                 int y = transform1.yToScreen(agentY);
@@ -331,8 +326,8 @@ public class TrafficSimulatorGUIDrone extends JPanel {
                 int vx = transform1.xToScreen(velocityX);
                 int fy = transform1.yToScreen(forceY);
                 int fx = transform1.xToScreen(forceX);
-                int hx = transform1.xToScreen(heightX);
-                int hy = transform1.yToScreen(heightY);
+//                int hx = transform1.xToScreen(heightX);
+//                int hy = transform1.yToScreen(heightY);
                 int ellipseWidth = x2 - x1;
                 int ellipseHeight = y1 - y2;
 

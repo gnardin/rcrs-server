@@ -148,32 +148,6 @@ public class TrafficManager1 {
         agents.put(agent.getHuman(), agent);
     }
 
-//    /**
-//     * Regisyer a new TrafficBlockade
-//     */
-//    public void register(TrafficBlockade1 block) {
-//        blocks.put(block.getBlockade(), block);
-//        blockadeID.put(block.getBlockade().getID().getValue(), block);
-//    }
-//
-//    /**
-//     * Remove a blockade
-//     *
-//     * @param block
-//     */
-//    public void remove(TrafficBlockade1 block) {
-//        remove(block.getBlockade());
-//    }
-//
-//    /**
-//     * Remove a blockade.
-//     *
-//     * @param block
-//     */
-//    public void remove(Blockade block) {
-//        blocks.remove(block);
-//        blockadeID.remove(block.getID().getValue());
-//    }
 
     /**
      * Get all traffic agents
@@ -193,14 +167,7 @@ public class TrafficManager1 {
         return Collections.unmodifiableCollection(areas.values());
     }
 
-//    /**
-//     * Get all TrafficBlockades
-//     *
-//     * @return All traffic blockades
-//     */
-//    public Collection<TrafficBlockade1> getBlockades() {
-//        return Collections.unmodifiableCollection(blocks.values());
-//    }
+
 
     /**Compute pre cached information about the world.
      *
@@ -219,10 +186,6 @@ public class TrafficManager1 {
     public TrafficArea1 getTrafficAreaforDrone(Area area) {
         return areas.get(area);
     }
-
-//    public TrafficBlockade1 getTrafficBlockade(Blockade blockade) {
-//        return blocks.get(blockade);
-//    }
 
     public TrafficAgent1 getTrafficAgentForDrone(Human human) {
         return agents.get(human);

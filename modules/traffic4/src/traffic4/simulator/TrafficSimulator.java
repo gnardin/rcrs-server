@@ -205,10 +205,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     }
 
 
-//    private void clearAreaCache(EntityID entityArea) {
-//        manager.getTrafficAreaforDrone((Area) model.getEntity(entityArea)).clearBlockadeCache();
-//    }
-
     private void convertAreaToTrafficArea(Area area) {
         manager.register(new TrafficArea1(area));
     }
@@ -228,7 +224,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         double velocityLimit = 0;
         if(human instanceof Drone) {
             radius = AGENT_RADIUS;
-//            height = AGENT_HEIGHT;
             velocityLimit = agentVelocityGenerator.nextValue();
             TrafficAgent1 agent = new TrafficAgent1(human, manager, radius, velocityLimit);
             agent.setLocation(human.getX(), human.getY());
@@ -339,7 +334,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         Point2D edgeMid = getBestPoint(incomingEdge, destination);
         Line2D wallLine = incomingEdge.getLine();
 
-        int distance = 600;
+        int distance = 700;
         while (distance > 0) {
             Vector2D offset = wallLine.getDirection().getNormal().normalised().scale(distance);
             Point2D destinationXY = edgeMid.plus(offset);
@@ -450,10 +445,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 //                    return true;
 //                //return false;
 //            }
-//            double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
+            double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
 
-//            if (minDist < TrafficSimulator.AGENT_RADIUS / 2)
-//                return false;
+            if (minDist < TrafficSimulator.AGENT_RADIUS / 2)
+                return false;
             if (lastArea == null || lastArea == area) {
                 SameAreaElements.add(path);
             } else {
@@ -475,10 +470,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 
         for (int i = 1; i < sameAreaElem.size(); i++) {
             Line2D line2D = new Line2D(sameAreaElem.get(i - 1).getGoal(), sameAreaElem.get(i).getGoal());
-//            for (Line2D block : lastArea.getAllBlockingLines()) {
-//                if (GeometryTools2D.getSegmentIntersectionPoint(line2D, block) != null)
-//                    return false;
-//            }
+            for (Line2D block : lastArea.getAllBlockingLines()) {
+                if (GeometryTools2D.getSegmentIntersectionPoint(line2D, block) != null)
+                    return false;
+            }
         }
         return true;
     }
@@ -502,51 +497,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         }
         return min;
     }
-
-//    private Civilian handleDetect(AKDetect detect, ChangeSet changes) {
-//        EntityID agentID = detect.getAgentID();
-//        EntityID targetID = detect.getTarget();
-//        Entity agent = model.getEntity(agentID);
-//        Entity target = model.getEntity(targetID);
-//        if (agent == null) {
-//            Logger.warn("Rejecting detect command from agent: " + agentID + " agent does not exist");
-//            return null;
-//        }
-//        if (!(agent instanceof Drone)) {
-//            Logger.warn("Rejecting detect command from agent: " + agentID + ". The agent type is: " + agent.getURN());
-//            return null;
-//        }
-//        if (target == null) {
-//            Logger.warn("Rejecting detect command from agent: " + agentID + ". Target" + targetID + " does not exist");
-//            return null;
-//        }
-//        Drone drone = (Drone) agent;
-//        Civilian civ = (Civilian) target;
-//        if (civ.isBuriednessDefined() && civ.getBuriedness() > 0) {
-//            int x = civ.getX();
-//            int y = civ.getY();
-//            Logger.debug("Civilian detected at " + x + ", " + y);
-//        }
-//        if (drone.isBatteryDefined() && drone.getBattery() == 0) {
-//            Logger.warn("Rejecting detect command from agent " + agentID + ". The drone is out of battery");
-//            return null;
-//        }
-//        if (civ.isPositionDefined() || !civ.isPositionDefined() || !civ.getPosition().equals(civ.getPosition())) {
-//            Logger.warn("Rejecting detect command from agent + " + agentID + ". Target is non-adjacent " + targetID);
-//            return null;
-//        }
-//        //all checks passed
-//        civ.setPosition(agentID);
-//        civ.undefineX();
-//        civ.undefineY();
-//        changes.addChange(civ, civ.getPositionProperty());
-//        changes.addChange(civ, civ.getXProperty());
-//        changes.addChange(civ, civ.getYProperty());
-//        manager.getTrafficAgentForDrone(civ).setMobile(false);
-//        manager.getTrafficAgentForDrone(drone).setMobile(false);
-//        return civ;
-//    }
-
 
     private void timestep() {
         long start = System.currentTimeMillis();

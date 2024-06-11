@@ -134,12 +134,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       if (next instanceof AKMove) {
         handleMove((AKMove) next);
       }
-//      if (next instanceof AKFly) {
-//        handleFly((AKFly) next);
-//      }
-//      if (next instanceof AKDetect) {
-//
-//      }
       if (next instanceof AKLoad) {
         handleLoad((AKLoad) next, changes);
       }

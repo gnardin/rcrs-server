@@ -13,6 +13,8 @@ import rescuecore2.misc.geometry.GeometryTools2D;
 import rescuecore2.misc.geometry.Point2D;
 import rescuecore2.misc.geometry.Vector2D;
 import rescuecore2.misc.geometry.Line2D;
+import org.apache.log4j.Logger;
+
 
 import rescuecore2.standard.entities.Area;
 import rescuecore2.standard.entities.Edge;
@@ -48,9 +50,9 @@ public class TrafficArea1 {
 	public TrafficArea1(final Area area) {
 		this.area = area;
 		agents = new HashSet<TrafficAgent1>();
-//		blockingLines = null;
+		blockingLines = null;
 		areaLines = null;
-//		allBlockingLines = null;
+		allBlockingLines = null;
 		Rectangle2D rect = area.getShape().getBounds2D();
 		bounds = new Rectangle((float) rect.getMinX(), (float) rect.getMinY(), (float) rect.getMaxX(), (float) rect.getMaxY());
 	}
@@ -73,11 +75,11 @@ public class TrafficArea1 {
 		return bounds;
 	}
 
-//	/**
-//	 * Get all lines around this area that block movement.
-//	 *
-//	 * @return All area lines that block movement.
-//	 */
+	/**
+	 * Get all lines around this area that block movement.
+	 *
+	 * @return All area lines that block movement.
+	 */
 	public List<Line2D> getBlockingLines() {
 		if (blockingLines == null) {
 			blockingLines = new ArrayList<Line2D>();
@@ -111,12 +113,12 @@ public class TrafficArea1 {
 //		return Collections.unmodifiableList(blockingLines);
 //	}
 
-//	/**
-//	 * Get all lines that block movement. This includes impassable edges of the
-//	 * area and all blockade lines.
-//	 *
-//	 * @return All movement-blocking lines.
-//	 */
+	/**
+	 * Get all lines that block movement. This includes impassable edges of the
+	 * area and all blockade lines.
+	 *
+	 * @return All movement-blocking lines.
+	 */
 	public List<Line2D> getAllBlockingLines() {
 		if (allBlockingLines == null) {
 			allBlockingLines = new ArrayList<Line2D>();
@@ -244,8 +246,7 @@ public class TrafficArea1 {
 			List<Line2D> openLines = getOpenLines();
 			graph = new int[openLines.size()][openLines.size()];
 			for (int i = 0; i < graph.length; i++) {
-				FOR:
-				for (int j = 0; j < graph.length; j++) {
+				FOR: for (int j = 0; j < graph.length; j++) {
 					Line2D line = new Line2D(getMidPoint(openLines.get(i).getOrigin(), openLines.get(i).getEndPoint()),
 							getMidPoint(openLines.get(j).getOrigin(), openLines.get(j).getOrigin()));
 					for (Line2D is : getAllBlockingLines()) {
@@ -313,9 +314,9 @@ public class TrafficArea1 {
 	private static List<Line2D> minus(List<Line2D> edgeLines, Line2D line) {
 		List<Line2D> result = new ArrayList<Line2D>();
 		for (Line2D edgeLine : edgeLines) {
-			// System.out.println("Edge====");
-			// System.out.println(edgeLine);
-			// System.out.println(line);
+			 System.out.println("Edge====");
+			 System.out.println(edgeLine);
+			 System.out.println(line);
 			Line2D clone = new Line2D(edgeLine.getOrigin(), edgeLine.getEndPoint());
 			boolean lineContaintEdgeOrigin = GeometryTools2D.contains(line, edgeLine.getOrigin());
 			boolean lineContaintEdgeEnd = GeometryTools2D.contains(line, edgeLine.getEndPoint());
@@ -403,38 +404,23 @@ public class TrafficArea1 {
 
 		Line2D newLineToUp = new Line2D(origin, getBaseVectorDrone().scale(1000));
 		Line2D newLineToDown = new Line2D(origin, getBaseVectorDrone().scale(-1000));
-//		TrafficSimulator.debug.show("Init", new ShapeDebugFrame.AWTShapeInfo(getArea().getShape(), getArea() + "", Color.blue, false), new ShapeDebugFrame.Line2DShapeInfo(
-//				newLineToUp, "lineToUp", Color.red, false, true), new ShapeDebugFrame.Line2DShapeInfo(newLineToDown, "lineTodown", Color.green, false, true));
-
 		for (Line2D line : getAllAreaLines()) {
 			if (line.getOrigin().equals(origin) || line.getEndPoint().equals(origin))
 				continue;
 			double distance1 = GeometryTools2D.getDistance(newLineToUp.getOrigin(), newLineToUp.getEndPoint());
-			// newLineToUp.getDirection().scale(distance1);
+			 newLineToUp.getDirection().scale(distance1);
 			Point2D point1 = GeometryTools2D.getSegmentIntersectionPoint(newLineToUp, line);
 			if (point1 != null && !GeometryTools2D.nearlyZero(distance1))
 				newLineToUp.setEnd(point1);
 			double distance2 = GeometryTools2D.getDistance(newLineToDown.getOrigin(), newLineToDown.getEndPoint());
-			// newLineToDown.senewLineToDown.getDirection().scale(distance2);
+//			 newLineToDown.senewLineToDown.getDirection().scale(distance2);
 			Point2D point2 = GeometryTools2D.getSegmentIntersectionPoint(newLineToDown, line);
 			if (point2 != null && !GeometryTools2D.nearlyZero(distance2))
 				newLineToDown.setEnd(point2);
-//			TrafficSimulator.debug.show(
-//					"Checking",
-//					// new ShapeDebugFrame.AWTShapeInfo(getArea().getShape(),
-//					// getArea()+"", Color.blue, false),
-//					new ShapeDebugFrame.Line2DShapeInfo(line, "checkline", Color.MAGENTA, false, true), new ShapeDebugFrame.Line2DShapeInfo(newLineToUp, "lineToUp " + distance1,
-//							Color.red, false, true), new ShapeDebugFrame.Line2DShapeInfo(newLineToDown, "lineTodown " + distance2, Color.green, false, true),
-//					new ShapeDebugFrame.Point2DShapeInfo(point1, "Point1" + point1, Color.red, true), new ShapeDebugFrame.Point2DShapeInfo(point2, "Point2" + point2, Color.green,
-//							true));
 		}
 		boolean isValidLineToUp = isValidLine(newLineToUp);
 		boolean isValidLineToDown = isValidLine(newLineToDown);
-//		TrafficSimulator.debug.show("Final",
-//		// new ShapeDebugFrame.AWTShapeInfo(getArea().getShape(), getArea()+"",
-//		// Color.blue, false),
-//				new ShapeDebugFrame.Line2DShapeInfo(newLineToUp, "lineToUp:" + isValidLineToUp, Color.red, isValidLineToUp, true), new ShapeDebugFrame.Line2DShapeInfo(
-//						newLineToDown, "lineTodown:" + isValidLineToDown, Color.green, isValidLineToDown, true));
+
 		if (isValidLineToUp)
 			openLines.add(newLineToUp);
 		if (isValidLineToDown)

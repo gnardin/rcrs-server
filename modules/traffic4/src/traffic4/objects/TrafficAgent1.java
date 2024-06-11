@@ -10,15 +10,20 @@ import rescuecore2.standard.entities.Civilian;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.Road;
 //import traffic4.manager.TrafficManager;
-import traffic3.objects.TrafficBlockade;
 import traffic4.manager.TrafficManager1;
 import traffic4.simulator.PathElement;
 import traffic4.simulator.TrafficConstants;
 
 import java.util.*;
 
+/**
+ * A TrafficAgent1 is a mobile object in the world.
+ */
 public class TrafficAgent1 {
 
+    /**
+     * This class is used to compute and cache wall related information.
+     */
     private static class WallInformation {
         //wall
         private Line2D wall;
@@ -164,7 +169,7 @@ public class TrafficAgent1 {
 
     private double radius;
     private double velocityLimit;
-    private double height;
+//    private double height;
 
     // The point this agent wants to reach.
     private Point2D finalDestination;
@@ -281,10 +286,22 @@ public class TrafficAgent1 {
         totalDistance = 0;
     }
 
+    /**
+     * Enable or disable position history recording.
+     *
+     * @param b
+     *          The new frequency.
+     */
     public void setPositionHistoryEnabled1(boolean b) {
         savePositionHistory = b;
     }
 
+    /**
+     * Set the rrequency of position history records. Once record will be created
+     * every nth microstep.
+     * @param n
+     *          The new frequency.
+     */
     public void setDefaultPositionHistoryFrequency(int n) {
         positionHistoryFrequency = n;
     }
@@ -331,23 +348,23 @@ public class TrafficAgent1 {
         return this.radius;
     }
 
-    /**
-     * Set the height of this agent.
-     *
-     * @param height
-     */
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    /**
-     * Get the height of this agent.
-     *
-     * @return height
-     */
-    public double getHeight() {
-        return this.height;
-    }
+//    /**
+//     * Set the height of this agent.
+//     *
+//     * @param height
+//     */
+//    public void setHeight(double height) {
+//        this.height = height;
+//    }
+//
+//    /**
+//     * Get the height of this agent.
+//     *
+//     * @return height
+//     */
+//    public double getHeight() {
+//        return this.height;
+//    }
 
     /**
      * Set the path this agent wants to take.
@@ -504,6 +521,7 @@ public class TrafficAgent1 {
 //            setMobile(true);
 //        }
         startPosition = currentArea;
+//        setMobile(true);
     }
 
     public void endTimestep() {
@@ -680,23 +698,24 @@ public class TrafficAgent1 {
         if (crossedWall(location[0], location[1], x, y)) {
             velocity[0] = 0;
             velocity[1] = 0;
+//            velocity[1] = 1;
             return;
         }
         velocity[0] = newVX;
         velocity[1] = newVY;
         if (newVX != 0 || newVY != 0) {
             double dist = v * dt;
-            for (TrafficAgent1.WallInformation wall : blockingLines) {
+            for (WallInformation wall : blockingLines) {
                 wall.decreaseDistance(dist);
             }
             setLocation(x, y);
         }
     }
 
-    private boolean hasLos(TrafficAgent1.WallInformation target, List<TrafficAgent1.WallInformation> blocking) {
+    private boolean hasLos(WallInformation target, List<TrafficAgent1.WallInformation> blocking) {
         Line2D line = target.getLine();
 
-        for (TrafficAgent1.WallInformation wall : blocking) {
+        for (WallInformation wall : blocking) {
             if (wall == target) {
                 break;
             }
@@ -722,7 +741,7 @@ public class TrafficAgent1 {
         Line2D line = new Line2D(source, target);
         double dist = line.getDirection().getLength();
 
-        for (TrafficAgent1.WallInformation wall : blockingLines) {
+        for (WallInformation wall : blockingLines) {
             if (wall.getDistance() > dist || wall.getArea() != area) {
                 break;
             }
@@ -755,7 +774,7 @@ public class TrafficAgent1 {
 
     private boolean crossedWall(double oldX, double oldY, double newX, double newY) {
         Line2D moved = new Line2D(oldX, oldY, newX - oldX, newY - oldY);
-        ;
+
         double d = moved.getDirection().getLength();
         for (WallInformation wall : blockingLines) {
             if (wall.getDistance() >= d) {
@@ -798,31 +817,22 @@ public class TrafficAgent1 {
             wall.computeClosestPoint(position);
         }
 
-        for (int i = 0; i <= blockingLines.size(); i++) {
+        for (int i = 1; i < blockingLines.size(); i++) {
             WallInformation wall = blockingLines.get(i);
             for (int j = i; j >= 0; j--) {
-//                if (j == 0) {
-//                    blockingLines.remove(i);
-//                    blockingLines.add(0, wall);
-//                } else if (blockingLines.get(j - 1).getDistance() < wall.getDistance()) {
-//                    if (j == i) {
-//                        break;
-//                    }
-//                    blockingLines.remove(i);
-//                    blockingLines.add(j, wall);
-//                    break;
-//                }
-                if (blockingLines.get(j - 1).getDistance() < wall.getDistance()) {
+                if (j == 0) {
+                    blockingLines.remove(i);
+                    blockingLines.add(0, wall);
+                } else if (blockingLines.get(j - 1).getDistance() < wall.getDistance()) {
+                    if (j == i) {
+                        break;
+                    }
                     blockingLines.remove(i);
                     blockingLines.add(j, wall);
                     break;
                 }
-                if (j == i) {
-                    blockingLines.remove(i);
-                    blockingLines.add(0, wall);
-                }
             }
-        }
+       }
     }
 
 
@@ -850,7 +860,7 @@ public class TrafficAgent1 {
                 dy = this.velocityLimit * dy;
             }
 
-            final double sss2 = 0.0002;
+            final double sss2 = 0.0001;
             destX = sss2 * (dx - velocity[0]);
             destY = sss2 * (dy - velocity[1]);
         } else {
@@ -1028,8 +1038,8 @@ public class TrafficAgent1 {
                 // Vector2D repulsionForce = wallForceVector.scale(factor / dt);
                 xSum += stopForce.getX();
                 ySum += stopForce.getY();
-                // xSum += repulsionForce.getX();
-                // ySum += repulsionForce.getY();
+//                 xSum += repulsionForce.getX();
+//                 ySum += repulsionForce.getY();
                 if (verbose) {
                     Logger.debug("Distance to wall : " + distance);
                     Logger.debug("Distance to wall : " + radii + " radii");

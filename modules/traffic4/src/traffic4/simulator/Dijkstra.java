@@ -9,8 +9,8 @@ public class Dijkstra {
     private int parent[];
     private long minCost[];
     private int mark[];
-    private int numberOfVertex;
-    private int marker;
+    private int numberOfVertex = 1;
+    private int marker = 1;
 
 
     public Dijkstra(int n) {

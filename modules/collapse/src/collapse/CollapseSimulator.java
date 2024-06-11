@@ -720,12 +720,12 @@ public class CollapseSimulator extends StandardSimulator implements
 				y = (int) d[1];
 				moveX = x;
 				moveY = y;
-				// Logger.debug("Move to " + x + ", " + y);
+				 Logger.debug("Move to " + x + ", " + y);
 				break;
 			case PathIterator.SEG_LINETO:
 				x = (int) d[0];
 				y = (int) d[1];
-				// Logger.debug("Line to " + x + ", " + y);
+				 Logger.debug("Line to " + x + ", " + y);
 				if (x == moveX && y == moveY) {
 					finished = true;
 				}

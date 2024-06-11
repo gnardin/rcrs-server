@@ -52,10 +52,6 @@ public class PathElement {
         return edgeLine;
     }
 
-//    public Point2D getTargetPoint() {
-//        return targetPoint;
-//    }
-
     /**
      * Get the list of waypoints.
      * @return The list of waypoints.
@@ -64,10 +60,10 @@ public class PathElement {
         return Collections.unmodifiableList(allPoints);
     }
 
-//    /**
-//     * Remove a waypoint
-//     * @param point the waipoint to remove.
-//     */
+    /**
+     * Remove a waypoint
+     * @param point the waipoint to remove.
+     */
     public void removeWayPoints(Point2D point) {
         allPoints.remove(point);
     }
