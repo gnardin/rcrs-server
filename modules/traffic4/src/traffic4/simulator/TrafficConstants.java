@@ -115,32 +115,32 @@ public class TrafficConstants {
         return W_FORCE_COEFFICIENT_B;
     }
 
-    /**
+   /* *//**
      Get the maximum height at which the ground affects drones.
      @return The ground force distance cutoff
-     */
+     *//*
     public static double getGroundDistanceCutoff() {
         return GROUND_DISTANCE_CUTOFF;
     }
 
-    /**
+    *//**
      Get the ground force function coefficient "A"
      @return The ground force function coefficient A
-     */
+     *//*
     public static double getGroundForceCoefficientA() {
         return GROUND_FORCE_COEFFICIENT_A;
     }
 
-    /**
+    *//**
      Get the ground force function coefficient "B"
      @return The ground force function coefficient B
-     */
+     *//*
     public static double getGroundF0rceCoefficientB() {
         return GROUND_F0RCE_COEFFICIENT_B;
     }
 
 
-
+*/
 
 
 

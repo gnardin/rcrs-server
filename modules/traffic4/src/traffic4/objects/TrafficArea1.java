@@ -30,8 +30,8 @@ import com.infomatiq.jsi.Rectangle;
 public class TrafficArea1 {
 	private Collection<TrafficAgent1> agents;
 //	private Collection<TrafficBlockade1> blocks;
-
-//	private Collection<Line2D> blockadeLines;
+//
+//	private List<Line2D> blockadeLines;
 	private List<Line2D> blockingLines;
 	private List<Line2D> allBlockingLines;
 	private List<Line2D> areaLines;
@@ -50,7 +50,9 @@ public class TrafficArea1 {
 	public TrafficArea1(final Area area) {
 		this.area = area;
 		agents = new HashSet<TrafficAgent1>();
+//		blocks = new HashSet<TrafficBlockade1>();
 		blockingLines = null;
+//		blockadeLines = null;
 		areaLines = null;
 		allBlockingLines = null;
 		Rectangle2D rect = area.getShape().getBounds2D();
@@ -87,6 +89,9 @@ public class TrafficArea1 {
 				if (!edge.isPassable()) {
 					blockingLines.add(edge.getLine());
 				}
+//				if (edge.isPassable()) {
+//					blockingLines.remove(edge.getLine());
+//				}
 			}
 		}
 		return Collections.unmodifiableList(blockingLines);
@@ -110,7 +115,7 @@ public class TrafficArea1 {
 //				blockadeLines.addAll(blockade.getLines());
 //			}
 //		}
-//		return Collections.unmodifiableList(blockingLines);
+//		return Collections.unmodifiableList(blockadeLines);
 //	}
 
 	/**
@@ -173,9 +178,9 @@ public class TrafficArea1 {
 //	 */
 //	public void addBlockade(TrafficBlockade1 block) {
 //		blocks.add(block);
-//		//
+//		clearBlockadeCache();
 //	}
-//
+
 //	/**
 //	 * Remove a TrafficBlockade
 //	 *
@@ -393,7 +398,7 @@ public class TrafficArea1 {
 		return baseVec;
 	}
 
-	private List<Line2D> getAllAreaLines() {
+	private List<Line2D> getAllBlockingAreaLines() {
 //		List<Line2D> lines = new ArrayList<Line2D>(getBlockadeLines());
 		List<Line2D> lines = new ArrayList<Line2D>();
 		lines.addAll(getAreaLines());
@@ -404,7 +409,7 @@ public class TrafficArea1 {
 
 		Line2D newLineToUp = new Line2D(origin, getBaseVectorDrone().scale(1000));
 		Line2D newLineToDown = new Line2D(origin, getBaseVectorDrone().scale(-1000));
-		for (Line2D line : getAllAreaLines()) {
+		for (Line2D line : getAllBlockingAreaLines()) {
 			if (line.getOrigin().equals(origin) || line.getEndPoint().equals(origin))
 				continue;
 			double distance1 = GeometryTools2D.getDistance(newLineToUp.getOrigin(), newLineToUp.getEndPoint());
@@ -429,14 +434,12 @@ public class TrafficArea1 {
 
 	private boolean isValidLine(Line2D line) {
 		Point midPoint = new Point((int) (line.getOrigin().getX() + line.getEndPoint().getX()) / 2, (int) (line.getOrigin().getY() + line.getEndPoint().getY()) / 2);
-		if (!getArea().getShape().contains(midPoint)) {
+		if (!getArea().getShape().contains(midPoint))
 			return false;
-		} /*for (TrafficBlockade1 blockade : getBlockades()) {
-			if (blockade.getBlockade().getShape().contains(midPoint)) {
-				return true;
-				//return false;
-			}
-		}*/
+//		for (TrafficBlockade1 blockade : getBlockades()) {
+//			if (blockade.getBlockade().getShape().contains(midPoint))
+//				return false;
+//		}
 		return true;
 	}
 

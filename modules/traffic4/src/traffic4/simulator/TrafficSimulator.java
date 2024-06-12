@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+import org.jfree.chart.block.Block;
 import org.uncommons.maths.number.NumberGenerator;
 import org.uncommons.maths.random.GaussianGenerator;
 
@@ -96,12 +97,19 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         model.addWorldModelListener(new WorldModelListener<StandardEntity>() {
                                         @Override
                                         public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-
+//                                            if (e instanceof Blockade) {
+//                                                convertBlockade((Blockade) e);
+//                                            }
                                         }
 
                                         @Override
                                         public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-
+//                                            if (e instanceof Blockade) {
+//                                                Blockade b = (Blockade) e;
+//                                                TrafficBlockade1 block = manager.getTrafficBlockade(b);
+//                                                block.getArea().removeBlockade(block);
+//                                                manager.remove(block);
+//                                            }
                                         }
         });
         gui.initialise();
@@ -184,7 +192,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         for (EntityID id : update.getChangeSet().getChangedEntities()) {
             StandardEntity entity = model.getEntity(id);
             switch (StandardEntityURN.fromInt(update.getChangeSet().getEntityURN(id))) {
-//                case ROAD:
+                case ROAD:
 //                case BUILDING:
 //                case AMBULANCE_CENTRE:
 //                case FIRE_STATION:
@@ -212,31 +220,31 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 //    public void convertBlockade(Blockade blockade) {
 //        Area area = (Area) model.getEntity(blockade.getPosition());
 //        TrafficArea1 a = manager.getTrafficAreaforDrone(area);
-////        TrafficBlockade1 block = new TrafficBlockade1(blockade, a);
+//        TrafficBlockade1 block = new TrafficBlockade1(blockade, a);
 //        manager.register(block);
-//
+//        a.addBlockade(block);
 //    }
 
     private void convertHumanDrone(Human human, NumberGenerator<Double> agentVelocityGenerator,
                                    NumberGenerator<Double> civilianVelocityGenerator) {
         double radius = 0;
-        double height = 0;
         double velocityLimit = 0;
-        if(human instanceof Drone) {
+        if (human instanceof Drone) {
             radius = AGENT_RADIUS;
             velocityLimit = agentVelocityGenerator.nextValue();
             TrafficAgent1 agent = new TrafficAgent1(human, manager, radius, velocityLimit);
             agent.setLocation(human.getX(), human.getY());
             manager.register(agent);
-        } /*else if(human instanceof RescueRobot) {
+        /*else if(human instanceof RescueRobot) {
             radius = AGENT_RADIUS;
             velocityLimit = civilianVelocityGenerator.nextValue();
         } *//*else if(human instanceof Civilian) {
-//            radius = CIVILIAN_RADIUS;
-//            velocityLimit = civilianVelocityGenerator.nextValue();
+            radius = CIVILIAN_RADIUS;
+            velocityLimit = civilianVelocityGenerator.nextValue();
         }*/ /*else {
             throw new IllegalArgumentException("Unrecognised agent type: " + human + " (" + human.getClass().getName() + ")");
         }*/
+        }
     }
 
 
@@ -442,8 +450,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             TrafficArea1 area = manager.getTrafficAreaforDrone((Area) model.getEntity(path.getAreaID()));
 //            for (TrafficBlockade1 block : area.getBlockades()) {
 //                if (block.getBlockade().getShape().contains(path.getGoal().getX(), path.getGoal().getY()))
-//                    return true;
-//                //return false;
+//                    return false;
+//                    //                    return true;
 //            }
             double minDist = getMinimumDistance(area.getAllBlockingLines(), path.getGoal());
 

@@ -24,6 +24,7 @@ import rescuecore2.standard.entities.StandardWorldModel;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 import gnu.trove.TIntProcedure;
+import traffic3.objects.TrafficBlockade;
 import traffic4.objects.TrafficAgent1;
 import traffic4.objects.TrafficArea1;
 import traffic4.objects.TrafficBlockade1;
@@ -38,9 +39,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TrafficManager1 {
 
     private Map<Integer, TrafficArea1> areaByID;
-//    private Map<Integer, TrafficBlockade1> blockadeID;
+    private Map<Integer, TrafficBlockade1> blockadeID;
     private Map<Area, TrafficArea1> areas;
-//    private Map<Blockade, TrafficBlockade1> blocks;
+    private Map<Blockade, TrafficBlockade1> blocks;
     private Map<Human, TrafficAgent1> agents;
     private Map<TrafficArea1, Collection<TrafficArea1>> areaNeighbours;
 
@@ -148,6 +149,39 @@ public class TrafficManager1 {
         agents.put(agent.getHuman(), agent);
     }
 
+//    /**
+//     * Register a new TrafficBlockade1.
+//     *
+//     * @param block
+//     *   The TrafficBlockade1 to register.
+//     */
+//    public void register(TrafficBlockade1 block) {
+//        blocks.put(block.getBlockade(), block);
+//        blockadeID.put(block.getBlockade().getID().getValue(), block);
+//    }
+//
+//    /**
+//     * Remove a blockade.
+//     *
+//     * @param block
+//     *   The TrafficBlockade1 to remove.
+//     */
+//    public void remove(TrafficBlockade1 block) {
+//        remove(block.getBlockade());
+//    }
+//
+//
+//    /**
+//     * Remove a blockade.
+//     *
+//     * @param block
+//     *   The Blockade to remove.
+//     */
+//    public void remove(Blockade block) {
+//        blocks.remove(block);
+//        blockadeID.remove(block.getID().getValue());
+//    }
+
 
     /**
      * Get all traffic agents
@@ -166,7 +200,15 @@ public class TrafficManager1 {
     public Collection<TrafficArea1> getAllAreas() {
         return Collections.unmodifiableCollection(areas.values());
     }
-
+//
+//    /**
+//     * Get all TrafficBlockades.
+//     *
+//     * @return All TrafficBlockades.
+//     */
+//    public Collection<TrafficBlockade1> getBlockades() {
+//        return Collections.unmodifiableCollection(blocks.values());
+//    }
 
 
     /**Compute pre cached information about the world.
@@ -186,6 +228,10 @@ public class TrafficManager1 {
     public TrafficArea1 getTrafficAreaforDrone(Area area) {
         return areas.get(area);
     }
+
+//    public TrafficBlockade1 getTrafficBlockade(Blockade b) {
+//        return blocks.get(b);
+//    }
 
     public TrafficAgent1 getTrafficAgentForDrone(Human human) {
         return agents.get(human);

@@ -268,7 +268,6 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         case POLICE_OFFICE:
         case REFUGE:
         case AMBULANCE_TEAM:
-        case DRONE:
         case RESCUE_ROBOT:
         case POLICE_FORCE:
         case CIVILIAN:
@@ -303,7 +302,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       NumberGenerator<Double> civilianVelocityGenerator) {
     double radius = 0;
     double velocityLimit = 0;
-    if (h instanceof FireBrigade || h instanceof PoliceForce || h instanceof AmbulanceTeam || h instanceof RescueRobot || h instanceof Drone) {
+    if (h instanceof FireBrigade || h instanceof PoliceForce || h instanceof AmbulanceTeam || h instanceof RescueRobot) {
       radius = RESCUE_AGENT_RADIUS;
       velocityLimit = agentVelocityGenerator.nextValue();
     } else if (h instanceof Civilian) {

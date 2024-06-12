@@ -518,10 +518,10 @@ public class TrafficAgent1 {
     public void beginTimestep() {
         findBlockingLines();
 //        if (isInsideBlockade()) {
-//            setMobile(true);
+//            setMobile(false);
 //        }
         startPosition = currentArea;
-//        setMobile(true);
+        setMobile(true);
     }
 
     public void endTimestep() {
@@ -675,7 +675,7 @@ public class TrafficAgent1 {
         double newVY = velocity[1] + dt * force[1];
         double v = Math.hypot(newVX, newVY);
         if (v > this.velocityLimit) {
-            // System.err.println("velocity exceeded velocityLimit");
+            System.err.println("velocity exceeded velocityLimit");
             v /= this.velocityLimit;
             newVX /= v;
             newVY /= v;
@@ -712,7 +712,7 @@ public class TrafficAgent1 {
         }
     }
 
-    private boolean hasLos(WallInformation target, List<TrafficAgent1.WallInformation> blocking) {
+    private boolean hasLos(WallInformation target, List<WallInformation> blocking) {
         Line2D line = target.getLine();
 
         for (WallInformation wall : blocking) {
@@ -759,11 +759,11 @@ public class TrafficAgent1 {
 //        if (currentArea == null) {
 //            return false;
 //        }
-////        for (TrafficBlockade1 block : currentArea.getBlockades()) {
-////            if (block.contains(location[0], location[1])) {
-////                return true;
-////            }
-////        }
+//        for (TrafficBlockade1 block : currentArea.getBlockades()) {
+//            if (block.contains(location[0], location[1])) {
+//                return true;
+//            }
+//        }
 //        return false;
 //    }
 
@@ -885,7 +885,7 @@ public class TrafficAgent1 {
 
     private void computeDroneForce(double[] result) {
         result[0] = 0;
-        result[1] = 1;
+        result[1] = 0;
         if (currentArea == null) {
             return;
         }
@@ -915,17 +915,18 @@ public class TrafficAgent1 {
             }
 
             double totalRd = radius + agent.getRadius();
-            double distanceSqrd = Math.hypot(dx, dy);
+            double distanceSquared = Math.hypot(dx, dy);
+//            double distanceSquared = dx * dx + dy * dy;
 
 
-            if (distanceSqrd == 0) {
+            if (distanceSquared == 0) {
                 xSum = TrafficConstants.getColocatedAgentNudge();
                 ySum = TrafficConstants.getColocatedAgentNudge();
                 colocated = true;
                 Logger.debug(this + "is co located with " + agent);
                 break;
             }
-            double distance = Math.sqrt(distanceSqrd);
+            double distance = Math.sqrt(distanceSquared);
             double dxN = dx / distance;
             double dyN = dy / distance;
             double negative_seperation = totalRd - distance;
@@ -954,6 +955,7 @@ public class TrafficAgent1 {
         }
         if (Double.isNaN(ySum)) {
             Logger.warn("computeDroneForce: Sum of Y force is NaN");
+            ySum = 0;
         }
         result[0] = xSum;
         result[1] = ySum;
