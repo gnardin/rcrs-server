@@ -1,7 +1,5 @@
 package rescuecore2.standard.entities;
 
-import javax.swing.plaf.basic.BasicInternalFrameUI.InternalFramePropertyChangeListener;
-
 import org.json.JSONObject;
 import rescuecore2.misc.Pair;
 import rescuecore2.worldmodel.EntityID;
@@ -24,9 +22,12 @@ public abstract class Robot extends StandardEntity {
     private IntArrayProperty  positionHistory;
     private IntProperty       travelDistance;
     private IntProperty       direction;
+    private IntProperty       stamina;
+    private IntProperty       hp;
+    private IntProperty       buriedness;
     private IntProperty       battery;
     private IntProperty       sensorRange; 
-    private DoubleProperty    height; 
+    private IntProperty    height;
     private DoubleProperty    detectionRange;
     private DoubleProperty    speed;
     private IntProperty       damage;
@@ -46,10 +47,13 @@ public abstract class Robot extends StandardEntity {
         positionHistory = new IntArrayProperty(
             StandardPropertyURN.POSITION_HISTORY );
         direction = new IntProperty( StandardPropertyURN.DIRECTION );
+        stamina = new IntProperty( StandardPropertyURN.STAMINA );
+        hp = new IntProperty( StandardPropertyURN.HP );
+        buriedness = new IntProperty( StandardPropertyURN.BURIEDNESS );
         battery = new IntProperty( StandardPropertyURN.BATTERY );
         sensorRange = new IntProperty( StandardPropertyURN.SENSOR_RANGE );
         detectionRange = new DoubleProperty( StandardPropertyURN.DETECTION_RANGE );
-        height = new DoubleProperty( StandardPropertyURN.HEIGHT );
+        height = new IntProperty( StandardPropertyURN.HEIGHT );
         speed = new DoubleProperty( StandardPropertyURN.SPEED );
         damage = new IntProperty( StandardPropertyURN.DAMAGE );
         registerProperties( x, y, position, positionHistory, travelDistance,
@@ -71,10 +75,13 @@ public abstract class Robot extends StandardEntity {
         position = new EntityRefProperty( other.position );
         positionHistory = new IntArrayProperty( other.positionHistory );
         direction = new IntProperty( other.direction );
+        stamina = new IntProperty( other.stamina );
+        hp = new IntProperty( other.hp );
+        buriedness = new IntProperty( other.buriedness );
         battery = new IntProperty( other.battery );
         sensorRange = new IntProperty( other.sensorRange );
         detectionRange = new DoubleProperty( other.detectionRange );
-        height = new DoubleProperty( other.height );
+        height = new IntProperty( other.height );
         speed = new DoubleProperty( other.speed );
         damage = new IntProperty( other.damage );
         registerProperties( x, y, position, positionHistory, travelDistance,
@@ -114,6 +121,12 @@ public abstract class Robot extends StandardEntity {
           return detectionRange;
         case DAMAGE:
           return damage;
+        case HP:
+          return hp;
+        case STAMINA:
+            return stamina;
+        case BURIEDNESS:
+            return buriedness;
         default:
           return super.getProperty( urn );
       }
@@ -279,7 +292,155 @@ public abstract class Robot extends StandardEntity {
     direction.undefine();
   }
 
-  /**
+
+    /**
+     * Get the stamina property.
+     *
+     * @return The stamina property.
+     */
+    public IntProperty getStaminaProperty() {
+        return stamina;
+    }
+
+
+    /**
+     * Get the stamina of this human.
+     *
+     * @return The stamina.
+     */
+    public int getStamina() {
+        return stamina.getValue();
+    }
+
+
+    /**
+     * Set the stamina of this human.
+     *
+     * @param stamina
+     *          The new stamina.
+     */
+    public void setStamina( int stamina ) {
+        this.stamina.setValue( stamina );
+    }
+
+
+    /**
+     * Find out if the stamina property has been defined.
+     *
+     * @return True if the stamina property has been defined, false otherwise.
+     */
+    public boolean isStaminaDefined() {
+        return stamina.isDefined();
+    }
+
+
+    /**
+     * Undefine the stamina property.
+     */
+    public void undefineStamina() {
+        stamina.undefine();
+    }
+
+
+    /**
+     * Get the hp property.
+     *
+     * @return The hp property.
+     */
+    public IntProperty getHPProperty() {
+        return hp;
+    }
+
+
+    /**
+     * Get the hp of this human.
+     *
+     * @return The hp of this human.
+     */
+    public int getHP() {
+        return hp.getValue();
+    }
+
+
+    /**
+     * Set the hp of this human.
+     *
+     * @param newHP
+     *          The new hp.
+     */
+    public void setHP( int newHP ) {
+        this.hp.setValue( newHP );
+    }
+
+
+    /**
+     * Find out if the hp property has been defined.
+     *
+     * @return True if the hp property has been defined, false otherwise.
+     */
+    public boolean isHPDefined() {
+        return hp.isDefined();
+    }
+
+
+    /**
+     * Undefine the hp property.
+     */
+    public void undefineHP() {
+        hp.undefine();
+    }
+
+    /**
+     * Get the buriedness property.
+     *
+     * @return The buriedness property.
+     */
+    public IntProperty getBuriednessProperty() {
+        return buriedness;
+    }
+
+
+    /**
+     * Get the buriedness of this human.
+     *
+     * @return The buriedness of this human.
+     */
+    public int getBuriedness() {
+        return buriedness.getValue();
+    }
+
+
+    /**
+     * Set the buriedness of this human.
+     *
+     * @param buriedness
+     *          The new buriedness.
+     */
+    public void setBuriedness( int buriedness ) {
+        this.buriedness.setValue( buriedness );
+    }
+
+
+    /**
+     * Find out if the buriedness property has been defined.
+     *
+     * @return True if the buriedness property has been defined, false otherwise.
+     */
+    public boolean isBuriednessDefined() {
+        return buriedness.isDefined();
+    }
+
+
+    /**
+     * Undefine the buriedness property.
+     */
+    public void undefineBuriedness() {
+        buriedness.undefine();
+    }
+
+
+
+    /**
    * Get the X property.
    *
    * @return The X property.
@@ -430,15 +591,16 @@ public abstract class Robot extends StandardEntity {
    * 
    * @return The height property
    */
-  public DoubleProperty getHeightProperty() {
+  public IntProperty getHeightProperty() {
     return height;
   }
 
-  /** Get the height of the robot
-   * 
+  /**
+   * Get the height of the robot
+   *
    * @return The height of the robot
    */
-  public double getHeight() {
+  public int getHeight() {
     return height.getValue();
   }
 
@@ -446,7 +608,7 @@ public abstract class Robot extends StandardEntity {
    * 
    * @param h The new height of the robot
    */
-  public void setHeight( double h ) {
+  public void setHeight( int h ) {
     this.height.setValue( h );
   }
 
@@ -679,6 +841,8 @@ public abstract class Robot extends StandardEntity {
     jsonObject.put( StandardPropertyURN.POSITION_HISTORY.toString(),
         this.isPositionHistoryDefined() ? this.getPositionHistory()
             : JSONObject.NULL );
+    jsonObject.put( StandardPropertyURN.DAMAGE.toString(),
+        this.isDamageDefined() ? this.getDamage() : JSONObject.NULL );
     jsonObject.put( StandardPropertyURN.BATTERY.toString(),
         this.isBatteryDefined() ? this.getBattery() : JSONObject.NULL );
     jsonObject.put( StandardPropertyURN.SPEED.toString(),

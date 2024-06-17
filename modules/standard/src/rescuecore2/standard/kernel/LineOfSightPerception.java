@@ -12,23 +12,12 @@ import java.util.Map;
 import kernel.Perception;
 import kernel.AgentProxy;
 
-import rescuecore2.standard.entities.StandardWorldModel;
-import rescuecore2.standard.entities.StandardEntity;
-import rescuecore2.standard.entities.Road;
-import rescuecore2.standard.entities.Area;
-import rescuecore2.standard.entities.Edge;
-import rescuecore2.standard.entities.Blockade;
-import rescuecore2.standard.entities.Building;
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.FireBrigade;
-import rescuecore2.standard.entities.StandardEntityURN;
-import rescuecore2.standard.entities.Refuge;
-import rescuecore2.standard.entities.AmbulanceCentre;
+import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 import rescuecore2.worldmodel.WorldModel;
 import rescuecore2.worldmodel.ChangeSet;
+import rescuecore2.worldmodel.properties.DoubleProperty;
 import rescuecore2.worldmodel.properties.IntProperty;
 import rescuecore2.config.Config;
 import rescuecore2.view.RenderedObject;
@@ -269,6 +258,19 @@ public class LineOfSightPerception implements Perception, GUIComponent {
         IntProperty damage = (IntProperty)human.getDamageProperty().copy();
         roundProperty(damage, damagePrecision);
         result.addChange(human, damage);
+    }
+
+    private void addRobotProperties(Robot robot, ChangeSet result) {
+        result.addChange(robot, robot.getPositionHistoryProperty());
+        result.addChange(robot, robot.getXProperty());
+        result.addChange(robot, robot.getYProperty());
+        result.addChange(robot, robot.getDirectionProperty());
+        result.addChange(robot, robot.getStaminaProperty());
+        result.addChange(robot, robot.getBuriednessProperty());
+        result.addChange(robot, robot.getHeightProperty());
+        result.addChange(robot, robot.getBatteryProperty());
+        //round battery and damage
+        IntProperty battery = (IntProperty) robot.getBatteryProperty().copy();
     }
 
     private void addSelfProperties(Human human, ChangeSet result) {

@@ -16,11 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.jfree.chart.block.Block;
 import rescuecore2.misc.collections.LazyMap;
-import rescuecore2.standard.entities.Area;
-import rescuecore2.standard.entities.Blockade;
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.StandardEntity;
-import rescuecore2.standard.entities.StandardWorldModel;
+import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 import gnu.trove.TIntProcedure;
@@ -42,7 +38,8 @@ public class TrafficManager1 {
     private Map<Integer, TrafficBlockade1> blockadeID;
     private Map<Area, TrafficArea1> areas;
     private Map<Blockade, TrafficBlockade1> blocks;
-    private Map<Human, TrafficAgent1> agents;
+//    private Map<Human, TrafficAgent1> agents;
+    private Map<Robot, TrafficAgent1> agents;
     private Map<TrafficArea1, Collection<TrafficArea1>> areaNeighbours;
 
     private SpatialIndex index;
@@ -53,9 +50,8 @@ public class TrafficManager1 {
     public TrafficManager1() {
         areas = new ConcurrentHashMap<Area, TrafficArea1>();
         areaByID = new ConcurrentHashMap<Integer, TrafficArea1>();
-//        blockadeID = new ConcurrentHashMap<Integer, TrafficBlockade1>();
-//        blocks = new ConcurrentHashMap<Blockade, TrafficBlockade1>();
-        agents = new ConcurrentHashMap<Human, TrafficAgent1>();
+//        agents = new ConcurrentHashMap<Human, TrafficAgent1>();
+        agents = new ConcurrentHashMap<Robot, TrafficAgent1>();
         areaNeighbours = new LazyMap<TrafficArea1, Collection<TrafficArea1>>() {
 
             @Override
@@ -233,9 +229,13 @@ public class TrafficManager1 {
 //        return blocks.get(b);
 //    }
 
-    public TrafficAgent1 getTrafficAgentForDrone(Human human) {
+    public TrafficAgent1 getTrafficAgentForDrone(Robot human) {
         return agents.get(human);
     }
+
+//    public TrafficAgent1 getTrafficAgentForDrone(Human human) {
+//        return agents.get(human);
+//    }
 
     public void computeNeighboursforDrone(Area a, StandardWorldModel world) {
         Collection<TrafficArea1> neighbours = areaNeighbours.get(getTrafficAreaforDrone(a));

@@ -25,6 +25,7 @@ import rescuecore2.misc.gui.ShapeDebugFrame;
 import rescuecore2.misc.gui.ShapeDebugFrame.Line2DShapeInfo;
 import rescuecore2.standard.components.StandardSimulator;
 import rescuecore2.standard.entities.*;
+import rescuecore2.standard.entities.Robot;
 import rescuecore2.standard.messages.*;
 import rescuecore2.worldmodel.ChangeSet;
 import rescuecore2.worldmodel.Entity;
@@ -90,8 +91,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         NumberGenerator<Double> civilianVelocityGenerator = new GaussianGenerator(CIVILIAN_VELOCITY_MEAN,
                 CIVILIAN_VELOCITY_SD, config.getRandom());
         for (StandardEntity next : model) {
-            if (next instanceof Human) {
-                convertHumanDrone((Human) next, agentVelocityGenerator, civilianVelocityGenerator);
+            if (next instanceof Robot /*Human*/) {
+                convertHumanDrone((Robot) next, agentVelocityGenerator, civilianVelocityGenerator);
             }
         }
         model.addWorldModelListener(new WorldModelListener<StandardEntity>() {
@@ -136,9 +137,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
          * Drones that have run out of battery are immobile
          */
         for (StandardEntity next : model) {
-            if (next instanceof Human) {
-                Human h = (Human) next;
-                if(h.isBatteryDefined() && h.getBattery() <= 0) {
+            if (next instanceof Robot) {
+//                Human h = (Human) next;
+                Robot h = (Robot) next;
+                if(h instanceof Drone && h.isBatteryDefined() && h.getBattery() <= 0) {
                     Logger.debug("Drone " + h + " is out of battery");
                     manager.getTrafficAgentForDrone(h).setMobile(false);
                 }
@@ -147,7 +149,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         timestep();
         for (TrafficAgent1 agent : manager.getALLAgents()) {
             //update position and position history for agents that were not loaded or unloaded
-            Human human = agent.getHuman();
+//            Human human = agent.getHuman();
+            Robot human = agent.getHuman();
             if(!agent.isMobile()) {
                 human.undefinePositionHistory();
                 human.setTravelDistance(0);
@@ -225,7 +228,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 //        a.addBlockade(block);
 //    }
 
-    private void convertHumanDrone(Human human, NumberGenerator<Double> agentVelocityGenerator,
+    private void convertHumanDrone(Robot/*Human*/ human, NumberGenerator<Double> agentVelocityGenerator,
                                    NumberGenerator<Double> civilianVelocityGenerator) {
         double radius = 0;
         double velocityLimit = 0;
@@ -250,7 +253,8 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 
 
     private void handleFly(AKFly fly) {
-        Human human = (Human) model.getEntity(fly.getAgentID());
+//        Human human = (Human) model.getEntity(fly.getAgentID());
+        Robot human = (Robot) model.getEntity(fly.getAgentID());
         TrafficAgent1 agent = manager.getTrafficAgentForDrone(human);
         EntityID current = human.getPosition();
         if(current == null) {
@@ -305,7 +309,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         agent.setPath(steps1);
     }
 
-    private Collection<? extends PathElement> getPathElements(Human human, Area lastArea, Edge lastEdge, Area nextArea,
+    private Collection<? extends PathElement> getPathElements(Robot human, Area lastArea, Edge lastEdge, Area nextArea,
                                                               Edge nextEdge) {
         if (human.getID().getValue() == 204623396) {
             System.out.println(
@@ -359,7 +363,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return null;
     }
 
-    private Collection<? extends PathElement> getPathElements2(Human human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
+    private Collection<? extends PathElement> getPathElements2(/*Human */Robot human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
         Collection<? extends PathElement> originalPath = getPathElements(human, lastArea, lastEdge, nextArea, nextEdge);
         if (isOriginalPathOk(originalPath))
             return originalPath;

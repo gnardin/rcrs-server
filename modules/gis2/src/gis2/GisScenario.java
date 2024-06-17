@@ -377,7 +377,7 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
       EntityID id = new EntityID(next);
       lastID = getNextId(model, config, lastID);
       Drone d = new Drone(new EntityID(lastID));
-      setupAgent(d, id, model, config);
+      setupRobot(d, id, model, config);
     }
     LOG.debug("Creating " + fsLocations.size() + " fire stations");
     for (int next : fsLocations) {
@@ -977,6 +977,28 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
    */
   public void removeRescueRobot(int location) {
     rrLocations.remove(location);
+  }
+
+  private void setupRobot(Robot r, EntityID position, StandardWorldModel model, Config config) throws ScenarioException {
+    Entity areaEntity = model.getEntity(position);
+    if (areaEntity == null) {
+      throw new ScenarioException("Area " + position + " does not exist");
+    }
+    if (!(areaEntity instanceof Area area)) {
+      throw new ScenarioException("Entity " + position + " is not an area: " + areaEntity);
+    }
+    r.setX(area.getX());
+    r.setY(area.getY());
+    r.setPosition(position);
+    r.setStamina(DEFAULT_STAMINA);
+    r.setHP(DEFAULT_HP);
+    r.setDamage(0);
+    r.setBuriedness(0);
+    r.setDirection(0);
+    r.setTravelDistance(0);
+    r.setPositionHistory(new int[0]);
+    model.addEntity(r);
+    LOG.debug("created " + r);
   }
 
   private void setupAgent(Human h, EntityID position, StandardWorldModel model, Config config)

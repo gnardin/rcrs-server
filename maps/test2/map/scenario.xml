@@ -11,7 +11,7 @@
   <scenario:policeoffice scenario:location="960"/>
   <scenario:rescuerobot scenario:location="273"/>
   <scenario:rescuerobot scenario:location="297"/>
-  <scenario:drone scenario:location="975"/>
-  <scenario:drone scenario:location="976"/>
-  <scenario:drone scenario:location="268"/>
+  <scenario:drone scenario:location="971"/>
+  <scenario:drone scenario:location="970"/>
+  <scenario:drone scenario:location="273"/>
 </scenario:scenario>

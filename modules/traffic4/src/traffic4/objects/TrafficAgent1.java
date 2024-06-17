@@ -8,6 +8,7 @@ import rescuecore2.misc.geometry.Vector2D;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.entities.Civilian;
 import rescuecore2.standard.entities.Human;
+import rescuecore2.standard.entities.Robot;
 import rescuecore2.standard.entities.Road;
 //import traffic4.manager.TrafficManager;
 import traffic4.manager.TrafficManager1;
@@ -190,7 +191,8 @@ public class TrafficAgent1 {
     private int positionHistoryFrequency;
     private int historyCount;
 
-    private Human human;
+//    private Human human;
+    private Robot robot;
     private TrafficManager1 manager;
 
     private boolean mobile;
@@ -208,8 +210,9 @@ public class TrafficAgent1 {
      * @param radius        The radius of this agent in mm.
      * @param velocityLimit The velicity limit.
      */
-    public TrafficAgent1(Human h, TrafficManager1 manager, double radius, double velocityLimit) {
-        this.human = h;
+    public TrafficAgent1(/*Human h,*/ Robot h, TrafficManager1 manager, double radius, double velocityLimit) {
+//        this.human = h;
+        this.robot = h;
         this.manager = manager;
         this.radius = radius;
         this.velocityLimit = velocityLimit;
@@ -227,8 +230,9 @@ public class TrafficAgent1 {
      *
      * @return The wrapped Human.
      */
-    public Human getHuman() {
-        return human;
+    public /*Human */Robot getHuman() {
+//        return human;
+        return robot;
     }
 
     /**
@@ -530,8 +534,9 @@ public class TrafficAgent1 {
 
 
     private void handleOutOfActivitiesCivilianMoves() {
-        if (!(getHuman() instanceof Civilian))
-            return;
+//        if (!(getHuman() instanceof Civilian))
+//            return;
+//        if (!(getHuman() instanceof ))
         if (currentArea.getArea().equals(startPosition.getArea()))
             return;
         if (!(currentArea.getArea() instanceof Building))
@@ -1073,7 +1078,8 @@ public class TrafficAgent1 {
         @Override
         public String toString() {
             StringBuffer sb = new StringBuffer("TrafficAgent[");
-            sb.append("id:").append(human.getID()).append(";");
+//            sb.append("id:").append(human.getID()).append(";");
+            sb.append("id:").append(robot.getID()).append(";");
             sb.append("x:").append((int) getX()).append(";");
             sb.append("y:").append((int) getY()).append(";");
             sb.append("]");
@@ -1082,7 +1088,7 @@ public class TrafficAgent1 {
 
         @Override
         public int hashCode() {
-            return human.getID().hashCode();
+            return robot.getID().hashCode();
         }
     }
 
