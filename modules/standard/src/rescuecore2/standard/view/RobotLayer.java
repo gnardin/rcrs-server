@@ -39,8 +39,8 @@ public class RobotLayer extends StandardEntityViewLayer<Robot> {
     private static final int HP_INJURED = 5400;
     private static final int HP_CRITICAL = 1000;
 
-    private static final String ICON_SIZE_KEY = "view.standard.robot.icons.size";
-    private static final String USE_ICONS_KEY = "view.standard.robot.icons.use";
+    private static final String ICON_SIZE_KEY = "view.standard.human.icons.size";
+    private static final String USE_ICONS_KEY = "view.standard.human.icons.use";
     private static final int DEFAULT_ICON_SIZE = 32;
 
     private static RobotSorter ROBOT_SORTER = null;
@@ -66,7 +66,8 @@ public class RobotLayer extends StandardEntityViewLayer<Robot> {
         iconSize = config.getIntValue(ICON_SIZE_KEY, DEFAULT_ICON_SIZE);
         icons = new HashMap<String, Map<State, Icon>>();
         useIcons = config.getBooleanValue(USE_ICONS_KEY, false);
-//        icons.put(StandardEntityURN.DRONE.toString() + gene)
+        icons.put(StandardEntityURN.DRONE.toString(), generateIconMap("DroneTeam"));
+        useIconsAction = new UseIconsAction();
     }
 
     @Override
@@ -90,6 +91,9 @@ public class RobotLayer extends StandardEntityViewLayer<Robot> {
             } else {
                 shape = new Ellipse2D.Double(x - SIZE / 2, y - SIZE / 2, SIZE, SIZE);
             }
+
+
+            g.setColor(adjustColour(getColour(r), r.isHPDefined() ? r.getHP() : 10000));
             g.fill(shape);
             g.setColor(getColour(r));
             g.draw(shape);
@@ -124,6 +128,21 @@ public class RobotLayer extends StandardEntityViewLayer<Robot> {
         return r.getLocation(world);
     }
 
+    private Map<State, Icon> generateIconMap(String type) {
+        Map<State, Icon> result = new EnumMap<State, Icon>(State.class);
+        for (State state : State.values()) {
+            String resourceName = "rescuecore2/standard/view/" + type + "-" + state.toString() + "-" + iconSize + "x" + iconSize + ".png";
+            URL resource = RobotLayer.class.getClassLoader().getResource(resourceName);
+            if (resource == null) {
+                Logger.warn("Could not find resource: " + resourceName);
+            }
+            else {
+                result.put(state, new ImageIcon(resource));
+            }
+        }
+        return result;
+    }
+
     private Color getColour(Robot r)  {
         switch (r.getStandardURN()) {
             case DRONE:
@@ -147,6 +166,23 @@ public class RobotLayer extends StandardEntityViewLayer<Robot> {
             return null;
         }
         return iconMap.get(state);
+    }
+
+    private Color adjustColour(Color c, int hp) {
+        if (hp == 0) {
+            return DEAD_COLOUR;
+        }
+        if (hp < HP_CRITICAL) {
+            c = c.darker();
+        }
+        if (hp < HP_INJURED) {
+            c = c.darker();
+        }
+        if (hp < HP_MAX) {
+            c = c.darker();
+        }
+
+        return c;
     }
 
     private BatteryLevel getBattery(Robot r) {

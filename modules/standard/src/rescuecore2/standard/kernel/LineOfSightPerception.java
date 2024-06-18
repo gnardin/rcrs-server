@@ -13,6 +13,7 @@ import kernel.Perception;
 import kernel.AgentProxy;
 
 import rescuecore2.standard.entities.*;
+import rescuecore2.standard.view.*;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 import rescuecore2.worldmodel.WorldModel;
@@ -38,13 +39,6 @@ import java.awt.Graphics2D;
 import java.awt.BorderLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-
-import rescuecore2.standard.view.StandardWorldModelViewer;
-import rescuecore2.standard.view.StandardViewLayer;
-import rescuecore2.standard.view.BuildingLayer;
-import rescuecore2.standard.view.RoadLayer;
-import rescuecore2.standard.view.RoadBlockageLayer;
-import rescuecore2.standard.view.HumanLayer;
 
 /**
    Line of sight perception.
@@ -158,16 +152,18 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                 case CIVILIAN:
                 case FIRE_BRIGADE:
                 case AMBULANCE_TEAM:
+                case DRONE:
                 case POLICE_FORCE:
                     // Always send all properties of the agent-controlled object
                     if (next == agentEntity) {
+                        assert next instanceof Human;
                         addSelfProperties((Human)next, result);
                     }
                     else {
+                        assert next instanceof Human;
                         addHumanProperties((Human)next, result);
                     }
                     break;
-                case DRONE:
                 case RESCUE_ROBOT:
                     if (next == agentEntity) {
                         addSelfProperties((Human) next, result);
@@ -270,7 +266,12 @@ public class LineOfSightPerception implements Perception, GUIComponent {
         result.addChange(robot, robot.getHeightProperty());
         result.addChange(robot, robot.getBatteryProperty());
         //round battery and damage
-        IntProperty battery = (IntProperty) robot.getBatteryProperty().copy();
+        IntProperty hp = (IntProperty)robot.getHPProperty().copy();
+        roundProperty(hp, hpPrecision);
+        result.addChange(robot, hp);
+        IntProperty damage = (IntProperty)robot.getDamageProperty().copy();
+        roundProperty(damage, damagePrecision);
+        result.addChange(robot, damage);
     }
 
     private void addSelfProperties(Human human, ChangeSet result) {
@@ -285,6 +286,21 @@ public class LineOfSightPerception implements Perception, GUIComponent {
             result.addChange(fb, fb.getWaterProperty());
         }
     }
+
+
+    private void addSelfRProperties(Robot robot, ChangeSet result) {
+        // Update human properties and POSITION_HISTORY
+        addRobotProperties(robot, result);
+        result.addChange(robot, robot.getPositionHistoryProperty());
+        // Un-round hp and damage
+        result.addChange(robot, robot.getHPProperty());
+        result.addChange(robot, robot.getDamageProperty());
+        if (robot instanceof Drone) {
+            Drone drone = (Drone) robot;
+            result.addChange(drone, drone.getBatteryProperty());
+        }
+    }
+
 
     private void addBlockadeProperties(Blockade blockade, ChangeSet result) {
         result.addChange(blockade, blockade.getXProperty());
@@ -339,6 +355,15 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                 }
             }
         }
+        // Now look for robots
+        for (StandardEntity next : nearby) {
+            if (next instanceof Robot) {
+                Robot r = (Robot) next;
+                if (canSeeRobots(agentEntity, location, r, lines)) {
+                    result.add(r);
+                }
+            }
+        }
         // Add self
         result.add(agentEntity);
         Logger.debug(agentEntity + " can see " + result);
@@ -363,6 +388,31 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                 return true;
             }
             Entity e = world.getEntity(h.getPosition());
+            if (e instanceof AmbulanceTeam) {
+                return canSee(agent, location, (Human)e, lines);
+            }
+        }
+        return false;
+    }
+
+    private boolean canSeeRobots(StandardEntity agent, Point2D location, Robot r, Collection<LineInfo> lines) {
+        if (r.isXDefined() && r.isYDefined()) {
+            int x = r.getX();
+            int y = r.getY();
+            Point2D humanLocation = new Point2D(x, y);
+            Ray ray = new Ray(new Line2D(location, humanLocation), lines);
+            if (ray.getVisibleLength() >= 1) {
+                if (view != null) {
+                    view.addRay(agent, ray);
+                }
+                return true;
+            }
+        }
+        else if (r.isPositionDefined()) {
+            if (r.getPosition().equals(agent.getID())) {
+                return true;
+            }
+            Entity e = world.getEntity(r.getPosition());
             if (e instanceof AmbulanceTeam) {
                 return canSee(agent, location, (Human)e, lines);
             }
@@ -498,6 +548,7 @@ public class LineOfSightPerception implements Perception, GUIComponent {
             viewer.addLayer(new RoadLayer());
             viewer.addLayer(new RoadBlockageLayer());
             viewer.addLayer(new HumanLayer());
+            viewer.addLayer(new RobotLayer());
             viewer.addLayer(new RayLayer());
             rays = new ArrayList<Ray>();
             sources = new LazyMap<StandardEntity, Collection<Ray>>() {
@@ -514,6 +565,10 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                         for (RenderedObject o : objects) {
                             if (o.getObject() instanceof Human) {
                                 selected = (StandardEntity)o.getObject();
+                                viewer.repaint();
+                            }
+                            if (o.getObject() instanceof Robot) {
+                                selected = (StandardEntity) o.getObject();
                                 viewer.repaint();
                             }
                         }

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import rescuecore2.misc.Pair;
 import rescuecore2.standard.entities.Human;
+import rescuecore2.standard.entities.Robot;
 import rescuecore2.standard.entities.StandardWorldModel;
 
 /**
@@ -43,6 +44,24 @@ public abstract class AgentPath {
     return null;
   }
 
+  public static AgentPath computePath1(Robot human, StandardWorldModel world) {
+    if (human == null) {
+      throw new IllegalArgumentException("Agent must not be null");
+    }
+    if (!human.isPositionDefined()) {
+      throw new IllegalArgumentException("Agent has an undefined position");
+    }
+    if (!human.isPositionHistoryDefined()) {
+      // Agent didn't move.
+      return null;
+    }
+    int[] history = human.getPositionHistory();
+    if (history.length > 2) {
+      return new CoordinatePath(history);
+    }
+    // Agent didn't move far enough: only one piece of history.
+    return null;
+  }
 
   /**
    * Get the coordinates of a point along this path.

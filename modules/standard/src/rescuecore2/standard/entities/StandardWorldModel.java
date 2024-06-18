@@ -31,6 +31,7 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
   private Map<StandardEntityURN, Collection<StandardEntity>> storedTypes;
   private Set<StandardEntity> unindexedEntities;
   private Map<Human, Rectangle> humanRectangles;
+  private Map<Robot, Rectangle> robotRectangles;
 
   private boolean indexed;
   private int minX;
@@ -47,6 +48,7 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
         StandardEntityURN.class);
     unindexedEntities = new HashSet<StandardEntity>();
     humanRectangles = new HashMap<Human, Rectangle>();
+    robotRectangles = new HashMap<Robot, Rectangle>();
     addWorldModelListener(new AddRemoveListener());
     indexed = false;
   }
@@ -118,6 +120,9 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
         maxY = Math.max(maxY, (int) r.maxY);
         if (next instanceof Human) {
           humanRectangles.put((Human) next, r);
+        }
+        if (next instanceof Robot) {
+          robotRectangles.put((Robot) next, r);
         }
       }
     }
@@ -401,6 +406,16 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
     } else if (e instanceof Human) {
       Human h = (Human) e;
       Pair<Integer, Integer> location = h.getLocation(this);
+      if (location == null) {
+        return null;
+      }
+      x1 = location.first();
+      x2 = location.first();
+      y1 = location.second();
+      y2 = location.second();
+    } else if (e instanceof Robot) {
+      Robot r = (Robot) e;
+      Pair<Integer, Integer> location = r.getLocation(this);
       if (location == null) {
         return null;
       }

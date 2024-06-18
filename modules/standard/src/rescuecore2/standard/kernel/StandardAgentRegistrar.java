@@ -130,6 +130,11 @@ public class StandardAgentRegistrar implements AgentRegistrar {
                 initialEntities.add(h);
             }
         }
+        if (e instanceof Robot) {
+            if (!(e instanceof Robot)) {
+                Robot r = (Robot)e.copy();
+            }
+        }
     }
 
     private void filterAreaProperties(Area a) {
@@ -180,4 +185,6 @@ public class StandardAgentRegistrar implements AgentRegistrar {
             }
         }
     }
+
+
 }
