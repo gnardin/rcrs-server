@@ -159,6 +159,11 @@ public final class SampleSearch {
     return path;
   }
 
+  public List<EntityID> droneSearch( EntityID start, Collection<EntityID> goals) {
+    return null;
+  }
+
+
   private static class Node {
     EntityID ID;
     int cost;

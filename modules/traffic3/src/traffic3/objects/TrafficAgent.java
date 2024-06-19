@@ -40,6 +40,7 @@ public class TrafficAgent {
 		private Point2D origin;
 		private Line2D line;
 		private Vector2D vector;
+		private boolean isBlockade;
 
 		/**
 		 * Create a new WallInfo object from a Line2D in a TrafficArea.
@@ -49,13 +50,22 @@ public class TrafficAgent {
 		 * @param area
 		 *            The area this wall belongs to.
 		 */
-		public WallInfo(Line2D wall, TrafficArea area) {
+		public WallInfo(Line2D wall, TrafficArea area, boolean isBlockade) {
 			this.wall = wall;
 			this.area = area;
 			this.distance = -1;
 			this.closest = null;
 			this.origin = null;
+			this.isBlockade = isBlockade;
 		}
+
+		public void setBlockade(boolean blockade) {
+			isBlockade = blockade;
+		}
+
+//		public boolean isBlockade() {
+//			return isBlockade;
+//		}
 
 		/**
 		 * Get the shortest distance from the agent's position. The distance may
@@ -1008,6 +1018,7 @@ public class TrafficAgent {
 		result[1] = ySum;
 	}
 
+
 	private void computeWallsForce(double[] result, double dt) {
 		double xSum = 0;
 		double ySum = 0;
@@ -1024,6 +1035,8 @@ public class TrafficAgent {
 			}
 
 			for (WallInfo wall : blockingLines) {
+				// check if the current wall is a blockade
+
 				if (wall.getDistance() > cutoff) {
 					break;
 				}

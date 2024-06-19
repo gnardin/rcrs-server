@@ -152,7 +152,7 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                 case CIVILIAN:
                 case FIRE_BRIGADE:
                 case AMBULANCE_TEAM:
-                case DRONE:
+                case RESCUE_ROBOT:
                 case POLICE_FORCE:
                     // Always send all properties of the agent-controlled object
                     if (next == agentEntity) {
@@ -164,11 +164,11 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                         addHumanProperties((Human)next, result);
                     }
                     break;
-                case RESCUE_ROBOT:
+                case DRONE:
                     if (next == agentEntity) {
-                        addSelfProperties((Human) next, result);
+                        addSelfRobotProperties((Robot) next, result);
                     } else {
-                        addHumanProperties((Human) next, result);
+                        addRobotProperties((Robot) next, result);
                     }
                     break;
                 case BLOCKADE:
@@ -288,7 +288,7 @@ public class LineOfSightPerception implements Perception, GUIComponent {
     }
 
 
-    private void addSelfRProperties(Robot robot, ChangeSet result) {
+    private void addSelfRobotProperties(Robot robot, ChangeSet result) {
         // Update human properties and POSITION_HISTORY
         addRobotProperties(robot, result);
         result.addChange(robot, robot.getPositionHistoryProperty());

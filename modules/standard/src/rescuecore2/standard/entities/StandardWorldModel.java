@@ -68,6 +68,17 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
         next.setValue(r);
       }
     }
+    // Update robot rectangles
+    for (Map.Entry<Robot, Rectangle> next : robotRectangles.entrySet()) {
+      Robot r = next.getKey();
+      Rectangle rect = next.getValue();
+      index.delete(rect, r.getID().getValue());
+      rect = makeRectangle(r);
+      if (rect != null) {
+        index.add(rect, r.getID().getValue());
+        next.setValue(rect);
+      }
+    }
   }
 
 

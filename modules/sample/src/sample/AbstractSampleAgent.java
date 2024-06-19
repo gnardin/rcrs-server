@@ -9,11 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import rescuecore2.Constants;
 import rescuecore2.standard.components.StandardAgent;
-import rescuecore2.standard.entities.Building;
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.Refuge;
-import rescuecore2.standard.entities.Road;
-import rescuecore2.standard.entities.StandardEntity;
+import rescuecore2.standard.entities.*;
 import rescuecore2.standard.kernel.comms.ChannelCommunicationModel;
 import rescuecore2.standard.kernel.comms.StandardCommunicationModel;
 import rescuecore2.worldmodel.EntityID;
@@ -136,7 +132,7 @@ public abstract class AbstractSampleAgent<E extends StandardEntity>
   protected List<EntityID> randomFly() {
     List<EntityID> result = new ArrayList<EntityID>( RANDOM_FLY_LENGTH );
     Set<EntityID> seen = new HashSet<EntityID>();
-    EntityID current = ( (Human) me() ).getPosition();
+    EntityID current = ( (Robot) me() ).getPosition();
     for (int i = 0; i < RANDOM_FLY_LENGTH; i++) {
       result.add(current);
       seen.add(current);

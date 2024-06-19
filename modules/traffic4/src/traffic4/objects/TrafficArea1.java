@@ -220,28 +220,28 @@ public class TrafficArea1 {
 		List<Line2D> oLines = getOpenLines();
 		double minDst = Integer.MAX_VALUE;
 		int minIndex = -1;
-		/*FOR:*/
+		FOR:
 		for (int i = 0; i < oLines.size(); i++) {
-//			Line2D line = new Line2D(point,getMidPoint(oLines.get(i).getOrigin(), oLines.get(i).getEndPoint()));
-//			for (Line2D is :getAllBlockingLines()) {
-//				if (GeometryTools2D.getSegmentIntersectionPoint(line, is) != null) {
-//					continue FOR;
-//				}
-//			}
-//			for (int k = 0; k < oLines.size(); k++) {
-//				if(k==i)
-//					continue;
-//				if (GeometryTools2D.getSegmentIntersectionPoint(line, oLines.get(k)) == null) {
-//					continue FOR;
-//				}
-//			}
+			Line2D line = new Line2D(point,getMidPoint(oLines.get(i).getOrigin(), oLines.get(i).getEndPoint()));
+			for (Line2D is :getAllBlockingLines()) {
+				if (GeometryTools2D.getSegmentIntersectionPoint(line, is) != null) {
+					continue FOR;
+				}
+			}
+			for (int k = 0; k < oLines.size(); k++) {
+				if(k==i)
+					continue;
+				if (GeometryTools2D.getSegmentIntersectionPoint(line, oLines.get(k)) == null) {
+					continue FOR;
+				}
+			}
 			Point2D nearestPoint = GeometryTools2D.getClosestPointOnSegment(oLines.get(i), point);
 			double dst = GeometryTools2D.getDistance(point, nearestPoint);
 			if (dst < minDst) {
 				minDst = dst;
 				minIndex = i;
 			}
-			//return i;
+			return i;
 		}
 		return minIndex;
 	}
