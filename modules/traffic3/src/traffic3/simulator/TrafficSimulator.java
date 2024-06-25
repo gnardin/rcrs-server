@@ -93,26 +93,26 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
       if (next instanceof Human) {
         convertHuman((Human) next, agentVelocityGenerator, civilianVelocityGenerator);
       }
-      if (next instanceof Blockade) {
-        convertBlockade((Blockade) next);
-      }
+//      if (next instanceof Blockade) {
+//        convertBlockade((Blockade) next);
+//      }
     }
     model.addWorldModelListener(new WorldModelListener<StandardEntity>() {
       @Override
       public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-        if (e instanceof Blockade) {
-          convertBlockade((Blockade) e);
-        }
+//        if (e instanceof Blockade) {
+//          convertBlockade((Blockade) e);
+//        }
       }
 
       @Override
       public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-        if (e instanceof Blockade) {
-          Blockade b = (Blockade) e;
-          TrafficBlockade block = manager.getTrafficBlockade(b);
-          block.getArea().removeBlockade(block);
-          manager.remove(block);
-        }
+//        if (e instanceof Blockade) {
+//          Blockade b = (Blockade) e;
+//          TrafficBlockade block = manager.getTrafficBlockade(b);
+//          block.getArea().removeBlockade(block);
+//          manager.remove(block);
+//        }
       }
     });
     gui.initialise();
@@ -288,16 +288,16 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     manager.register(new TrafficArea(area));
   }
 
-  private void convertBlockade(Blockade b) {
-    Logger.debug("Converting blockade: " + b.getFullDescription());
-    Area a = (Area) model.getEntity(b.getPosition());
-    Logger.debug("Area: " + a);
-    TrafficArea area = manager.getTrafficArea(a);
-    Logger.debug("Traffic area: " + area);
-    TrafficBlockade block = new TrafficBlockade(b, area);
-    manager.register(block);
-    area.addBlockade(block);
-  }
+//  private void convertBlockade(Blockade b) {
+//    Logger.debug("Converting blockade: " + b.getFullDescription());
+//    Area a = (Area) model.getEntity(b.getPosition());
+//    Logger.debug("Area: " + a);
+//    TrafficArea area = manager.getTrafficArea(a);
+//    Logger.debug("Traffic area: " + area);
+//    TrafficBlockade block = new TrafficBlockade(b, area);
+//    manager.register(block);
+//    area.addBlockade(block);
+//  }
 
   private void convertHuman(Human h, NumberGenerator<Double> agentVelocityGenerator,
       NumberGenerator<Double> civilianVelocityGenerator) {
@@ -586,11 +586,11 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     for (PathElement pathElement : originalPaths) {
 
       TrafficArea area = manager.getTrafficArea((Area) model.getEntity(pathElement.getAreaID()));
-      for (TrafficBlockade block : area.getBlockades()) {
-        if (block.getBlockade().getShape().contains(pathElement.getGoal().getX(), pathElement.getGoal().getY()))
-          return false;
-//          return true;
-      }
+//      for (TrafficBlockade block : area.getBlockades()) {
+//        if (block.getBlockade().getShape().contains(pathElement.getGoal().getX(), pathElement.getGoal().getY()))
+//          return false;
+////          return true;
+//      }
       double minDistance = getMinDistance(area.getAllBlockingLines(), pathElement.getGoal());
 
       if (minDistance < TrafficSimulator.RESCUE_AGENT_RADIUS / 2)

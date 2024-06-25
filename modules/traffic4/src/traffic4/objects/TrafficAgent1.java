@@ -191,7 +191,7 @@ public class TrafficAgent1 {
     private int positionHistoryFrequency;
     private int historyCount;
 
-//    private Human human;
+//    private Human robot;
     private Robot robot;
     private TrafficManager1 manager;
 
@@ -210,7 +210,7 @@ public class TrafficAgent1 {
      * @param radius        The radius of this agent in mm.
      * @param velocityLimit The velicity limit.
      */
-    public TrafficAgent1(/*Human h,*/ Robot h, TrafficManager1 manager, double radius, double velocityLimit) {
+    public TrafficAgent1(/*Human h, */Robot h, TrafficManager1 manager, double radius, double velocityLimit) {
 //        this.human = h;
         this.robot = h;
         this.manager = manager;
@@ -230,7 +230,7 @@ public class TrafficAgent1 {
      *
      * @return The wrapped Human.
      */
-    public /*Human */Robot getHuman() {
+    public /*Human*/ Robot getHuman() {
 //        return human;
         return robot;
     }
@@ -352,23 +352,6 @@ public class TrafficAgent1 {
         return this.radius;
     }
 
-//    /**
-//     * Set the height of this agent.
-//     *
-//     * @param height
-//     */
-//    public void setHeight(double height) {
-//        this.height = height;
-//    }
-//
-//    /**
-//     * Get the height of this agent.
-//     *
-//     * @return height
-//     */
-//    public double getHeight() {
-//        return this.height;
-//    }
 
     /**
      * Set the path this agent wants to take.
@@ -522,10 +505,11 @@ public class TrafficAgent1 {
     public void beginTimestep() {
         findBlockingLines();
 //        if (isInsideBlockade()) {
+//            Logger.warn(this + " inside blockade");
 //            setMobile(false);
 //        }
         startPosition = currentArea;
-        setMobile(true);
+//        setMobile(true);
     }
 
     public void endTimestep() {
@@ -537,6 +521,7 @@ public class TrafficAgent1 {
 //        if (!(getHuman() instanceof Civilian))
 //            return;
 //        if (!(getHuman() instanceof ))
+//            return;
         if (currentArea.getArea().equals(startPosition.getArea()))
             return;
         if (!(currentArea.getArea() instanceof Building))
@@ -920,8 +905,8 @@ public class TrafficAgent1 {
             }
 
             double totalRd = radius + agent.getRadius();
-            double distanceSquared = Math.hypot(dx, dy);
-//            double distanceSquared = dx * dx + dy * dy;
+//            double distanceSquared = Math.hypot(dx, dy);
+            double distanceSquared = dx * dx + dy * dy;
 
 
             if (distanceSquared == 0) {

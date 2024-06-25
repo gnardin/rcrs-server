@@ -50,22 +50,13 @@ public class TrafficAgent {
 		 * @param area
 		 *            The area this wall belongs to.
 		 */
-		public WallInfo(Line2D wall, TrafficArea area, boolean isBlockade) {
+		public WallInfo(Line2D wall, TrafficArea area) {
 			this.wall = wall;
 			this.area = area;
 			this.distance = -1;
 			this.closest = null;
 			this.origin = null;
-			this.isBlockade = isBlockade;
 		}
-
-		public void setBlockade(boolean blockade) {
-			isBlockade = blockade;
-		}
-
-//		public boolean isBlockade() {
-//			return isBlockade;
-//		}
 
 		/**
 		 * Get the shortest distance from the agent's position. The distance may
@@ -532,12 +523,13 @@ public class TrafficAgent {
 	 * Perform any pre-timestep activities required.
 	 */
 	public void beginTimestep() {
+		setMobile(true);
 		findBlockingLines();
-		if (insideBlockade()) {
-			Logger.debug(this + " inside blockade");
-			setMobile(false);
-//			setMobile(true);
-		}
+//		if (insideBlockade()) {
+//			Logger.debug(this + " inside blockade");
+//			setMobile(false);
+////			setMobile(true);
+//		}
 		startPosition = currentArea;
 	}
 
@@ -796,22 +788,22 @@ public class TrafficAgent {
 		return true;
 	}
 
-	private boolean insideBlockade() {
-		if (currentArea == null) {
-			return false;
-		}
-		for (TrafficBlockade block : currentArea.getBlockades()) {
-			if (block.contains(location[0], location[1])) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	private boolean insideBlockade() {
+//		if (currentArea == null) {
+//			return false;
+//		}
+//		for (TrafficBlockade block : currentArea.getBlockades()) {
+//			if (block.contains(location[0], location[1])) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 
 	private boolean crossedLine(double oldX, double oldY, double newX, double newY, Line2D line) {
 		Line2D moved = new Line2D(oldX, oldY, newX - oldX, newY - oldY);
 		return (GeometryTools2D.getSegmentIntersectionPoint(moved, line) != null);
-		/*
+/*
 		 * Vector2D normal = line.getDirection().getNormal().normalised();
 		 * double dot1 = new Vector2D(oldX - line.getOrigin().getX(), oldY -
 		 * line.getOrigin().getY()).normalised().dot(normal); double dot2 = new
@@ -819,7 +811,7 @@ public class TrafficAgent {
 		 * line.getOrigin().getY()).normalised().dot(normal); return (((dot1 < 0
 		 * && dot2 > 0) || (dot1 > 0 && dot2 < 0)) && GeometryTools2D
 		 * .getSegmentIntersectionPoint(moved, line) != null);
-		 */
+*/
 	}
 
 	private boolean crossedWall(double oldX, double oldY, double newX, double newY) {

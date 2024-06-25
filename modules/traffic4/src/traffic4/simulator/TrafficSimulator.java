@@ -91,7 +91,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         NumberGenerator<Double> civilianVelocityGenerator = new GaussianGenerator(CIVILIAN_VELOCITY_MEAN,
                 CIVILIAN_VELOCITY_SD, config.getRandom());
         for (StandardEntity next : model) {
-            if (next instanceof Robot /*Human*/) {
+            if (next instanceof Robot) {
                 convertHumanDrone((Robot) next, agentVelocityGenerator, civilianVelocityGenerator);
             }
         }
@@ -196,7 +196,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             StandardEntity entity = model.getEntity(id);
             switch (StandardEntityURN.fromInt(update.getChangeSet().getEntityURN(id))) {
                 case ROAD:
-//                case BUILDING:
+                case BUILDING:
 //                case AMBULANCE_CENTRE:
 //                case FIRE_STATION:
 //                case GAS_STATION:
@@ -232,7 +232,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
                                    NumberGenerator<Double> civilianVelocityGenerator) {
         double radius = 0;
         double velocityLimit = 0;
-        if (human instanceof Drone) {
+        if (human instanceof Robot) {
             radius = AGENT_RADIUS;
             velocityLimit = agentVelocityGenerator.nextValue();
             TrafficAgent1 agent = new TrafficAgent1(human, manager, radius, velocityLimit);
@@ -247,13 +247,14 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         }*/ /*else {
             throw new IllegalArgumentException("Unrecognised agent type: " + human + " (" + human.getClass().getName() + ")");
         }*/
+        } else {
+            throw new IllegalArgumentException("Unrecognised agent type: " + human + " (" + human.getClass().getName() + ")");
         }
     }
 
 
 
     private void handleFly(AKFly fly) {
-//        Human human = (Human) model.getEntity(fly.getAgentID());
         Robot human = (Robot) model.getEntity(fly.getAgentID());
         TrafficAgent1 agent = manager.getTrafficAgentForDrone(human);
         EntityID current = human.getPosition();
@@ -309,7 +310,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         agent.setPath(steps1);
     }
 
-    private Collection<? extends PathElement> getPathElements(Robot human, Area lastArea, Edge lastEdge, Area nextArea,
+    private Collection<? extends PathElement> getPathElements(Robot /*Human*/ human, Area lastArea, Edge lastEdge, Area nextArea,
                                                               Edge nextEdge) {
         if (human.getID().getValue() == 204623396) {
             System.out.println(
@@ -363,7 +364,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         return null;
     }
 
-    private Collection<? extends PathElement> getPathElements2(/*Human */Robot human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
+    private Collection<? extends PathElement> getPathElements2(/*Human*/ Robot human, Area lastArea, Edge lastEdge, Area nextArea, Edge nextEdge) {
         Collection<? extends PathElement> originalPath = getPathElements(human, lastArea, lastEdge, nextArea, nextEdge);
         if (isOriginalPathOk(originalPath))
             return originalPath;
@@ -492,6 +493,10 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 
     static Point2D getMidPoint(Point2D p1, Point2D p2) {
         return new Point2D((p1.getX() + p2.getX()) / 2, (p2.getX() + p2.getY()) / 2);
+    }
+
+    private Point2D getTransivit(Point2D base, Point2D p1) {
+        return new Point2D((base.getX() - (p1.getX() - base.getX())), (base.getY() - (p1.getY() - base.getY())));
     }
 
     private Point2D getBestPoint(Edge edge, Area destination) {

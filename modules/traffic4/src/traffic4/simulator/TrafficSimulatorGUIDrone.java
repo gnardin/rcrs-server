@@ -304,19 +304,19 @@ public class TrafficSimulatorGUIDrone extends JPanel {
             }
         }
 
-//        private void drawBlockades(Graphics2D g) {
-//            g.setStroke(BLOCKADE_STROKE);
-//            g.setColor(BLOCKADE_OUTLINE_COLOUR);
-//            for (TrafficBlockade1 b : manager.getBlockades()) {
-//                for (Line2D line : b.getLines()) {
-//                    int x1 = transform1.xToScreen(line.getOrigin().getX());
-//                    int y1 = transform1.yToScreen(line.getOrigin().getY());
-//                    int x2 = transform1.xToScreen(line.getEndPoint().getX());
-//                    int y2 = transform1.yToScreen(line.getEndPoint().getY());
-//                    g.drawLine(x1, y1, x2, y2);
-//                }
-//            }
-//        }
+        private void drawBlockades(Graphics2D g) {
+            g.setStroke(BLOCKADE_STROKE);
+            g.setColor(BLOCKADE_OUTLINE_COLOUR);
+            for (TrafficBlockade1 b : manager.getBlockades()) {
+                for (Line2D line : b.getLines()) {
+                    int x1 = transform1.xToScreen(line.getOrigin().getX());
+                    int y1 = transform1.yToScreen(line.getOrigin().getY());
+                    int x2 = transform1.xToScreen(line.getEndPoint().getX());
+                    int y2 = transform1.yToScreen(line.getEndPoint().getY());
+                    g.drawLine(x1, y1, x2, y2);
+                }
+            }
+        }
 
         private void drawAgents(Graphics2D graphics) {
             for (TrafficAgent1 agent : manager.getALLAgents()) {

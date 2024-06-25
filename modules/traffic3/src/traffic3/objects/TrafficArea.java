@@ -430,8 +430,8 @@ public class TrafficArea {
 
 	private void createLine(Point2D origin, List<Line2D> openLines) {
 
-		Line2D newLineToUp = new Line2D(origin, getBaseVector().scale(1000));
-		Line2D newLineToDown = new Line2D(origin, getBaseVector().scale(-1000));
+		Line2D newLineToUp = new Line2D(origin, getBaseVector().scale(900));
+		Line2D newLineToDown = new Line2D(origin, getBaseVector().scale(-900));
 //		TrafficSimulator.debug.show("Init", new ShapeDebugFrame.AWTShapeInfo(getArea().getShape(), getArea() + "", Color.blue, false), new ShapeDebugFrame.Line2DShapeInfo(
 //				newLineToUp, "lineToUp", Color.red, false, true), new ShapeDebugFrame.Line2DShapeInfo(newLineToDown, "lineTodown", Color.green, false, true));
 
@@ -474,11 +474,11 @@ public class TrafficArea {
 		Point midPoint = new Point((int) (line.getOrigin().getX() + line.getEndPoint().getX()) / 2, (int) (line.getOrigin().getY() + line.getEndPoint().getY()) / 2);
 		if (!getArea().getShape().contains(midPoint))
 			return false;
-		for (TrafficBlockade blockade : getBlockades()) {
-			if (blockade.getBlockade().getShape().contains(midPoint))
-				return false;
-//				return true;
-		}
+//		for (TrafficBlockade blockade : getBlockades()) {
+//			if (blockade.getBlockade().getShape().contains(midPoint))
+//				return false;
+////				return true;
+//		}
 		return true;
 
 	}

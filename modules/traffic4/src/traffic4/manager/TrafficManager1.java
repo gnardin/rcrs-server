@@ -50,7 +50,8 @@ public class TrafficManager1 {
     public TrafficManager1() {
         areas = new ConcurrentHashMap<Area, TrafficArea1>();
         areaByID = new ConcurrentHashMap<Integer, TrafficArea1>();
-//        agents = new ConcurrentHashMap<Human, TrafficAgent1>();
+        blocks = new ConcurrentHashMap<Blockade, TrafficBlockade1>();
+        blockadeID = new ConcurrentHashMap<Integer, TrafficBlockade1>();
         agents = new ConcurrentHashMap<Robot, TrafficAgent1>();
         areaNeighbours = new LazyMap<TrafficArea1, Collection<TrafficArea1>>() {
 
@@ -121,8 +122,8 @@ public class TrafficManager1 {
         areas.clear();
         agents.clear();
         areaNeighbours.clear();
-//        blockadeID.clear();
-//        blocks.clear();
+        blockadeID.clear();
+        blocks.clear();
         areaByID.clear();
         index = new RTree();
         index.init(new Properties());
@@ -145,39 +146,6 @@ public class TrafficManager1 {
         agents.put(agent.getHuman(), agent);
     }
 
-//    /**
-//     * Register a new TrafficBlockade1.
-//     *
-//     * @param block
-//     *   The TrafficBlockade1 to register.
-//     */
-//    public void register(TrafficBlockade1 block) {
-//        blocks.put(block.getBlockade(), block);
-//        blockadeID.put(block.getBlockade().getID().getValue(), block);
-//    }
-//
-//    /**
-//     * Remove a blockade.
-//     *
-//     * @param block
-//     *   The TrafficBlockade1 to remove.
-//     */
-//    public void remove(TrafficBlockade1 block) {
-//        remove(block.getBlockade());
-//    }
-//
-//
-//    /**
-//     * Remove a blockade.
-//     *
-//     * @param block
-//     *   The Blockade to remove.
-//     */
-//    public void remove(Blockade block) {
-//        blocks.remove(block);
-//        blockadeID.remove(block.getID().getValue());
-//    }
-
 
     /**
      * Get all traffic agents
@@ -196,15 +164,15 @@ public class TrafficManager1 {
     public Collection<TrafficArea1> getAllAreas() {
         return Collections.unmodifiableCollection(areas.values());
     }
-//
-//    /**
-//     * Get all TrafficBlockades.
-//     *
-//     * @return All TrafficBlockades.
-//     */
-//    public Collection<TrafficBlockade1> getBlockades() {
-//        return Collections.unmodifiableCollection(blocks.values());
-//    }
+
+    /**
+     * Get all TrafficBlockades.
+     *
+     * @return All TrafficBlockades.
+     */
+    public Collection<TrafficBlockade1> getBlockades() {
+        return Collections.unmodifiableCollection(blocks.values());
+    }
 
 
     /**Compute pre cached information about the world.
@@ -224,10 +192,6 @@ public class TrafficManager1 {
     public TrafficArea1 getTrafficAreaforDrone(Area area) {
         return areas.get(area);
     }
-
-//    public TrafficBlockade1 getTrafficBlockade(Blockade b) {
-//        return blocks.get(b);
-//    }
 
     public TrafficAgent1 getTrafficAgentForDrone(Robot human) {
         return agents.get(human);
