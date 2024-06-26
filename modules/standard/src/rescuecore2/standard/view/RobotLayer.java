@@ -36,7 +36,7 @@ public class RobotLayer extends StandardEntityViewLayer<Robot> {
     private static final int SIZE = 10;
 
     private static final int HP_MAX = 10000;
-    private static final int HP_INJURED = 5400;
+    private static final int HP_INJURED = 7500;
     private static final int HP_CRITICAL = 1000;
 
     private static final String ICON_SIZE_KEY = "view.standard.human.icons.size";

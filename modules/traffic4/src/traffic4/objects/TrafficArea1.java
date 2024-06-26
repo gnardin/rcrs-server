@@ -280,7 +280,7 @@ public class TrafficArea1 {
 		if (openLines == null) {
 			openLines = new ArrayList<Line2D>();
 			HashSet<Point2D> checkedPoint = new HashSet<Point2D>();
-			for (Line2D line : getBlockingLines()) {
+			for (Line2D line : getBlockadeLines()) {
 				if (!checkedPoint.contains(line.getOrigin())) {
 					createLine(line.getOrigin(), openLines);
 				}

@@ -52,7 +52,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
     private static final int CIVILIAN_RADIUS = 200;
     private static final double AGENT_VELOCITY_MEAN = 0.7;
     private static final double AGENT_VELOCITY_SD = 0.1;
-    private static final double AGENT_HEIGHT = 100;
+//    private static final double AGENT_HEIGHT = 100;
     private static final double CIVILIAN_VELOCITY_MEAN = 0.2;
     private static final double CIVILIAN_VELOCITY_SD = 0.002;
 
@@ -92,7 +92,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
                 CIVILIAN_VELOCITY_SD, config.getRandom());
         for (StandardEntity next : model) {
             if (next instanceof Robot) {
-                convertHumanDrone((Robot) next, agentVelocityGenerator, civilianVelocityGenerator);
+                convertHumanDrone((Robot) next, agentVelocityGenerator);
             }
         }
         model.addWorldModelListener(new WorldModelListener<StandardEntity>() {
@@ -195,6 +195,21 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         for (EntityID id : update.getChangeSet().getChangedEntities()) {
             StandardEntity entity = model.getEntity(id);
             switch (StandardEntityURN.fromInt(update.getChangeSet().getEntityURN(id))) {
+                case BLOCKADE:
+                    IntProperty blockadeCost = (IntProperty) update.getChangeSet().getChangedProperty(id,
+                            StandardPropertyURN.REPAIR_COST.getURNId());
+                    EntityRefProperty position = ((EntityRefProperty) update.getChangeSet().getChangedProperty(id,
+                            StandardPropertyURN.POSITION.getURNId()));
+                    if (entity == null || blockadeCost == null
+                            || ((Blockade) entity).getRepairCost() != blockadeCost.getValue()) {
+                        if (position != null)
+                            clearAreaCache(position.getValue());
+                        else if (entity != null) {
+                            clearAreaCache(((Blockade) entity).getPosition());
+
+                        }
+                    }
+                    break;
                 case ROAD:
                 case BUILDING:
 //                case AMBULANCE_CENTRE:
@@ -208,13 +223,16 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 //                case POLICE_FORCE:
 //                case CIVILIAN:
 //                case FIRE_BRIGADE:
-//                case WORLD:
+                case WORLD:
                 default:
                     break;
             }
         }
     }
 
+    private void clearAreaCache(EntityID entityArea) {
+        manager.getTrafficAreaforDrone((Area) model.getEntity(entityArea)).clearBlockadeCache();
+    }
 
     private void convertAreaToTrafficArea(Area area) {
         manager.register(new TrafficArea1(area));
@@ -228,16 +246,13 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
 //        a.addBlockade(block);
 //    }
 
-    private void convertHumanDrone(Robot/*Human*/ human, NumberGenerator<Double> agentVelocityGenerator,
-                                   NumberGenerator<Double> civilianVelocityGenerator) {
+    private void convertHumanDrone(Robot/*Human*/ human, NumberGenerator<Double> agentVelocityGenerator
+                                   /*NumberGenerator<Double> civilianVelocityGenerator*/) {
         double radius = 0;
         double velocityLimit = 0;
-        if (human instanceof Robot) {
+        if (human instanceof Drone) {
             radius = AGENT_RADIUS;
             velocityLimit = agentVelocityGenerator.nextValue();
-            TrafficAgent1 agent = new TrafficAgent1(human, manager, radius, velocityLimit);
-            agent.setLocation(human.getX(), human.getY());
-            manager.register(agent);
         /*else if(human instanceof RescueRobot) {
             radius = AGENT_RADIUS;
             velocityLimit = civilianVelocityGenerator.nextValue();
@@ -250,6 +265,9 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
         } else {
             throw new IllegalArgumentException("Unrecognised agent type: " + human + " (" + human.getClass().getName() + ")");
         }
+        TrafficAgent1 agent = new TrafficAgent1(human, manager, radius, velocityLimit);
+        agent.setLocation(human.getX(), human.getY());
+        manager.register(agent);
     }
 
 
@@ -538,7 +556,7 @@ public class TrafficSimulator extends StandardSimulator implements GUIComponent 
             Logger.debug("Microsteps: " + (post - pre) + "ms (average " + ((post - pre) / MICROSTEPS) + "ms");
             Logger.debug("Post timestep: " + (end - post) + " ms (average " + ((end - post) / manager.getALLAgents().size()) + "ms per agent");
         }
-        Logger.debug("Total time " + (end - start));
+        Logger.debug("Total time " + (end - start) + "ms");
     }
 
     private void microstep() {

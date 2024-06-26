@@ -7,7 +7,7 @@ import rescuecore2.standard.entities.Robot;
 import java.awt.*;
 
 public class PositionHistoryDroneLayer extends StandardEntityViewLayer<Robot> {
-    private static final Color FLIGHT_PATH_COLOUR = Color.RED;
+    private static final Color FLIGHT_PATH_COLOUR = Color.GREEN;
 
     /**
      * Construct a position history layer
