@@ -291,24 +291,24 @@ public class StandardPerception implements Perception, GUIComponent {
     result.addChange(human, damage);
   }
 
-  private void addRobotProperties(Robot robot, ChangeSet result) {
-    // Update POSITION, POSITION_EXTRA, DIRECTION, STAMINA, HP, DAMAGE, BURIEDNESS, BATTERY
-    result.addChange(robot, robot.getPositionProperty());
-    // result.addChange(human, human.getPositionExtraProperty());
-    result.addChange(robot, robot.getXProperty());
-    result.addChange(robot, robot.getYProperty());
-    result.addChange(robot, robot.getDirectionProperty());
-    result.addChange(robot, robot.getStaminaProperty());
-    result.addChange(robot, robot.getBuriednessProperty());
-    result.addChange(robot, robot.getBatteryProperty());
-    // Round HP and damage
-    IntProperty hp = (IntProperty) robot.getHPProperty().copy();
-    roundProperty(hp, hpPrecision);
-    result.addChange(robot, hp);
-    IntProperty damage = (IntProperty) robot.getDamageProperty().copy();
-    roundProperty(damage, damagePrecision);
-    result.addChange(robot, damage);
-  }
+//  private void addRobotProperties(Robot robot, ChangeSet result) {
+//    // Update POSITION, POSITION_EXTRA, DIRECTION, STAMINA, HP, DAMAGE, BURIEDNESS, BATTERY
+//    result.addChange(robot, robot.getPositionProperty());
+//    // result.addChange(human, human.getPositionExtraProperty());
+//    result.addChange(robot, robot.getXProperty());
+//    result.addChange(robot, robot.getYProperty());
+//    result.addChange(robot, robot.getDirectionProperty());
+//    result.addChange(robot, robot.getStaminaProperty());
+//    result.addChange(robot, robot.getBuriednessProperty());
+//    result.addChange(robot, robot.getBatteryProperty());
+//    // Round HP and damage
+//    IntProperty hp = (IntProperty) robot.getHPProperty().copy();
+//    roundProperty(hp, hpPrecision);
+//    result.addChange(robot, hp);
+//    IntProperty damage = (IntProperty) robot.getDamageProperty().copy();
+//    roundProperty(damage, damagePrecision);
+//    result.addChange(robot, damage);
+//  }
 
   private void addSelfProperties(Human human, ChangeSet result) {
     // Update human properties and POSITION_HISTORY
@@ -321,12 +321,12 @@ public class StandardPerception implements Perception, GUIComponent {
       result.addChange(human, ((FireBrigade) human).getWaterProperty());
   }
 
-  private void addSelfRProperties(Robot robot, ChangeSet result) {
-    addRobotProperties(robot, result);
-    result.addChange(robot, robot.getPositionHistoryProperty());
-    result.addChange(robot, robot.getHPProperty());
-    result.addChange(robot, robot.getDamageProperty());
-  }
+//  private void addSelfRProperties(Robot robot, ChangeSet result) {
+//    addRobotProperties(robot, result);
+//    result.addChange(robot, robot.getPositionHistoryProperty());
+//    result.addChange(robot, robot.getHPProperty());
+//    result.addChange(robot, robot.getDamageProperty());
+//  }
 
   private void addBlockadeProperties(Blockade blockade, ChangeSet result) {
     result.addChange(blockade, blockade.getXProperty());

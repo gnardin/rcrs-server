@@ -354,7 +354,7 @@ public class CommandLayer extends StandardViewLayer {
         int x = t.xToScreen(location.first()) - SIZE / 2;
         int y = t.yToScreen(location.second()) - SIZE / 2;
 
-        //PoliceForce agent = (PoliceForce) world.getEntity(c.getAgentID());
+//        PoliceForce agent = (PoliceForce) world.getEntity(c.getAgentID());
         RescueRobot agent = (RescueRobot) world.getEntity(c.getAgentID());
 		int targetX = c.getDestinationX();
 		int targetY = c.getDestinationY();

@@ -6,12 +6,7 @@ import java.util.EnumMap;
 
 import rescuecore2.config.Config;
 
-import rescuecore2.standard.entities.Building;
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.AmbulanceTeam;
-import rescuecore2.standard.entities.FireBrigade;
-import rescuecore2.standard.entities.PoliceForce;
-import rescuecore2.standard.entities.Refuge;
+import rescuecore2.standard.entities.*;
 
 /**
  * Container for all misc simulator parameters.
@@ -248,6 +243,8 @@ public class MiscParameters {
         private final double ambulanceMultiplier;
         private final double policeMultiplier;
         private final double fireMultiplier;
+//        private final double droneMultiplier;
+//        private final double robotMultiplier;
 
         public DamageType(Config config, String type) {
             damage = new EnumMap<Injury, Integer>(Injury.class);
@@ -258,6 +255,8 @@ public class MiscParameters {
             ambulanceMultiplier = config.getFloatValue("misc.injury." + type + ".multiplier.ambulance");
             policeMultiplier = config.getFloatValue("misc.injury." + type + ".multiplier.police");
             fireMultiplier = config.getFloatValue("misc.injury." + type + ".multiplier.fire");
+//            droneMultiplier = config.getFloatValue("misc.injury." + type + ".muliplier.drone");
+//            robotMultiplier = config.getFloatValue("misc.injury." + type + ".multiplier.robot");
         }
 
         public int getDamage(Injury injury, Human agent) {
@@ -271,6 +270,12 @@ public class MiscParameters {
             if (agent instanceof FireBrigade) {
                 return (int)(result * fireMultiplier);
             }
+//            if (agent instanceof RescueRobot) {
+//                return (int)(result * robotMultiplier);
+//            }
+//            if (agent instanceof Drone) {
+//                return (int)(result * droneMultiplier);
+//            }
             return result;
         }
     }

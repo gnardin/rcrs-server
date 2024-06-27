@@ -295,7 +295,7 @@ public class ClearSimulator extends StandardSimulator {
     }
 
     // Check PoliceForce
-    //PoliceForce police = (PoliceForce) agent;
+//    PoliceForce robot = (PoliceForce) agent;
     RescueRobot robot = (RescueRobot) agent;
     StandardEntity agentPosition = robot.getPosition(model);
     if (agentPosition == null) {
@@ -358,7 +358,7 @@ public class ClearSimulator extends StandardSimulator {
     }
 
     // Check PoliceForce
-    //PoliceForce police = (PoliceForce) agent;
+//    PoliceForce robot = (PoliceForce) agent;
     RescueRobot robot = (RescueRobot) agent;
     StandardEntity agentPosition = robot.getPosition(model);
     if (!(agentPosition instanceof Area)) {

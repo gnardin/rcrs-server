@@ -523,13 +523,13 @@ public class TrafficAgent {
 	 * Perform any pre-timestep activities required.
 	 */
 	public void beginTimestep() {
-		setMobile(true);
+//		setMobile(true);
 		findBlockingLines();
-//		if (insideBlockade()) {
-//			Logger.debug(this + " inside blockade");
-//			setMobile(false);
-////			setMobile(true);
-//		}
+		if (insideBlockade()) {
+			Logger.debug(this + " inside blockade");
+			setMobile(false);
+//			setMobile(true);
+		}
 		startPosition = currentArea;
 	}
 
@@ -788,17 +788,17 @@ public class TrafficAgent {
 		return true;
 	}
 
-//	private boolean insideBlockade() {
-//		if (currentArea == null) {
-//			return false;
-//		}
-//		for (TrafficBlockade block : currentArea.getBlockades()) {
-//			if (block.contains(location[0], location[1])) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+	private boolean insideBlockade() {
+		if (currentArea == null) {
+			return false;
+		}
+		for (TrafficBlockade block : currentArea.getBlockades()) {
+			if (block.contains(location[0], location[1])) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	private boolean crossedLine(double oldX, double oldY, double newX, double newY, Line2D line) {
 		Line2D moved = new Line2D(oldX, oldY, newX - oldX, newY - oldY);

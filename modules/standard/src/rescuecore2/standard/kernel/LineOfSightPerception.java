@@ -166,9 +166,9 @@ public class LineOfSightPerception implements Perception, GUIComponent {
                     break;
                 case DRONE:
                     if (next == agentEntity) {
-                        addSelfRobotProperties((Robot) next, result);
+                        addSelfProperties((Human) next, result);
                     } else {
-                        addRobotProperties((Robot) next, result);
+                        addHumanProperties((Human) next, result);
                     }
                     break;
                 case BLOCKADE:
@@ -256,23 +256,23 @@ public class LineOfSightPerception implements Perception, GUIComponent {
         result.addChange(human, damage);
     }
 
-    private void addRobotProperties(Robot robot, ChangeSet result) {
-        result.addChange(robot, robot.getPositionHistoryProperty());
-        result.addChange(robot, robot.getXProperty());
-        result.addChange(robot, robot.getYProperty());
-        result.addChange(robot, robot.getDirectionProperty());
-        result.addChange(robot, robot.getStaminaProperty());
-        result.addChange(robot, robot.getBuriednessProperty());
-        result.addChange(robot, robot.getHeightProperty());
-        result.addChange(robot, robot.getBatteryProperty());
-        //round battery and damage
-        IntProperty hp = (IntProperty)robot.getHPProperty().copy();
-        roundProperty(hp, hpPrecision);
-        result.addChange(robot, hp);
-        IntProperty damage = (IntProperty)robot.getDamageProperty().copy();
-        roundProperty(damage, damagePrecision);
-        result.addChange(robot, damage);
-    }
+//    private void addRobotProperties(Robot robot, ChangeSet result) {
+//        result.addChange(robot, robot.getPositionHistoryProperty());
+//        result.addChange(robot, robot.getXProperty());
+//        result.addChange(robot, robot.getYProperty());
+//        result.addChange(robot, robot.getDirectionProperty());
+//        result.addChange(robot, robot.getStaminaProperty());
+//        result.addChange(robot, robot.getBuriednessProperty());
+//        result.addChange(robot, robot.getHeightProperty());
+//        result.addChange(robot, robot.getBatteryProperty());
+//        //round battery and damage
+//        IntProperty hp = (IntProperty)robot.getHPProperty().copy();
+//        roundProperty(hp, hpPrecision);
+//        result.addChange(robot, hp);
+//        IntProperty damage = (IntProperty)robot.getDamageProperty().copy();
+//        roundProperty(damage, damagePrecision);
+//        result.addChange(robot, damage);
+//    }
 
     private void addSelfProperties(Human human, ChangeSet result) {
         // Update human properties and POSITION_HISTORY
@@ -288,18 +288,18 @@ public class LineOfSightPerception implements Perception, GUIComponent {
     }
 
 
-    private void addSelfRobotProperties(Robot robot, ChangeSet result) {
-        // Update human properties and POSITION_HISTORY
-        addRobotProperties(robot, result);
-        result.addChange(robot, robot.getPositionHistoryProperty());
-        // Un-round hp and damage
-        result.addChange(robot, robot.getHPProperty());
-        result.addChange(robot, robot.getDamageProperty());
-        if (robot instanceof Drone) {
-            Drone drone = (Drone) robot;
-            result.addChange(drone, drone.getBatteryProperty());
-        }
-    }
+//    private void addSelfRobotProperties(Robot robot, ChangeSet result) {
+//        // Update human properties and POSITION_HISTORY
+//        addRobotProperties(robot, result);
+//        result.addChange(robot, robot.getPositionHistoryProperty());
+//        // Un-round hp and damage
+//        result.addChange(robot, robot.getHPProperty());
+//        result.addChange(robot, robot.getDamageProperty());
+//        if (robot instanceof Drone) {
+//            Drone drone = (Drone) robot;
+//            result.addChange(drone, drone.getBatteryProperty());
+//        }
+//    }
 
 
     private void addBlockadeProperties(Blockade blockade, ChangeSet result) {

@@ -238,7 +238,7 @@ public class TrafficArea {
 		List<Line2D> oLines = getOpenLines();
 		double minDst=Integer.MAX_VALUE;
 		int minIndex=-1;
-		/*FOR:*/for (int i = 0; i < oLines.size(); i++) {
+		/*FOR: */for (int i = 0; i < oLines.size(); i++) {
 //			Line2D line = new Line2D(point,getMidPoint(oLines.get(i).getOrigin(), oLines.get(i).getEndPoint()));
 //			for (Line2D is :getAllBlockingLines()) {
 //				if (GeometryTools2D.getSegmentIntersectionPoint(line, is) != null) {
@@ -474,11 +474,11 @@ public class TrafficArea {
 		Point midPoint = new Point((int) (line.getOrigin().getX() + line.getEndPoint().getX()) / 2, (int) (line.getOrigin().getY() + line.getEndPoint().getY()) / 2);
 		if (!getArea().getShape().contains(midPoint))
 			return false;
-//		for (TrafficBlockade blockade : getBlockades()) {
-//			if (blockade.getBlockade().getShape().contains(midPoint))
-//				return false;
-////				return true;
-//		}
+		for (TrafficBlockade blockade : getBlockades()) {
+			if (blockade.getBlockade().getShape().contains(midPoint))
+				return false;
+//				return true;
+		}
 		return true;
 
 	}

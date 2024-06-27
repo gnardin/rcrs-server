@@ -13,11 +13,9 @@ import rescuecore2.misc.geometry.Point2D;
 import rescuecore2.misc.gui.PanZoomListener;
 import rescuecore2.misc.gui.ScreenTransform;
 import rescuecore2.standard.entities.Edge;
-import traffic3.objects.TrafficBlockade;
 import traffic4.manager.TrafficManager1;
 import traffic4.objects.TrafficAgent1;
 import traffic4.objects.TrafficArea1;
-import traffic4.objects.TrafficBlockade1;
 
 
 import java.util.List;
@@ -32,7 +30,7 @@ import java.awt.event.ActionListener;
 public class TrafficSimulatorGUIDrone extends JPanel {
     private static final Color SELECTED_AREA_COLOUR = new Color(0,0,255,128);
     private static final Color AREA_OUTLINE_COLOUR = new Color(0,2,0);
-    private static final Color BLOCKADE_OUTLINE_COLOUR = new Color(255,255,0);
+    private static final Color BLOCKADE_OUTLINE_COLOUR = new Color(128, 0, 0);
 
     private static final Stroke PASSABLE_EDGE_STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
     private static final Stroke IMPASSABLE_EDGE_STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
@@ -304,19 +302,19 @@ public class TrafficSimulatorGUIDrone extends JPanel {
             }
         }
 
-        private void drawBlockades(Graphics2D g) {
-            g.setStroke(BLOCKADE_STROKE);
-            g.setColor(BLOCKADE_OUTLINE_COLOUR);
-            for (TrafficBlockade1 b : manager.getBlockades()) {
-                for (Line2D line : b.getLines()) {
-                    int x1 = transform1.xToScreen(line.getOrigin().getX());
-                    int y1 = transform1.yToScreen(line.getOrigin().getY());
-                    int x2 = transform1.xToScreen(line.getEndPoint().getX());
-                    int y2 = transform1.yToScreen(line.getEndPoint().getY());
-                    g.drawLine(x1, y1, x2, y2);
-                }
-            }
-        }
+//        private void drawBlockades(Graphics2D g) {
+//            g.setStroke(BLOCKADE_STROKE);
+//            g.setColor(BLOCKADE_OUTLINE_COLOUR);
+//            for (TrafficBlockade1 b : manager.getBlockades()) {
+//                for (Line2D line : b.getLines()) {
+//                    int x1 = transform1.xToScreen(line.getOrigin().getX());
+//                    int y1 = transform1.yToScreen(line.getOrigin().getY());
+//                    int x2 = transform1.xToScreen(line.getEndPoint().getX());
+//                    int y2 = transform1.yToScreen(line.getEndPoint().getY());
+//                    g.drawLine(x1, y1, x2, y2);
+//                }
+//            }
+//        }
 
         private void drawAgents(Graphics2D graphics) {
             for (TrafficAgent1 agent : manager.getALLAgents()) {

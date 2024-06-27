@@ -170,10 +170,10 @@ public class TrafficManager {
    * @param block
    *   The TrafficBlockade1 to register.
    */
-//  public void register(TrafficBlockade block) {
-//    blocks.put(block.getBlockade(), block);
-//    blockadeByID.put(block.getBlockade().getID().getValue(), block);
-//  }
+  public void register(TrafficBlockade block) {
+    blocks.put(block.getBlockade(), block);
+    blockadeByID.put(block.getBlockade().getID().getValue(), block);
+  }
 
 
   /**
@@ -182,9 +182,9 @@ public class TrafficManager {
    * @param block
    *   The TrafficBlockade1 to remove.
    */
-//  public void remove(TrafficBlockade block) {
-//    remove(block.getBlockade());
-//  }
+  public void remove(TrafficBlockade block) {
+    remove(block.getBlockade());
+  }
 
 
   /**
@@ -193,10 +193,10 @@ public class TrafficManager {
    * @param block
    *   The Blockade to remove.
    */
-//  public void remove(Blockade block) {
-//    blocks.remove(block);
-//    blockadeByID.remove(block.getID().getValue());
-//  }
+  public void remove(Blockade block) {
+    blocks.remove(block);
+    blockadeByID.remove(block.getID().getValue());
+  }
 
 
   /**
@@ -268,9 +268,9 @@ public class TrafficManager {
    * @return The TrafficBlockade1 that wraps the given blockade or null if no
    * such TrafficBlockade1 exists.
    */
-//  public TrafficBlockade getTrafficBlockade(Blockade b) {
-//    return blocks.get(b);
-//  }
+  public TrafficBlockade getTrafficBlockade(Blockade b) {
+    return blocks.get(b);
+  }
 
 
   /**

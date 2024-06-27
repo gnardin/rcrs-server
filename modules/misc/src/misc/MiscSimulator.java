@@ -31,6 +31,7 @@ import rescuecore2.standard.entities.Refuge;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.standard.entities.StandardPropertyURN;
+import rescuecore2.standard.messages.AKFly;
 import rescuecore2.standard.messages.AKLoad;
 import rescuecore2.standard.messages.AKRescue;
 import rescuecore2.standard.messages.AKUnload;

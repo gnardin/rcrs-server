@@ -31,7 +31,7 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
   private Map<StandardEntityURN, Collection<StandardEntity>> storedTypes;
   private Set<StandardEntity> unindexedEntities;
   private Map<Human, Rectangle> humanRectangles;
-  private Map<Robot, Rectangle> robotRectangles;
+//  private Map<Robot, Rectangle> robotRectangles;
 
   private boolean indexed;
   private int minX;
@@ -48,7 +48,7 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
         StandardEntityURN.class);
     unindexedEntities = new HashSet<StandardEntity>();
     humanRectangles = new HashMap<Human, Rectangle>();
-    robotRectangles = new HashMap<Robot, Rectangle>();
+//    robotRectangles = new HashMap<Robot, Rectangle>();
     addWorldModelListener(new AddRemoveListener());
     indexed = false;
   }
@@ -69,16 +69,16 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
       }
     }
     // Update robot rectangles
-    for (Map.Entry<Robot, Rectangle> next : robotRectangles.entrySet()) {
-      Robot r = next.getKey();
-      Rectangle rect = next.getValue();
-      index.delete(rect, r.getID().getValue());
-      rect = makeRectangle(r);
-      if (rect != null) {
-        index.add(rect, r.getID().getValue());
-        next.setValue(rect);
-      }
-    }
+//    for (Map.Entry<Robot, Rectangle> next : robotRectangles.entrySet()) {
+//      Robot r = next.getKey();
+//      Rectangle rect = next.getValue();
+//      index.delete(rect, r.getID().getValue());
+//      rect = makeRectangle(r);
+//      if (rect != null) {
+//        index.add(rect, r.getID().getValue());
+//        next.setValue(rect);
+//      }
+//    }
   }
 
 
@@ -132,9 +132,9 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
         if (next instanceof Human) {
           humanRectangles.put((Human) next, r);
         }
-        if (next instanceof Robot) {
-          robotRectangles.put((Robot) next, r);
-        }
+//        if (next instanceof Robot) {
+//          robotRectangles.put((Robot) next, r);
+//        }
       }
     }
     long end = System.currentTimeMillis();
@@ -424,7 +424,7 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
       x2 = location.first();
       y1 = location.second();
       y2 = location.second();
-    } else if (e instanceof Robot) {
+    } /*else if (e instanceof Robot) {
       Robot r = (Robot) e;
       Pair<Integer, Integer> location = r.getLocation(this);
       if (location == null) {
@@ -434,7 +434,7 @@ public class StandardWorldModel extends DefaultWorldModel<StandardEntity> {
       x2 = location.first();
       y1 = location.second();
       y2 = location.second();
-    } else {
+    } */else {
       return null;
     }
     return new Rectangle(x1, y1, x2, y2);

@@ -191,8 +191,8 @@ public class TrafficAgent1 {
     private int positionHistoryFrequency;
     private int historyCount;
 
-//    private Human robot;
-    private Robot robot;
+    private Human robot;
+//    private Robot robot;
     private TrafficManager1 manager;
 
     private boolean mobile;
@@ -210,9 +210,9 @@ public class TrafficAgent1 {
      * @param radius        The radius of this agent in mm.
      * @param velocityLimit The velicity limit.
      */
-    public TrafficAgent1(/*Human h, */Robot h, TrafficManager1 manager, double radius, double velocityLimit) {
-//        this.human = h;
+    public TrafficAgent1(Human h, /*Robot h,*/ TrafficManager1 manager, double radius, double velocityLimit) {
         this.robot = h;
+//        this.robot = h;
         this.manager = manager;
         this.radius = radius;
         this.velocityLimit = velocityLimit;
@@ -230,7 +230,7 @@ public class TrafficAgent1 {
      *
      * @return The wrapped Human.
      */
-    public /*Human*/ Robot getHuman() {
+    public Human /*Robot*/ getHuman() {
 //        return human;
         return robot;
     }
@@ -518,8 +518,8 @@ public class TrafficAgent1 {
 
 
     private void handleOutOfActivitiesCivilianMoves() {
-//        if (!(getHuman() instanceof Civilian))
-//            return;
+        if (!(getHuman() instanceof Civilian))
+            return;
 //        if (!(getHuman() instanceof ))
 //            return;
         if (currentArea.getArea().equals(startPosition.getArea()))
