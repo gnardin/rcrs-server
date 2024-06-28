@@ -160,6 +160,9 @@ public final class SampleSearch {
   }
 
   public List<EntityID> droneSearch( EntityID start, Collection<EntityID> goals) {
+    List<EntityID> open = new LinkedList<EntityID>();
+    Map<EntityID, EntityID> ancestors = new HashMap<EntityID, EntityID>();
+
     return null;
   }
 

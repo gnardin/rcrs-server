@@ -31,7 +31,7 @@ public class StandardWorldModelViewer extends LayerViewComponent {
         addLayer(new RoadBlockageLayer());
         addLayer(new AreaIconLayer());
         addLayer(new HumanLayer());
-//        addLayer(new RobotLayer());
+        addLayer(new RobotLayer());
         addLayer(new CommandLayer());
         addLayer(new PositionHistoryLayer());
     }

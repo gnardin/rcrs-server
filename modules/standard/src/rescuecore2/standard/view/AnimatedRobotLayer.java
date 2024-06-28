@@ -94,36 +94,36 @@ public class AnimatedRobotLayer extends RobotLayer {
      * Compute the animation frames
      * @param frameCount The number of animation frames to compute.
      */
-//    void computeAnimation(int frameCount) {
-//        synchronized (this) {
-//            frames.clear();
-//            //compute animation
-//            double step = 1.0 / (frameCount - 1.0);
-//            for (EntityID next : robotIDs) {
-//                Queue<Pair<Integer, Integer>> result = new LinkedList<>();
-//                Robot robot = (Robot) world.getEntity(next);
-//                if (robot == null) {
-//                    continue;
-//                }
-//                AgentPath path;
-//                StandardEntity position = world.getEntity(robot.getPosition());
-//                if (position instanceof Drone) {
-//                    path = AgentPath.computePath((Drone)position, world);
-//                } else {
-//                    path = AgentPath.computePath(robot, world);
-//                }
-//                if (path == null) {
-//                    continue;
-//                }
-//                for (int i = 0; i < frameCount; ++i) {
-//                    Pair<Integer, Integer> nextPoint = path.getPointOnPath(i + step);
-//                    result.add(nextPoint);
-//                }
-//                frames.put(next, result);
-//            }
-//            animationDone = false;
-//        }
-//    }
+    void computeAnimation(int frameCount) {
+        synchronized (this) {
+            frames.clear();
+            //compute animation
+            double step = 1.0 / (frameCount - 1.0);
+            for (EntityID next : robotIDs) {
+                Queue<Pair<Integer, Integer>> result = new LinkedList<>();
+                Robot robot = (Robot) world.getEntity(next);
+                if (robot == null) {
+                    continue;
+                }
+                AgentPath path;
+                StandardEntity position = world.getEntity(robot.getPosition());
+                if (position instanceof Drone) {
+                    path = AgentPath.computePath1((Drone)position, world);
+                } else {
+                    path = AgentPath.computePath1(robot, world);
+                }
+                if (path == null) {
+                    continue;
+                }
+                for (int i = 0; i < frameCount; ++i) {
+                    Pair<Integer, Integer> nextPoint = path.getPointOnPath(i + step);
+                    result.add(nextPoint);
+                }
+                frames.put(next, result);
+            }
+            animationDone = false;
+        }
+    }
 
 
 }

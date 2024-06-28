@@ -8,7 +8,7 @@ import rescuecore2.worldmodel.properties.IntProperty;
 /**
  * The Drone object.
  */
-public class Drone extends Human {
+public class Drone extends /*Human*/ Robot {
 
     private IntProperty height;
 

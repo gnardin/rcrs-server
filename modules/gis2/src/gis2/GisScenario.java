@@ -377,7 +377,7 @@ public class GisScenario implements rescuecore2.scenario.Scenario, CollapseSimCo
       EntityID id = new EntityID(next);
       lastID = getNextId(model, config, lastID);
       Drone d = new Drone(new EntityID(lastID));
-      setupAgent(d, id, model, config);
+      setupRobot(d, id, model, config);
     }
     LOG.debug("Creating " + fsLocations.size() + " fire stations");
     for (int next : fsLocations) {

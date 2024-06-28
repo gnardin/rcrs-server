@@ -13,7 +13,7 @@ public class AnimatedWorldModelViewer extends StandardWorldModelViewer {
     private static final int FRAME_DELAY = ANIMATION_TIME / FRAME_COUNT;
 
     private AnimatedHumanLayer humans;
-//    private AnimatedRobotLayer robots;
+    private AnimatedRobotLayer robots;
     private Timer timer;
     private final Object lock = new Object();
     private boolean done;
@@ -35,10 +35,10 @@ public class AnimatedWorldModelViewer extends StandardWorldModelViewer {
                             done = false;
                             repaint();
                         }
-//                        if (robots.nextFrame()) {
-//                            done = false;
-//                            repaint();
-//                        }
+                        if (robots.nextFrame()) {
+                            done = false;
+                            repaint();
+                        }
                     }
                 }
             });
@@ -59,9 +59,9 @@ public class AnimatedWorldModelViewer extends StandardWorldModelViewer {
         addLayer(new RoadBlockageLayer());
         addLayer(new AreaIconLayer());
         humans = new AnimatedHumanLayer();
-//        robots = new AnimatedRobotLayer();
+        robots = new AnimatedRobotLayer();
         addLayer(humans);
-//        addLayer(robots);
+        addLayer(robots);
         CommandLayer commands = new CommandLayer();
         addLayer(commands);
         commands.setRenderMove(false);
@@ -75,7 +75,7 @@ public class AnimatedWorldModelViewer extends StandardWorldModelViewer {
         synchronized (lock) {
             done = false;
             humans.computeAnimation(FRAME_COUNT);
-//            robots.computeAnimation(FRAME_COUNT);
+            robots.computeAnimation(FRAME_COUNT);
         }
     }
 }
