@@ -27,7 +27,7 @@ public abstract class Robot extends StandardEntity {
     private IntProperty       buriedness;
     private IntProperty       battery;
     private IntProperty       sensorRange; 
-    private IntProperty    height;
+    private IntProperty       height;
     private DoubleProperty    detectionRange;
     private DoubleProperty    speed;
     private IntProperty       damage;
@@ -57,7 +57,8 @@ public abstract class Robot extends StandardEntity {
         speed = new DoubleProperty( StandardPropertyURN.SPEED );
         damage = new IntProperty( StandardPropertyURN.DAMAGE );
         registerProperties( x, y, position, positionHistory, travelDistance,
-            direction, battery, sensorRange, detectionRange, height, speed, damage );
+                            direction, battery, sensorRange, detectionRange,
+                            height, speed, damage );
     }
 
 
@@ -84,8 +85,10 @@ public abstract class Robot extends StandardEntity {
         height = new IntProperty( other.height );
         speed = new DoubleProperty( other.speed );
         damage = new IntProperty( other.damage );
-        registerProperties( x, y, position, positionHistory, travelDistance,
-            direction, battery, sensorRange, detectionRange, height, speed, damage );
+        registerProperties( x, y, position, positionHistory,
+                            travelDistance, direction, battery,
+                            sensorRange, detectionRange, height, speed,
+                            damage );
     }
 
     @Override
@@ -604,7 +607,8 @@ public abstract class Robot extends StandardEntity {
     return height.getValue();
   }
 
-  /** Set the height of the robot
+  /**
+   * Set the height of the robot
    * 
    * @param h The new height of the robot
    */
@@ -612,7 +616,8 @@ public abstract class Robot extends StandardEntity {
     this.height.setValue( h );
   }
 
-  /** Find out if the height has been defined
+  /**
+   * Find out if the height has been defined
    * 
    * @return True if the height has been defined, false otherwise.
    */
@@ -620,7 +625,9 @@ public abstract class Robot extends StandardEntity {
     return height.isDefined();
   }
 
-  /** Undefine the height property */
+  /**
+   * Undefine the height property
+   */
   public void undefineHeight() {
     height.undefine();
   }
@@ -848,12 +855,8 @@ public abstract class Robot extends StandardEntity {
     jsonObject.put( StandardPropertyURN.SPEED.toString(),
         this.isSpeedDefined() ? this.getSpeed() : JSONObject.NULL );
     jsonObject.put( StandardPropertyURN.HEIGHT.toString(),
-        this.isBatteryDefined() ? this.getHeight() : JSONObject.NULL );
+        this.isHeightDefined() ? this.getHeight() : JSONObject.NULL );
 
     return jsonObject;
   }
-
-
-
-  
 }

@@ -25,8 +25,6 @@ public abstract class AbstractSampleAgent<E extends StandardEntity>
 
   private static final int             RANDOM_WALK_LENGTH        = 50;
 
-  private static final int RANDOM_FLY_LENGTH = 100;
-
   private static final String          SAY_COMMUNICATION_MODEL   = StandardCommunicationModel.class
       .getName();
   private static final String          SPEAK_COMMUNICATION_MODEL = ChannelCommunicationModel.class
@@ -37,29 +35,29 @@ public abstract class AbstractSampleAgent<E extends StandardEntity>
   /**
    * The search algorithm.
    */
-  protected SampleSearch               search;
+  protected SampleSearch                 search;
 
   /**
    * Whether to use AKSpeak messages or not.
    */
-  protected boolean                    useSpeak;
+  protected boolean                      useSpeak;
 
   /**
    * Cache of building IDs.
    */
-  protected List<EntityID>             buildingIDs;
+  protected List<EntityID>               buildingIDs;
 
   /**
    * Cache of road IDs.
    */
-  protected List<EntityID>             roadIDs;
+  protected List<EntityID>               roadIDs;
 
   /**
    * Cache of refuge IDs.
    */
-  protected List<EntityID>             refugeIDs;
+  protected List<EntityID>               refugeIDs;
 
-  private Map<EntityID, Set<EntityID>> neighbours;
+  protected Map<EntityID, Set<EntityID>> neighbours;
 
 
   /**
@@ -113,7 +111,7 @@ public abstract class AbstractSampleAgent<E extends StandardEntity>
           neighbours.get( current ) );
       Collections.shuffle( possible, random );
       boolean found = false;
-      for ( EntityID next : possible ) {
+      for( EntityID next : possible ) {
         if ( seen.contains( next ) ) {
           continue;
         }
@@ -126,33 +124,6 @@ public abstract class AbstractSampleAgent<E extends StandardEntity>
         break;
       }
     }
-    return result;
-  }
-
-  protected List<EntityID> randomFly() {
-    List<EntityID> result = new ArrayList<EntityID>( RANDOM_FLY_LENGTH );
-    Set<EntityID> seen = new HashSet<EntityID>();
-    EntityID current = ( (Robot) me() ).getPosition();
-    for (int i = 0; i < RANDOM_FLY_LENGTH; i++) {
-      result.add(current);
-      seen.add(current);
-      List<EntityID> possible = new ArrayList<EntityID>(neighbours.get(current));
-      Collections.shuffle(possible, random);
-      boolean found = false;
-      for ( EntityID next : possible ) {
-        if ( seen.contains( next )) {
-          continue;
-        }
-        current = next;
-        found = true;
-        break;
-      }
-      if (!found) {
-        //dead end
-        break;
-      }
-    }
-
     return result;
   }
 }
